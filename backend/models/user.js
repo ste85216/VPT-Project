@@ -1,6 +1,6 @@
 import { Schema, model, ObjectId, Error } from 'mongoose'
 import validator from 'validator'
-import bycrypt from 'bcrypt'
+import bcrypt from 'bcrypt'
 import UserRole from '../enums/UserRole.js'
 
 const cartSchema = new Schema({
@@ -44,14 +44,16 @@ const schema = new Schema({
   email: {
     type: String,
     required: [true, '請正確填寫電子信箱'],
+    unique: true,
     validate: {
       validator: validator.isEmail,
       message: '電子信箱格式錯誤'
     }
   },
-  cellphone: {
+  phone: {
     type: String,
     required: [true, '請正確填寫手機號碼'],
+    unique: true,
     validate: {
       validator: validator.isMobilePhone,
       message: '手機號碼格式錯誤'
@@ -73,10 +75,7 @@ const schema = new Schema({
     type: String,
     default: 'https://i.imgur.com/5zJ6Y7E.png'
   },
-  gender: {
-    type: String
-  },
-  birthdate: {
+  birthday: {
     type: Date
   },
   address: {
@@ -106,7 +105,7 @@ schema.pre('save', function (next) {
       next(error)
       return
     } else {
-      user.password = bycrypt.hash(user.password, 10)
+      user.password = bcrypt.hashSync(user.password, 10)
     }
   }
   next()
@@ -119,4 +118,4 @@ schema.virtual('cartQuantity').get(function () {
   }, 0) // 初始值為 0
 })
 
-export default model('users', schema) 
+export default model('users', schema)

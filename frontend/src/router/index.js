@@ -1,17 +1,18 @@
 /**
- * router/index.ts
+ * router/index.js
  *
  * Automatic routes for `./src/pages/*.vue`
  */
 
 // Composables
-import { createRouter, createWebHashHistory } from 'vue-router/auto'
+import { createRouter, createWebHashHistory, START_LOCATION } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes } from 'vue-router/auto-routes'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  routes: setupLayouts(routes)
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804
@@ -32,5 +33,27 @@ router.onError((err, to) => {
 router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
 })
+
+router.beforeEach(async (to, from, next) => {
+  const user = useUserStore()
+
+  if (from === START_LOCATION) {
+    await user.profile()
+  }
+
+  if (user.isLogin && ['/register', '/login'].includes(to.path)) {
+    next('/')
+  } else if (to.meta.login && !user.isLogin) {
+    next('/login')
+  } else if (to.meta.admin && !user.isAdmin) {
+    next('/')
+  } else {
+    next()
+  }
+})
+
+router.afterEach((to, from) => {
+  document.title = to.meta.title
+}) // 設定網頁標題
 
 export default router
