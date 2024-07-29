@@ -6,6 +6,7 @@ import { StatusCodes } from 'http-status-codes'
 import mongoSanitize from 'express-mongo-sanitize'
 import rateLimit from 'express-rate-limit'
 import routeUser from './routes/user.js'
+import routeProduct from './routes/product.js'
 import './passport/passport.js'
 
 const app = express()
@@ -47,6 +48,7 @@ app.use((_, req, res, next) => {
 app.use(mongoSanitize())
 
 app.use('/user', routeUser)
+app.use('/product', routeProduct)
 
 app.all('*', (req, res) => {
   res.status(StatusCodes.NOT_FOUND).json({

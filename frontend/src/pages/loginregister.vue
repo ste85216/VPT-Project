@@ -369,7 +369,7 @@ const registerSubmit = handleRegisterSubmit(async (values) => {
   // 註冊成功後的其他邏輯
     setTimeout(() => {
       window.location.reload()
-    }, 1500) // 延遲 2 秒
+    }, 1500) // 延遲 1.5 秒
   }
   try {
     await api.post('/user', {
@@ -421,86 +421,6 @@ const loginSubmit = handleLoginSubmit(async (values) => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '/src/styles/settings.scss';
-
-// html, body {
-//       overflow-y: hidden;
-//     }
-
-#background {
-  width: 100%;
-  height: calc(100vh - 99px);
-  position: absolute;
-  top: 99px;
-  background: url('/src/assets/sea2-court.jpg') no-repeat center center;
-  background-size: cover;
-}
-
-.link {
-  cursor: pointer;
-  color: $third-color;
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-#login-register {
-  width: 400px;
-  height: 440px;
-  background: rgba(255,255,255,0.5);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(20px);
-  padding: 0;
-  overflow: hidden;
-  transition: ease 0.2s;
-}
-
-.login {
-  a {
-    text-decoration: none;
-    color: $third-color;
-  }
-}
-
-.wrapper {
-  position: relative;
-  left: 210px;
-  transition: 0.18s ease;
-  .v-btn{
-  background-color: $primary-color;
-  color:white
-  }
-  .v-text-field {
-    width: 335px;
-  }
-  .title {
-    font-size: 20px;
-    font-weight: 500;
-    color: #333;
-  }
-  .forget {
-    color: #333;
-    font-size: 12px;
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  .signup {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    a {
-      font-size: 14px;
-      margin-left: 8px;
-      line-height: 12px;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
 </style>

@@ -6,11 +6,13 @@
 
 // https://vuetifyjs.com/features/sass-variables/`
 // @use 'vuetify/settings' with (
-//   $color-pack: false
+//   $application-background: #000 // Set the application background color to black
 // );
 
-@import './variables';
+@import '_variables';
 
-@import './rwd';
+@import '_rwd';
 
-@import '_colors.scss';
+@import '_colors';
+
+@import '_loginregister'
