@@ -3,34 +3,32 @@ import { Schema, model } from 'mongoose'
 const schema = new Schema({
   name: {
     type: String,
-    required: [true, '請輸入商品名稱']
+    required: [true, '商品名稱必填']
   },
   price: {
     type: Number,
-    required: [true, '請輸入商品價格'],
-    min: [0, '商品價格最少 0 元']
+    required: [true, '商品價格必填'],
+    min: [0, '商品價格不能小於 0']
   },
   image: {
     type: String,
-    required: [true, '請上傳商品圖片']
+    required: [true, '商品圖片必填']
   },
-  color: {
-    type: [String]
-  },
-  size: {
-    type: [String]
+  description: {
+    type: String,
+    required: [true, '商品說明必填']
   },
   category: {
     type: String,
     required: [true, '商品分類必填'],
     enum: {
-      values: ['排球衣', '排球褲', '排球', '護具', '球鞋', '其他'],
+      values: ['衣服', '手機', '遊戲', '食品'],
       message: '商品分類錯誤'
     }
   },
   sell: {
     type: Boolean,
-    required: [true, '請選擇是否上架']
+    required: [true, '商品上架狀態必填']
   }
 }, {
   timestamps: true,

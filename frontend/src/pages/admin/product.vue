@@ -2,10 +2,17 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <h1 class="text-center">商品管理</h1>
+        <h1 class="text-center">
+          商品管理
+        </h1>
       </v-col>
       <v-col cols="12">
-        <v-btn color="green" @click="openDialog(null)">新增商品</v-btn>
+        <v-btn
+          color="green"
+          @click="openDialog(null)"
+        >
+          新增商品
+        </v-btn>
       </v-col>
       <v-col cols="12">
         <v-data-table-server
@@ -17,66 +24,86 @@
           :loading="tableLoading"
           :items-length="tableItemsLength"
           :search="tableSearch"
+          hover
           @update:items-per-page="tableLoadItems(false)"
           @update:sort-by="tableLoadItems(false)"
           @update:page="tableLoadItems(false)"
-          hover
         >
           <template #top>
             <v-text-field
-              label="搜尋"
               v-model="tableSearch"
+              label="搜尋"
               append-icon="mdi-magnify"
               @click-append="tableLoadItems(true)"
               @keydown.enter="tableLoadItems(true)"
-            ></v-text-field>
+            />
           </template>
           <template #[`item.image`]="{ value }">
-            <v-img :src="value" height="50px"></v-img>
+            <v-img
+              :src="value"
+              height="60px"
+            />
           </template>
           <template #[`item.sell`]="{ value }">
-            <v-icon icon="mdi-check" v-if="value"></v-icon>
+            <v-icon
+              v-if="value"
+              icon="mdi-check"
+            />
           </template>
           <template #[`item.action`]="{ item }">
-            <v-btn icon="mdi-pencil" variant="text" color="blue" @click="openDialog(item)"></v-btn>
+            <v-btn
+              icon="mdi-pencil"
+              variant="text"
+              color="blue"
+              @click="openDialog(item)"
+            />
           </template>
         </v-data-table-server>
       </v-col>
     </v-row>
   </v-container>
-  <v-dialog v-model="dialog.open" persistent width="500">
-    <v-form @submit.prevent="submit" :disabled="isSubmitting">
+  <v-dialog
+    v-model="dialog.open"
+    persistent
+    width="500"
+  >
+    <v-form
+      :disabled="isSubmitting"
+      @submit.prevent="submit"
+    >
       <v-card>
         <v-card-title>{{ dialog.id ? '編輯商品' : '新增商品' }}</v-card-title>
         <v-card-text>
           <v-text-field
-            label="名稱"
             v-model="name.value.value"
+            label="名稱"
             :error-messages="name.errorMessage.value"
-          ></v-text-field>
+          />
           <v-text-field
-            label="價格"
-            type="number" min="0"
             v-model="price.value.value"
+            label="價格"
+            type="number"
+            min="0"
             :error-messages="price.errorMessage.value"
-          ></v-text-field>
+          />
           <v-select
+            v-model="category.value.value"
             label="分類"
             :items="categories"
-            v-model="category.value.value"
             :error-messages="category.errorMessage.value"
-          ></v-select>
+          />
           <v-checkbox
-            label="上架"
             v-model="sell.value.value"
+            label="上架"
             :error-messages="sell.errorMessage.value"
-          ></v-checkbox>
+          />
           <v-textarea
-            label="說明"
             v-model="description.value.value"
+            label="說明"
             :error-messages="description.errorMessage.value"
-          ></v-textarea>
+          />
           <vue-file-agent
+            ref="fileAgent"
             v-model="fileRecords"
             v-model:raw-model-value="rawFileRecords"
             accept="image/jpeg,image/png"
@@ -84,12 +111,23 @@
             max-size="1MB"
             help-text="選擇檔案或拖曳到這裡"
             :error-text="{ type: '檔案格式不支援', size: '檔案大小不能超過 1MB' }"
-            ref="fileAgent"
-          ></vue-file-agent>
+          />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="red" :loading="isSubmitting" @click="closeDialog">取消</v-btn>
-          <v-btn color="green" type="submit" :loading="isSubmitting">送出</v-btn>
+          <v-btn
+            color="red"
+            :loading="isSubmitting"
+            @click="closeDialog"
+          >
+            取消
+          </v-btn>
+          <v-btn
+            color="green"
+            type="submit"
+            :loading="isSubmitting"
+          >
+            送出
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-form>

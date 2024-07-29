@@ -20,6 +20,7 @@ export const create = async (req, res) => {
         message
       })
     } else {
+      console.log(error)
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
         success: false,
         message: '未知錯誤'
