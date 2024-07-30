@@ -11,9 +11,16 @@ import 'vuetify/styles'
 // Composables
 import { createVuetify } from 'vuetify'
 
+import { zhHant } from 'vuetify/locale'
+
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'light',
+    defaultTheme: 'light'
   },
+  locale: {
+    locale: 'zhHant',
+    fallback: 'en',
+    messages: { zhHant }
+  }
 })

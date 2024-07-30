@@ -2,13 +2,13 @@
   <v-container>
     <v-row>
       <v-col cols="12">
-        <h1 class="text-center">
+        <h2 class="text-center">
           商品管理
-        </h1>
+        </h2>
       </v-col>
       <v-col cols="12">
         <v-btn
-          color="green"
+          class="custom-btn"
           @click="openDialog(null)"
         >
           新增商品
@@ -54,7 +54,7 @@
             <v-btn
               icon="mdi-pencil"
               variant="text"
-              color="blue"
+              class="edit-btn"
               @click="openDialog(item)"
             />
           </template>
@@ -65,19 +65,33 @@
   <v-dialog
     v-model="dialog.open"
     persistent
-    width="500"
+    width="600"
   >
     <v-form
       :disabled="isSubmitting"
       @submit.prevent="submit"
     >
-      <v-card>
+      <v-card class="rounded-xl">
         <v-card-title>{{ dialog.id ? '編輯商品' : '新增商品' }}</v-card-title>
         <v-card-text>
           <v-text-field
             v-model="name.value.value"
             label="名稱"
             :error-messages="name.errorMessage.value"
+          />
+          <v-combobox
+            v-model="colors.value.value"
+            label="顏色"
+            :items="colorItems"
+            multiple
+            :error-messages="colors.errorMessage.value"
+          />
+          <v-combobox
+            v-model="sizes.value.value"
+            label="尺寸"
+            :items="sizeItems"
+            multiple
+            :error-messages="sizes.errorMessage.value"
           />
           <v-text-field
             v-model="price.value.value"
@@ -115,6 +129,15 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
+            v-if="dialog.id"
+            color="red"
+            :loading="isSubmitting"
+            @click="openConfirmDialog"
+          >
+            刪除
+          </v-btn>
+          <v-spacer />
+          <v-btn
             color="red"
             :loading="isSubmitting"
             @click="closeDialog"
@@ -132,6 +155,34 @@
       </v-card>
     </v-form>
   </v-dialog>
+  <v-dialog
+    v-model="confirmDialog.open"
+    max-width="240"
+  >
+    <v-card>
+      <v-card-title class="headline">
+        確認刪除
+      </v-card-title>
+      <v-card-text>您確定要刪除此商品嗎？此操作無法撤銷。</v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          color="green darken-1"
+          text
+          @click="closeConfirmDialog"
+        >
+          取消
+        </v-btn>
+        <v-btn
+          color="red darken-1"
+          text
+          @click="deleteProduct"
+        >
+          刪除
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
@@ -144,7 +195,7 @@ import { useSnackbar } from 'vuetify-use-dialog'
 
 definePage({
   meta: {
-    title: '購物網 | 商品管理',
+    title: '商品管理 | VPT',
     login: true,
     admin: true
   }
@@ -162,6 +213,10 @@ const dialog = ref({
   id: ''
 })
 
+const confirmDialog = ref({
+  open: false
+})
+
 const openDialog = (item) => {
   if (item) {
     dialog.value.id = item._id
@@ -170,6 +225,8 @@ const openDialog = (item) => {
     description.value.value = item.description
     category.value.value = item.category
     sell.value.value = item.sell
+    colors.value.value = item.colors // 確保顏色陣列正確賦值
+    sizes.value.value = item.sizes // 確保尺寸陣列正確賦值
   } else {
     dialog.value.id = ''
   }
@@ -182,7 +239,36 @@ const closeDialog = () => {
   fileAgent.value.deleteFileRecord()
 }
 
-const categories = ['衣服', '手機', '遊戲', '食品']
+const openConfirmDialog = () => {
+  confirmDialog.value.open = true
+}
+
+const closeConfirmDialog = () => {
+  confirmDialog.value.open = false
+}
+
+const colorItems = [
+  '紅色',
+  '藍色',
+  '黃色',
+  '綠色',
+  '紫色',
+  '橘色',
+  '其他顏色請備註在訂單'
+]
+
+const sizeItems = [
+  'XS',
+  'S',
+  'M',
+  'L',
+  'XL',
+  '2XL',
+  '3XL',
+  'F'
+]
+
+const categories = ['球衣', '球褲', '球襪', '球鞋', '排球', '護具', '其他']
 const schema = yup.object({
   name: yup
     .string()
@@ -192,6 +278,12 @@ const schema = yup.object({
     .typeError('商品價格格式錯誤')
     .required('商品價格必填')
     .min(0, '商品價格不能小於 0'),
+  colors: yup
+    .array()
+    .of(yup.string()),
+  sizes: yup
+    .array()
+    .of(yup.string()),
   description: yup
     .string()
     .required('商品說明必填'),
@@ -209,6 +301,8 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
   initialValues: {
     name: '',
     price: 0,
+    colors: [],
+    sizes: [],
     description: '',
     category: '',
     sell: true
@@ -219,6 +313,8 @@ const price = useField('price')
 const description = useField('description')
 const category = useField('category')
 const sell = useField('sell')
+const colors = useField('colors')
+const sizes = useField('sizes')
 
 const fileRecords = ref([])
 const rawFileRecords = ref([])
@@ -233,6 +329,8 @@ const submit = handleSubmit(async (values) => {
     fd.append('name', values.name)
     fd.append('price', values.price)
     fd.append('description', values.description)
+    fd.append('colors', values.colors)
+    fd.append('sizes', values.sizes)
     fd.append('category', values.category)
     fd.append('sell', values.sell)
 
@@ -274,6 +372,8 @@ const tableItems = ref([])
 const tableHeaders = [
   { title: '圖片', align: 'center', sortable: false, key: 'image' },
   { title: '名稱', align: 'center', sortable: true, key: 'name' },
+  { title: '顏色', align: 'center', sortable: true, key: 'colors' },
+  { title: '尺寸', align: 'center', sortable: true, key: 'sizes' },
   { title: '價格', align: 'center', sortable: true, key: 'price' },
   { title: '分類', align: 'center', sortable: true, key: 'category' },
   { title: '上架', align: 'center', sortable: true, key: 'sell' },
@@ -309,7 +409,51 @@ const tableLoadItems = async (reset) => {
   tableLoading.value = false
 }
 tableLoadItems()
+
+const deleteProduct = async () => {
+  if (!dialog.value.id) return
+
+  try {
+    isSubmitting.value = true
+    await apiAuth.delete(`/product/${dialog.value.id}`)
+
+    createSnackbar({
+      text: '刪除成功',
+      snackbarProps: {
+        color: 'green'
+      }
+    })
+    closeDialog()
+    closeConfirmDialog()
+    tableLoadItems(true)
+  } catch (error) {
+    console.log(error)
+    createSnackbar({
+      text: error?.response?.data?.message || '發生錯誤',
+      snackbarProps: {
+        color: 'red'
+      }
+    })
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
+
+<style lang="scss">
+  @import '/src/styles/settings.scss';
+  h2 {
+    color: #333;
+    letter-spacing: 4px;
+  }
+  .edit-btn {
+    color: $primary-color;
+  }
+  .custom-btn {
+    background: $third-color;
+    color: white;
+  }
+</style>
 
 <route lang="yaml">
 meta:

@@ -14,6 +14,12 @@ const schema = new Schema({
     type: String,
     required: [true, '商品圖片必填']
   },
+  colors: {
+    type: [String]
+  },
+  sizes: {
+    type: [String]
+  },
   description: {
     type: String,
     required: [true, '商品說明必填']
@@ -22,7 +28,7 @@ const schema = new Schema({
     type: String,
     required: [true, '商品分類必填'],
     enum: {
-      values: ['衣服', '手機', '遊戲', '食品'],
+      values: ['球衣', '球褲', '球襪', '球鞋', '排球', '護具', '其他'],
       message: '商品分類錯誤'
     }
   },

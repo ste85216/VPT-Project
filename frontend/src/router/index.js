@@ -41,11 +41,11 @@ router.beforeEach(async (to, from, next) => {
     await user.profile()
   }
 
-  if (user.isLogin && ['/register', '/login'].includes(to.path)) {
+  if (user.isLogin && ['/loginregister'].includes(to.path)) { // 如果已登入，不允許進入登入註冊頁面
     next('/')
-  } else if (to.meta.login && !user.isLogin) {
-    next('/login')
-  } else if (to.meta.admin && !user.isAdmin) {
+  } else if (to.meta.login && !user.isLogin) { // 如果需要登入，但未登入，導向登入註冊頁面
+    next('/loginregister')
+  } else if (to.meta.admin && !user.isAdmin) { // 如果需要管理員權限，但未登入，導向首頁
     next('/')
   } else {
     next()

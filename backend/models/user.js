@@ -61,13 +61,11 @@ const schema = new Schema({
   },
   name: {
     type: String,
-    required: [true, '請正確填寫姓名'],
     minlength: [2, '姓名最少 2 個字'],
     maxlength: [10, '姓名最多 10 個字']
   },
   nickname: {
     type: String,
-    required: [true, '請正確填寫暱稱'],
     minlength: [2, '暱稱最少 2 個字'],
     maxlength: [10, '暱稱最多 10 個字']
   },

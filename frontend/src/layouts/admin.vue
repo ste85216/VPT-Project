@@ -1,44 +1,51 @@
 <template>
   <v-app-bar
-    height="60"
+    height="100"
     fixed
+    class="v-toolbar"
   >
     <v-container
       class="d-flex align-center pa-0 ps-10"
-      style="max-width: 100%;"
+      style="max-width: 1200px;"
     >
-      <v-btn to="/">
+      <v-btn
+        to="/"
+        class="logo-btn"
+      >
         <img
-          src="../assets/VPT_logo_text.png"
-          style="height: 40px;"
+          src="../assets/VPT_LOGO_1.png"
+          style="height: 50px;"
         >
       </v-btn>
-      <v-toolbar-title class="text-center">
-        後台管理
-      </v-toolbar-title>
     </v-container>
   </v-app-bar>
-  <v-navigation-drawer permanent>
-    <v-list>
-      <v-list-item
-        :prepend-avatar="avatar"
-        :title="user.account"
-      />
-    </v-list>
-    <v-divider></v-divider>
-    <v-list class="">
-      <v-list-item
-        v-for="item in navItems"
-        :key="item.to"
-        class="mt-3"
-        :to="item.to"
-        :title="item.text"
-        :prepend-icon="item.icon"
-      />
-    </v-list>
-  </v-navigation-drawer>
-
-  <router-view />
+  <v-container style="max-width: 1200px; margin-top: 3%;">
+    <v-row style="flex-wrap: nowrap;">
+      <v-col style="min-width:200px ;max-width: 260px;">
+        <v-list>
+          <v-list-item
+            :prepend-avatar="avatar"
+            :title="user.account"
+          />
+        </v-list>
+        <v-divider />
+        <v-list>
+          <v-list-item
+            v-for="items in navItems"
+            :key="items.to"
+            class="mt-5 v-list-title"
+            :to="items.to"
+            :prepend-icon="items.icon"
+          >
+            {{ items.text }}
+          </v-list-item>
+        </v-list>
+      </v-col>
+      <v-col>
+        <router-view />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup>
@@ -59,3 +66,18 @@ const avatar = computed(() => {
   return `https://api.multiavatar.com/${user.account}.png`
 })
 </script>
+
+<style lang="scss" scoped>
+  @import '/src/styles/settings.scss';
+  .logo-btn {
+    color: transparent
+  }
+  .v-toolbar {
+    background: $secondary-color;
+  }
+
+  .v-list-item {
+    font-size: 14px;
+    color: $third-color;
+  }
+</style>

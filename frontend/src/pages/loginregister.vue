@@ -37,12 +37,14 @@
                 :error-messages="Lpassword.errorMessage.value"
                 class="mt-4"
                 label="密碼"
-                type="password"
+                :type="showPasswordLogin ? 'text' : 'password'"
+                :append-inner-icon="showPasswordLogin ? 'mdi-eye-off' : 'mdi-eye'"
                 variant="outlined"
                 density="compact"
                 min-length="4"
                 maxlength="20"
                 clearable
+                @click:append-inner="showPasswordLogin = !showPasswordLogin"
               />
               <v-container class=" pa-0">
                 <a
@@ -174,24 +176,28 @@
                 :error-messages="Rpassword.errorMessage.value"
                 class="mt-2"
                 label="密碼"
-                type="password"
+                :type="showPasswordRegister ? 'text' : 'password'"
+                :append-inner-icon="showPasswordRegister ? 'mdi-eye-off' : 'mdi-eye'"
                 variant="outlined"
                 density="compact"
                 min-length="4"
                 maxlength="20"
                 clearable
+                @click:append-inner="showPasswordRegister = !showPasswordRegister"
               />
               <v-text-field
                 v-model="passwordConfirm.value.value"
                 :error-messages="passwordConfirm.errorMessage.value"
                 class="mt-2"
                 label="確認密碼"
-                type="password"
+                :type="showPasswordRegisterConfirm ? 'text' : 'password'"
+                :append-inner-icon="showPasswordRegisterConfirm ? 'mdi-eye-off' : 'mdi-eye'"
                 variant="outlined"
                 density="compact"
                 min-length="4"
                 maxlength="20"
                 clearable
+                @click:append-inner="showPasswordRegisterConfirm = !showPasswordRegisterConfirm"
               />
               <v-btn
                 class="mt-4"
@@ -233,6 +239,7 @@
 
 <script setup>
 import validator from 'validator'
+import { ref } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
@@ -251,6 +258,10 @@ const { api } = useApi()
 const router = useRouter()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
+
+const showPasswordLogin = ref(false)
+const showPasswordRegister = ref(false)
+const showPasswordRegisterConfirm = ref(false)
 
 const showRegister = () => {
   const login = document.querySelector('.login')
@@ -408,7 +419,11 @@ const loginSubmit = handleLoginSubmit(async (values) => {
         color: 'green'
       }
     })
-    router.push('/')
+    if (user.isAdmin) {
+      router.push('/admin/product')
+    } else {
+      router.push('/')
+    }
   } else {
     createSnackbar({
       text: result,

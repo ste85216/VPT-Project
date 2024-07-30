@@ -112,7 +112,7 @@ const navItems = computed(() => {
     { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
     { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' },
     { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin, class: 'customBtn' },
-    { to: '/admin', text: '管理後台', icon: 'mdi-cog', show: user.isLogin && user.isAdmin, class: 'customBtn' }
+    { to: '/admin/product', text: '管理後台', icon: 'mdi-cog', show: user.isLogin && user.isAdmin, class: 'customBtn' }
   ]
 })
 
@@ -155,7 +155,7 @@ const logout = async () => {
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 3px;
+      height: 2px;
       background-color: $primary-color;
       transform: scaleX(0%);
       transform-origin: center;
