@@ -6,14 +6,30 @@
           商品管理
         </h2>
       </v-col>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        class="d-flex pa-0 ps-4 pe-4 mt-5"
+      >
         <v-btn
           class="custom-btn"
           @click="openDialog(null)"
         >
           新增商品
         </v-btn>
+        <v-spacer />
+        <v-text-field
+          v-model="tableSearch"
+          label="搜尋"
+          append-inner-icon="mdi-magnify"
+          variant="outlined"
+          density="compact"
+          max-width="240"
+          clearable
+          @click-append="tableLoadItems(true)"
+          @keydown.enter="tableLoadItems(true)"
+        />
       </v-col>
+
       <v-col cols="12">
         <v-data-table-server
           v-model:items-per-page="tableItemsPerPage"
@@ -29,19 +45,17 @@
           @update:sort-by="tableLoadItems(false)"
           @update:page="tableLoadItems(false)"
         >
-          <template #top>
-            <v-text-field
-              v-model="tableSearch"
-              label="搜尋"
-              append-icon="mdi-magnify"
-              @click-append="tableLoadItems(true)"
-              @keydown.enter="tableLoadItems(true)"
-            />
+          <template #top />
+          <template #[`item.colors`]="{ value }">
+            {{ value.join(', ') }}
+          </template>
+          <template #[`item.sizes`]="{ value }">
+            {{ value.join(', ') }}
           </template>
           <template #[`item.image`]="{ value }">
             <v-img
               :src="value"
-              height="60px"
+              height="50px"
             />
           </template>
           <template #[`item.sell`]="{ value }">
@@ -53,7 +67,7 @@
           <template #[`item.action`]="{ item }">
             <v-btn
               icon="mdi-pencil"
-              variant="text"
+              variant="plain"
               class="edit-btn"
               @click="openDialog(item)"
             />
@@ -65,31 +79,41 @@
   <v-dialog
     v-model="dialog.open"
     persistent
-    width="600"
+    width="500"
   >
     <v-form
       :disabled="isSubmitting"
       @submit.prevent="submit"
     >
       <v-card class="rounded-xl">
-        <v-card-title>{{ dialog.id ? '編輯商品' : '新增商品' }}</v-card-title>
-        <v-card-text>
+        <v-card-title style="font-size: 18px;">
+          {{ dialog.id ? '編輯商品' : '新增商品' }}
+        </v-card-title>
+        <v-card-text class="mt-3 pa-3">
           <v-text-field
             v-model="name.value.value"
             label="名稱"
+            variant="outlined"
+            density="compact"
             :error-messages="name.errorMessage.value"
           />
           <v-combobox
             v-model="colors.value.value"
             label="顏色"
             :items="colorItems"
+            variant="outlined"
+            density="compact"
             multiple
+            clearable
             :error-messages="colors.errorMessage.value"
           />
           <v-combobox
             v-model="sizes.value.value"
             label="尺寸"
             :items="sizeItems"
+            variant="outlined"
+            density="compact"
+            clearable
             multiple
             :error-messages="sizes.errorMessage.value"
           />
@@ -97,6 +121,8 @@
             v-model="price.value.value"
             label="價格"
             type="number"
+            variant="outlined"
+            density="compact"
             min="0"
             :error-messages="price.errorMessage.value"
           />
@@ -104,6 +130,8 @@
             v-model="category.value.value"
             label="分類"
             :items="categories"
+            variant="outlined"
+            density="compact"
             :error-messages="category.errorMessage.value"
           />
           <v-checkbox
@@ -114,6 +142,8 @@
           <v-textarea
             v-model="description.value.value"
             label="說明"
+            variant="outlined"
+            density="compact"
             :error-messages="description.errorMessage.value"
           />
           <vue-file-agent
@@ -157,13 +187,18 @@
   </v-dialog>
   <v-dialog
     v-model="confirmDialog.open"
-    max-width="240"
+    max-width="320"
   >
     <v-card>
-      <v-card-title class="headline">
+      <v-card-title
+        class="headline"
+        style="font-size: 18px;"
+      >
         確認刪除
       </v-card-title>
-      <v-card-text>您確定要刪除此商品嗎？此操作無法撤銷。</v-card-text>
+      <v-card-text class="mt-3 pa-4">
+        您確定要刪除此商品嗎？此操作無法撤銷。
+      </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
@@ -334,6 +369,10 @@ const submit = handleSubmit(async (values) => {
     fd.append('category', values.category)
     fd.append('sell', values.sell)
 
+    for (const [key, value] of Object.entries(values)) {
+      console.log(`${key}: ${value}`)
+    }
+
     if (fileRecords.value.length > 0) {
       fd.append('image', fileRecords.value[0].file)
     }
@@ -370,14 +409,14 @@ const tableSortBy = ref([
 const tablePage = ref(1)
 const tableItems = ref([])
 const tableHeaders = [
-  { title: '圖片', align: 'center', sortable: false, key: 'image' },
-  { title: '名稱', align: 'center', sortable: true, key: 'name' },
-  { title: '顏色', align: 'center', sortable: true, key: 'colors' },
-  { title: '尺寸', align: 'center', sortable: true, key: 'sizes' },
-  { title: '價格', align: 'center', sortable: true, key: 'price' },
-  { title: '分類', align: 'center', sortable: true, key: 'category' },
-  { title: '上架', align: 'center', sortable: true, key: 'sell' },
-  { title: '操作', align: 'center', sortable: false, key: 'action' }
+  { title: '圖片', align: 'left', sortable: false, key: 'image' },
+  { title: '名稱', align: 'left', sortable: true, key: 'name' },
+  { title: '顏色', align: 'left', sortable: true, key: 'colors' },
+  { title: '尺寸', align: 'left', sortable: true, key: 'sizes' },
+  { title: '價格', align: 'left', sortable: true, key: 'price' },
+  { title: '分類', align: 'left', sortable: true, key: 'category' },
+  { title: '上架', align: 'left', sortable: true, key: 'sell' },
+  { title: '操作', align: 'left', sortable: false, key: 'action' }
 ]
 const tableLoading = ref(true)
 const tableItemsLength = ref(0)
@@ -447,6 +486,7 @@ const deleteProduct = async () => {
     letter-spacing: 4px;
   }
   .edit-btn {
+    left: -8px;
     color: $primary-color;
   }
   .custom-btn {

@@ -41,7 +41,8 @@ export const getAll = async (req, res) => {
       .find({
         $or: [
           { name: regex },
-          { description: regex }
+          { description: regex },
+          { category: regex }
         ]
       })
       // const text = 'a'
@@ -123,7 +124,8 @@ export const get = async (req, res) => {
         sell: true,
         $or: [
           { name: regex },
-          { description: regex }
+          { description: regex },
+          { category: regex }
         ]
       })
       // const text = 'a'

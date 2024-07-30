@@ -6,22 +6,28 @@
   >
     <v-container
       class="d-flex align-center pa-0 ps-10"
-      style="max-width: 1200px;"
+      style="max-width: 1300px;"
     >
       <v-btn
-        to="/"
+        to="/admin"
         class="logo-btn"
       >
         <img
           src="../assets/VPT_LOGO_1.png"
-          style="height: 50px;"
+          style="height: 70px;"
         >
       </v-btn>
     </v-container>
   </v-app-bar>
-  <v-container style="max-width: 1200px; margin-top: 3%;">
+  <v-container
+    class="d-flex align-center "
+    style="height:100%;max-width: 1300px;;"
+  >
     <v-row style="flex-wrap: nowrap;">
-      <v-col style="min-width:200px ;max-width: 260px;">
+      <v-col
+        class="left-navigation"
+        style="min-width:200px ;max-width: 240px;"
+      >
         <v-list>
           <v-list-item
             :prepend-avatar="avatar"
@@ -29,19 +35,38 @@
           />
         </v-list>
         <v-divider />
-        <v-list>
-          <v-list-item
-            v-for="items in navItems"
-            :key="items.to"
-            class="mt-5 v-list-title"
-            :to="items.to"
-            :prepend-icon="items.icon"
-          >
-            {{ items.text }}
-          </v-list-item>
+        <v-list class="h-80 overflow-hidden">
+          <v-row class="h-100 d-flex flex-column justify-space-between">
+            <v-col>
+              <v-list-item
+                v-for="items in navItems"
+                :key="items.to"
+                class="mt-5 v-list-title"
+                :to="items.to"
+                :prepend-icon="items.icon"
+              >
+                {{ items.text }}
+              </v-list-item>
+            </v-col>
+            <v-divider class="mt-5" />
+            <v-col class="custom-col">
+              <v-list-item
+                v-for="items in navItems2"
+                :key="items.to"
+                :to="items.to"
+                :prepend-icon="items.icon"
+                @click="items.click"
+              >
+                {{ items.text }}
+              </v-list-item>
+            </v-col>
+          </v-row>
         </v-list>
       </v-col>
-      <v-col>
+      <v-col
+        class="main pa-0 ps-6 pe-6"
+        style="min-width: 780px;"
+      >
         <router-view />
       </v-col>
     </v-row>
@@ -51,8 +76,20 @@
 <script setup>
 import { useUserStore } from '@/stores/user'
 import { computed } from 'vue'
+import { useSnackbar } from 'vuetify-use-dialog'
 
 const user = useUserStore()
+const createSnackbar = useSnackbar()
+
+const logout = async () => {
+  await user.logout()
+  createSnackbar({
+    text: '登出成功',
+    snackbarProps: {
+      color: 'success'
+    }
+  })
+}
 
 const navItems = [
   { to: '/admin/administrator', text: '管理者', icon: ' mdi-account-cog' },
@@ -60,6 +97,12 @@ const navItems = [
   { to: '/admin/product', text: '商品管理', icon: 'mdi-shopping' },
   { to: '/admin/order', text: '訂單管理', icon: 'mdi-list-box' },
   { to: '/admin/website', text: '網站管理', icon: 'mdi-web' }
+
+]
+
+const navItems2 = [
+  { to: '/', text: '前端首頁', icon: 'mdi-home-outline' },
+  { to: '/', text: '登出', icon: 'mdi-account-arrow-right', click: logout }
 ]
 
 const avatar = computed(() => {
@@ -69,7 +112,15 @@ const avatar = computed(() => {
 
 <style lang="scss" scoped>
   @import '/src/styles/settings.scss';
+  .left-navigation {
+    border: 1px solid rgba(0,0,0,0.2);
+  }
+  .main {
+    border: 1px solid rgba(0,0,0,0.2);
+    border-left: none;
+  }
   .logo-btn {
+    height: 80px;
     color: transparent
   }
   .v-toolbar {
@@ -79,5 +130,9 @@ const avatar = computed(() => {
   .v-list-item {
     font-size: 14px;
     color: $third-color;
+  }
+
+  .custom-col {
+    margin-top: 95%;
   }
 </style>

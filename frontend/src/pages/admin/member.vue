@@ -6,13 +6,27 @@
           會員管理
         </h2>
       </v-col>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        class="d-flex pa-0 ps-4 pe-4 mt-5"
+      >
         <v-btn
           class="custom-btn"
           @click="openDialog(null)"
         >
           新增會員
         </v-btn>
+        <v-spacer />
+        <v-text-field
+          v-model="tableSearch"
+          label="搜尋"
+          append-inner-icon="mdi-magnify"
+          variant="outlined"
+          density="compact"
+          max-width="240"
+          @click-append="tableLoadItems(true)"
+          @keydown.enter="tableLoadItems(true)"
+        />
       </v-col>
       <v-col cols="12">
         <v-data-table-server
@@ -29,32 +43,12 @@
           @update:sort-by="tableLoadItems(false)"
           @update:page="tableLoadItems(false)"
         >
-          <template #top>
-            <v-text-field
-              v-model="tableSearch"
-              label="搜尋"
-              append-icon="mdi-magnify"
-              @click-append="tableLoadItems(true)"
-              @keydown.enter="tableLoadItems(true)"
-            />
-          </template>
-          <template #[`item.image`]="{ value }">
-            <v-img
-              :src="value"
-              height="60px"
-            />
-          </template>
-          <template #[`item.sell`]="{ value }">
-            <v-icon
-              v-if="value"
-              icon="mdi-check"
-            />
-          </template>
+          <template #top />
           <template #[`item.action`]="{ item }">
             <v-btn
               class="edit-btn"
               icon="mdi-pencil"
-              variant="text"
+              variant="plain"
               @click="openDialog(item)"
             />
           </template>
@@ -65,15 +59,17 @@
   <v-dialog
     v-model="dialog.open"
     persistent
-    width="600"
+    width="440"
   >
     <v-form
       :disabled="isSubmitting"
       @submit.prevent="submit"
     >
       <v-card class="rounded-xl">
-        <v-card-title>{{ dialog.id ? '會員資料編輯' : '新增會員' }}</v-card-title>
-        <v-card-text>
+        <v-card-title style="font-size: 18px;">
+          {{ dialog.id ? '會員資料編輯' : '新增會員' }}
+        </v-card-title>
+        <v-card-text class="mt-3 pa-3">
           <v-text-field
             v-model="account.value.value"
             :error-messages="account.errorMessage.value"
@@ -188,13 +184,18 @@
   </v-dialog>
   <v-dialog
     v-model="confirmDialog.open"
-    max-width="240"
+    max-width="320"
   >
     <v-card>
-      <v-card-title class="headline">
+      <v-card-title
+        class="headline"
+        style="font-size: 18px;"
+      >
         確認刪除
       </v-card-title>
-      <v-card-text>您確定要刪除此會員嗎？此操作無法撤銷。</v-card-text>
+      <v-card-text class="mt-3 pa-4">
+        您確定要刪除此會員嗎？此操作無法撤銷。
+      </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
@@ -404,12 +405,12 @@ const tableSortBy = ref([
 const tablePage = ref(1)
 const tableItems = ref([])
 const tableHeaders = [
-  { title: '帳號', align: 'center', sortable: false, key: 'account' },
-  { title: '姓名', align: 'center', sortable: true, key: 'name' },
-  { title: '暱稱', align: 'center', sortable: true, key: 'nickname' },
-  { title: 'email', align: 'center', sortable: true, key: 'email' },
-  { title: '手機', align: 'center', sortable: true, key: 'phone' },
-  { title: '操作', align: 'center', sortable: false, key: 'action' }
+  { title: '帳號', align: 'left', sortable: false, key: 'account' },
+  { title: '姓名', align: 'left', sortable: true, key: 'name' },
+  { title: '暱稱', align: 'left', sortable: true, key: 'nickname' },
+  { title: 'email', align: 'left', sortable: true, key: 'email' },
+  { title: '手機', align: 'left', sortable: true, key: 'phone' },
+  { title: '操作', align: 'left', sortable: false, key: 'action' }
 ]
 const tableLoading = ref(true)
 const tableItemsLength = ref(0)
@@ -480,6 +481,7 @@ const deleteProduct = async () => {
     letter-spacing: 4px;
   }
   .edit-btn {
+    left: -8px;
     color: $primary-color;
   }
   .custom-btn {
