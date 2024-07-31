@@ -1,0 +1,22 @@
+.custom-btn {
+    background: $third-color;
+    color: white;
+    &:hover {
+      background: $third-light;
+    }
+  }
+
+  .edit-btn {
+    left: -8px;
+    color: $primary-color;
+  }
+
+  h2 {
+    color: #333;
+    letter-spacing: 4px;
+  }
+
+  h3 {
+    color:#333;
+    letter-spacing: 4px;
+  }

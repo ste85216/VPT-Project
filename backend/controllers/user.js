@@ -126,6 +126,7 @@ export const getAll = async (req, res) => {
         $or: [
           { role, account: regex }, // 這裡也要注意
           { role, name: regex },
+          { role, nickname: regex },
           { role, email: regex }
         ]
       })

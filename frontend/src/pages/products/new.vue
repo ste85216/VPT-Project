@@ -1,5 +1,5 @@
 <template>
-  <h2>排球衣</h2>
+  <h2>新品上市</h2>
 </template>
 <route lang="yaml">
   meta:

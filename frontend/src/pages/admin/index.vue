@@ -2,9 +2,9 @@
   <v-container class="">
     <v-row>
       <v-col cols="12">
-        <h1 class="text-center">
-          選擇管理項目
-        </h1>
+        <h2 class="text-center">
+          後台首頁
+        </h2>
       </v-col>
     </v-row>
   </v-container>

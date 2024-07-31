@@ -5,18 +5,16 @@
     class="v-toolbar"
   >
     <v-container
-      class="d-flex align-center pa-0 ps-10"
+      class="d-flex align-center pa-0"
       style="max-width: 1300px;"
     >
       <v-btn
         to="/admin"
-        class="logo-btn"
-      >
-        <img
-          src="../assets/VPT_LOGO_1.png"
-          style="height: 70px;"
-        >
-      </v-btn>
+        class="logo-btn ps-0"
+        text="VPT 管理者後台"
+        variant="plain"
+        :ripple="false"
+      />
     </v-container>
   </v-app-bar>
   <v-container
@@ -121,10 +119,14 @@ const avatar = computed(() => {
   }
   .logo-btn {
     height: 80px;
-    color: transparent
+    opacity: 1;
+    font-size: 28px;
+    font-weight: 500;
+    // color: transparent
   }
   .v-toolbar {
-    background: $secondary-color;
+    background: #020d2a;
+    color: #fff;
   }
 
   .v-list-item {

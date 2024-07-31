@@ -26,6 +26,14 @@
         </v-list-item>
       </template>
       <v-list-item
+        v-if="user.isLogin && user.isAdmin"
+        class="mt-5"
+        prepend-icon="mdi-cog"
+        to="/admin/product"
+      >
+        進入後台
+      </v-list-item>
+      <v-list-item
         v-if="user.isLogin"
         class="mt-5"
         prepend-icon="mdi-account-arrow-right"
@@ -62,7 +70,7 @@
             v-if="item.show"
             rounded="0"
             :to="item.to"
-            :class="item.class"
+            :class="[item.class, { 'v-btn--active': item.to === '/products' && isOnProductsPage }]"
             :ripple="false"
             variant="plain"
             style="opacity: 1;"
@@ -78,8 +86,16 @@
           </v-btn>
         </template>
         <v-btn
+          v-if="user.isLogin && user.isAdmin"
+          class="highlight"
+          prepend-icon="mdi-cog"
+          to="/admin/product"
+        >
+          進入後台
+        </v-btn>
+        <v-btn
           v-if="user.isLogin"
-          class="customBtn"
+          class="highlight"
           prepend-icon="mdi-account-arrow-right"
           @click="logout"
         >
@@ -88,7 +104,7 @@
       </template>
     </v-container>
   </v-app-bar>
-  <router-view v-if="!isOnProductsPage"/>
+  <router-view v-if="!isOnProductsPage" />
 </template>
 
 <script setup>
@@ -119,8 +135,7 @@ const navItems = computed(() => {
     { to: '/venues', text: '球場資訊', icon: 'mdi-information', show: user.isLogin || !user.isLogin, class: 'customBtn' },
     { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
     { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' },
-    { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin, class: 'customBtn' },
-    { to: '/admin/product', text: '管理後台', icon: 'mdi-cog', show: user.isLogin && user.isAdmin, class: 'customBtn' }
+    { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin, class: 'customBtn' }
   ]
 })
 
@@ -166,17 +181,16 @@ const logout = async () => {
       height: 2px;
       background-color: $primary-color;
       transform: scaleX(0%);
-      transform-origin: center;
+      // transform-origin: center;
       transition: 0.6s;
     }
     &:hover::before {
-      transform: scaleX(100%);
+      transform: scaleX(99.9%);
     }
   }
   .v-btn--active {
-    // border: 2px solid $primary-color;
     &::before {
-      transform: scaleX(100%);
+      transform: scaleX(99.9%);
     }
   }
 

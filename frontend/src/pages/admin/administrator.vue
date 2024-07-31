@@ -406,18 +406,6 @@ const deleteProduct = async () => {
 
 <style lang="scss">
   @import '/src/styles/settings.scss';
-  h2 {
-    color: #333;
-    letter-spacing: 4px;
-  }
-  .edit-btn {
-    left: -8px;
-    color: $primary-color;
-  }
-  .custom-btn {
-    background: $third-color;
-    color: white;
-  }
 </style>
 
 <route lang="yaml">
