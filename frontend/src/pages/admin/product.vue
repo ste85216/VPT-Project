@@ -35,6 +35,7 @@
           v-model:items-per-page="tableItemsPerPage"
           v-model:sort-by="tableSortBy"
           v-model:page="tablePage"
+          :items-per-page-options="[10, 20 ,50]"
           :items="tableItems"
           :headers="tableHeaders"
           :loading="tableLoading"
@@ -231,8 +232,8 @@ import { useSnackbar } from 'vuetify-use-dialog'
 definePage({
   meta: {
     title: '商品管理 | VPT',
-    login: true,
-    admin: true
+    login: true, // 需要登入才能訪問
+    admin: true // 需要是管理員才能訪問
   }
 })
 
@@ -436,6 +437,8 @@ const tableLoadItems = async (reset) => {
     })
     tableItems.value.splice(0, tableItems.value.length, ...data.result.data)
     tableItemsLength.value = data.result.total
+    console.log(data)
+    console.log(data.result.total)
   } catch (error) {
     console.log(error)
     createSnackbar({

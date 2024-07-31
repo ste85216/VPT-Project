@@ -33,6 +33,7 @@
           v-model:items-per-page="tableItemsPerPage"
           v-model:sort-by="tableSortBy"
           v-model:page="tablePage"
+          :items-per-page-options="[10, 20 ,50]"
           :items="tableItems"
           :headers="tableHeaders"
           :loading="tableLoading"
@@ -354,12 +355,12 @@ const tableLoadItems = async (reset) => {
         itemsPerPage: tableItemsPerPage.value,
         sortBy: tableSortBy.value[0]?.key || 'createdAt',
         sortOrder: tableSortBy.value[0]?.order || 'desc',
-        search: tableSearch.value
+        search: tableSearch.value,
+        role: 1
       }
     })
-    const filteredData = data.result.data.filter(user => user.role === 1)
-    tableItems.value.splice(0, tableItems.value.length, ...filteredData)
-    tableItemsLength.value = filteredData.length
+    tableItems.value.splice(0, tableItems.value.length, ...data.result.data)
+    tableItemsLength.value = data.result.adminTotal
   } catch (error) {
     console.log(error)
     createSnackbar({

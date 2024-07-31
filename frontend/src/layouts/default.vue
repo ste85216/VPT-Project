@@ -34,7 +34,7 @@
       />
     </v-list>
   </v-navigation-drawer>
-  <v-app-bar height="100">
+  <v-app-bar height="70">
     <v-container
       class="d-flex align-center pa-0"
       style="max-width: 1200px;"
@@ -46,7 +46,7 @@
       >
         <img
           src="../assets/VPT_logo_text.png"
-          height="70"
+          height="50"
         >
       </v-btn>
       <v-spacer />
@@ -88,7 +88,7 @@
       </template>
     </v-container>
   </v-app-bar>
-  <router-view />
+  <router-view v-if="!isOnProductsPage"/>
 </template>
 
 <script setup>
@@ -96,10 +96,18 @@ import { ref, computed } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
 import { useSnackbar } from 'vuetify-use-dialog'
+import { useRoute } from 'vue-router'
 
 const { mobile } = useDisplay()
 const user = useUserStore()
+const route = useRoute()
 const createSnackbar = useSnackbar()
+
+const currentPath = route.path
+
+const isOnProductsPage = computed(() => {
+  return currentPath.includes('/products')
+})
 
 const drawer = ref(false)
 

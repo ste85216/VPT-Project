@@ -1,57 +1,60 @@
 <template>
-  <swiper 
-  :navigation="{
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  }" 
-  :pagination="{
-        el: '.swiper-pagination',
-        clickable: true,
-      }"
-  :autoplay="{
-    delay: 2500,
-    disableOnInteraction: false
-  }" 
-  :loop="true" 
-  :modules="modules" 
-  class="mySwiper">
-    <swiper-slide v-for="(image,index) in images" :key="index">
-      <v-img :src="image"></v-img>
+  <swiper
+    :navigation="{
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    }"
+    :pagination="{
+      el: '.swiper-pagination',
+      clickable: true,
+    }"
+    :autoplay="{
+      delay: 2500,
+      disableOnInteraction: false
+    }"
+    :loop="true"
+    :modules="modules"
+    class="mySwiper"
+  >
+    <swiper-slide
+      v-for="(image,index) in images"
+      :key="index"
+    >
+      <v-img
+        :src="image"
+        width="100%"
+        height="800"
+      />
     </swiper-slide>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next" />
+    <div class="swiper-button-prev" />
+    <div class="swiper-pagination" />
   </swiper>
 </template>
 
 <script setup>
-  import socks from '../assets/排球襪.webp'
-  import socks2 from '../assets/排球襪2.webp'
-  import people from '../assets/人物圖.webp'
+import socks from '../assets/排球襪.webp'
+import socks2 from '../assets/排球襪2.webp'
+import people from '../assets/人物圖.webp'
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from 'swiper/vue'
 
-  const images = [
-    socks,
-    socks2,
-    people
-  ]
-  // Import Swiper Vue.js components
-  import { Swiper, SwiperSlide } from 'swiper/vue';
+// Import Swiper styles
+import 'swiper/css/bundle'
 
-  
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
-  // Import Swiper styles
-  import 'swiper/css/bundle';
+// import required modules
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 
-  import 'swiper/css/navigation';
-  import 'swiper/css/pagination';
+const images = [
+  socks,
+  socks2,
+  people
+]
 
-
-  // import required modules
-  import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-
-  const modules = [ Autoplay, Navigation, Pagination ]
-
-
+const modules = [Autoplay, Navigation, Pagination]
 
 </script>
 
@@ -74,7 +77,7 @@
   .swiper-button-next::after,
   .swiper-button-prev::after {
   font-size: 18px; /* 縮小箭頭大小 */
-  font-weight: 900; 
+  font-weight: 900;
   }
   .swiper-button-prev::after {
     position: absolute;
@@ -109,7 +112,7 @@
     }
     :deep(.swiper-pagination-bullet) {
       width: 16px;
-      
+
     }
     :deep(.swiper-pagination-bullet-active) {
       width: 80px

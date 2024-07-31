@@ -113,29 +113,33 @@ export const logout = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
+    console.log(req.query)
     const sortBy = req.query.sortBy || 'createdAt'
     const sortOrder = req.query.sortOrder || 'desc'
     const itemsPerPage = req.query.itemsPerPage * 1 || 10
     const page = req.query.page * 1 || 1
     const regex = new RegExp(req.query.search || '', 'i')
+    const role = req.query.role
 
     const data = await User
       .find({
         $or: [
-          { account: regex },
-          { email: regex }
+          { role, account: regex }, // 這裡也要注意
+          { role, name: regex },
+          { role, email: regex }
         ]
       })
       .sort({ [sortBy]: sortOrder })
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage)
-
-    const total = await User.estimatedDocumentCount()
+    console.log(data.length)
+    const memberTotal = await User.countDocuments({ role: 0 })
+    const adminTotal = await User.countDocuments({ role: 1 }) // 有篩選身分的資料筆數 跟product不一樣 這邊仔細觀察
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',
       result: {
-        data, total
+        data, memberTotal, adminTotal
       }
     })
   } catch (error) {

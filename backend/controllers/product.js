@@ -31,6 +31,7 @@ export const create = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
+    console.log(req.query)
     const sortBy = req.query.sortBy || 'createdAt'
     const sortOrder = req.query.sortOrder || 'desc'
     const itemsPerPage = req.query.itemsPerPage * 1 || 10
@@ -55,7 +56,7 @@ export const getAll = async (req, res) => {
       // 第三頁 = 21 ~ 30 = 跳過 20 筆 = (第 3 頁 - 1) * 10 = 20
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage)
-
+    console.log(data)
     const total = await Product.estimatedDocumentCount()
     res.status(StatusCodes.OK).json({
       success: true,
