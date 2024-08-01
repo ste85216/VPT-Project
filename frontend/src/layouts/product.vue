@@ -1,9 +1,9 @@
 <template>
   <v-container
-    style="max-width: 1200px; height: 100%;"
+    style="max-width: 1280px; height: 100%;"
     class="pa-0 pt-10"
   >
-    <v-row class="ps-5 h-100">
+    <v-row class="ps-16 h-100">
       <v-col style="max-width: 240px;">
         <h3>分類</h3>
         <v-list class="pa-0">
@@ -15,7 +15,7 @@
             variant="plain"
             class="pa-0 mt-5 custom"
           >
-            <v-list-item-title style="font-size: 15px;">
+            <v-list-item-title style="font-size: 15px; letter-spacing: 2px;">
               {{ category.title }}
             </v-list-item-title>
           </v-list-item>
@@ -29,11 +29,19 @@
             elevation="0"
           >
             <v-expansion-panel-title
-              class="pa-0 custom-icon"
+              class="pa-0 custom-icon mt-2"
               collapse-icon="mdi-minus-box-outline"
               expand-icon="mdi-plus-box-outline"
             >
-              所有商品
+              <v-btn
+                variant="plain"
+                :ripple="false"
+                class="pa-0"
+                to="/products"
+                style="opacity: 1; color:#333; font-size: 15px; font-weight:400;"
+              >
+                所有商品
+              </v-btn>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <v-list>
@@ -75,8 +83,30 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { useApi } from '@/composables/axios'
+import { useSnackbar } from 'vuetify-use-dialog'
 
 const route = useRoute()
+const { api } = useApi()
+const createSnackbar = useSnackbar()
+
+const productCategory = ref(null)
+
+const loadProductCategory = async (id) => {
+  try {
+    const { data } = await api.get(`/product/${id}`)
+    productCategory.value = data.result.category
+    console.log(data.result.category)
+  } catch (error) {
+    console.log(error)
+    createSnackbar({
+      text: error?.response?.data?.message || '發生錯誤',
+      snackbarProps: {
+        color: 'red'
+      }
+    })
+  }
+}
 
 const expandedPanel = ref([0])
 
@@ -86,10 +116,10 @@ const categories = ref([
 ])
 
 const subcategories = ref([
-  { title: '排球衣', to: '/products/shirts' },
-  { title: '排球褲', to: '/products/pants' },
+  { title: '球衣', to: '/products/shirts' },
+  { title: '球褲', to: '/products/pants' },
   { title: '排球', to: '/products/balls' },
-  { title: '排球襪', to: '/products/socks' },
+  { title: '球襪', to: '/products/socks' },
   { title: '護具', to: '/products/protection' },
   { title: '其他', to: '/products/others' }
 ])
@@ -98,36 +128,55 @@ const breadcrumbs = ref([
   { title: '所有商品', disabled: false, to: '/products' }
 ])
 
-const products = ref([])
-
-const fetchProductsForCategory = (category) => {
-  // 模擬根據分類獲取產品列表
-  return [
-    { name: `${category} 商品 1` },
-    { name: `${category} 商品 2` },
-    { name: `${category} 商品 3` }
-  ]
+const subCategoriesMap = {
+  '/products/shirts': '球衣',
+  '/products/pants': '球褲',
+  '/products/balls': '排球',
+  '/products/socks': '球襪',
+  '/products/protection': '護具',
+  '/products/others': '其他'
 }
 
 const categoriesMap = {
   '/products': '所有商品',
-  '/products/shirts': '排球衣',
-  '/products/pants': '排球褲',
-  '/products/balls': '排球',
-  '/products/socks': '排球襪',
-  '/products/protection': '護具',
-  '/products/others': '其他',
   '/products/bestsellers': '熱銷商品',
   '/products/new': '新品上市'
 }
 
-watch(route, (newRoute) => {
-  const category = categoriesMap[newRoute.path] || '所有商品'
-  breadcrumbs.value = [
-    { title: '所有商品', disabled: false, to: '/products' },
-    { title: category, disabled: true }
-  ]
-  products.value = fetchProductsForCategory(category)
+const subCategoryPathMap = {
+  球衣: '/products/shirts',
+  球褲: '/products/pants',
+  排球: '/products/balls',
+  球襪: '/products/socks',
+  護具: '/products/protection',
+  其他: '/products/others'
+}
+
+watch(route, async (newRoute) => {
+  const subCategory = subCategoriesMap[newRoute.path]
+  const category = categoriesMap[newRoute.path]
+  const productId = newRoute.params.id
+  if (productId) {
+    await loadProductCategory(productId)
+  }
+  const subCategoryPath = subCategoryPathMap[productCategory.value] || ''
+  console.log(subCategoryPath)
+  if (category) {
+    breadcrumbs.value = [
+      { title: category, disabled: false, to: newRoute.path }
+    ]
+  } else if (subCategory) {
+    breadcrumbs.value = [
+      { title: '所有商品', disabled: false, to: '/products' },
+      { title: subCategory, disabled: false, to: newRoute.path }
+    ]
+  } else {
+    breadcrumbs.value = [
+      { title: '所有商品', disabled: false, to: '/products' },
+      { title: productCategory, disabled: false, to: subCategoryPath },
+      { title: '商品詳情', disabled: true }
+    ]
+  }
 })
 </script>
 

@@ -12,11 +12,20 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 import { zhHant } from 'vuetify/locale'
+import colors from 'vuetify/util/colors'
 
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
-    defaultTheme: 'light'
+    themes: {
+      light: {
+        dark: false,
+        colors: {
+          primary: '#039199', // #E53935
+          secondary: colors.red.lighten4 // #FFCDD2
+        }
+      }
+    }
   },
   locale: {
     locale: 'zhHant',

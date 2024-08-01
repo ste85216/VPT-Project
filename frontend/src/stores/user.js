@@ -64,6 +64,24 @@ export const useUserStore = defineStore('user', () => {
     cart.value = 0
   }
 
+  const addCart = async (product, quantity) => {
+    try {
+      const { data } = await apiAuth.patch('/user/cart', {
+        product, quantity
+      })
+      cart.value = data.result
+      return {
+        color: 'green',
+        text: '成功加入購物車'
+      }
+    } catch (error) {
+      return {
+        color: 'red',
+        text: error?.response?.data?.message || '發生錯誤，請稍後再試'
+      }
+    }
+  }
+
   return {
     token,
     account,
@@ -73,7 +91,8 @@ export const useUserStore = defineStore('user', () => {
     isAdmin,
     login,
     profile,
-    logout
+    logout,
+    addCart
   }
 }, {
   persist: {
