@@ -188,9 +188,17 @@ h2{
 
 :deep(.v-expansion-panel-title__overlay) {
     background-color: transparent;
+    transition: none;
   }
+// :deep(.expand-transition-panel-enter-active),
+// :deep(.expand-transition-leave-to),
+// :deep(.expand-transition-panel-leave-active),
+// :deep(.expand-transition-enter-to) {
+//     transition: none;
+//   }
 :deep(.custom-icon .v-icon) {
     font-size: 18px;
     color: #333;
   }
+
 </style>

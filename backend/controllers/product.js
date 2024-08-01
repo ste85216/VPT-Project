@@ -4,7 +4,9 @@ import validator from 'validator'
 
 export const create = async (req, res) => {
   try {
-    req.body.image = req.file.path
+    const images = req.files.map(file => file.path) // 處理多張圖片
+    req.body.images = images
+
     const result = await Product.create(req.body)
     res.status(StatusCodes.OK).json({
       success: true,
@@ -78,7 +80,10 @@ export const edit = async (req, res) => {
   try {
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
 
-    req.body.image = req.file?.path
+    const images = req.files.map(file => file.path) // 新上傳的圖片
+    const existingImages = req.body.existingImages ? req.body.existingImages : [] // 保留的舊圖片
+    req.body.images = images.length > 0 ? images : existingImages // 如果有新圖片就用新圖片，沒有就用舊圖片
+
     await Product.findByIdAndUpdate(req.params.id, req.body, { runValidators: true }).orFail(new Error('NOT FOUND'))
 
     res.status(StatusCodes.OK).json({

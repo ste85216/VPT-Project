@@ -10,8 +10,8 @@ const schema = new Schema({
     required: [true, '商品價格必填'],
     min: [0, '商品價格不能小於 0']
   },
-  image: {
-    type: String,
+  images: {
+    type: [String],
     required: [true, '商品圖片必填']
   },
   colors: {

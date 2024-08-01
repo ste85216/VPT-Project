@@ -6,7 +6,7 @@
         cols="6"
       >
         <v-img
-          :src="product.image"
+          :src="product.images[0]"
           height="500"
           class="rounded-xl elevation-6"
           cover
@@ -104,7 +104,7 @@ const product = ref({
   _id: '',
   name: '',
   price: 0,
-  image: '',
+  images: [],
   sell: true,
   description: '',
   category: '',
@@ -118,7 +118,7 @@ const load = async () => {
     product.value._id = data.result._id
     product.value.name = data.result.name
     product.value.price = data.result.price
-    product.value.image = data.result.image
+    product.value.images = data.result.images
     product.value.sell = data.result.sell
     product.value.description = data.result.description
     product.value.category = data.result.category

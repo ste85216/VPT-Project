@@ -53,11 +53,19 @@
           <template #[`item.sizes`]="{ value }">
             {{ value.join(', ') }}
           </template>
-          <template #[`item.image`]="{ value }">
-            <v-img
-              :src="value"
-              height="50px"
-            />
+          <template #[`item.images`]="{ value }">
+            <div
+              class="images-container"
+              style="width: 200px;"
+            >
+              <v-img
+                v-for="(image, index) in value"
+                :key="index"
+                :src="image"
+                height="50"
+                class="me-2"
+              />
+            </div>
           </template>
           <template #[`item.sell`]="{ value }">
             <v-icon
@@ -152,6 +160,7 @@
             v-model="fileRecords"
             v-model:raw-model-value="rawFileRecords"
             accept="image/jpeg,image/png"
+            multiple
             deletable
             max-size="1MB"
             help-text="選擇檔案或拖曳到這裡"
@@ -186,6 +195,7 @@
       </v-card>
     </v-form>
   </v-dialog>
+
   <v-dialog
     v-model="confirmDialog.open"
     max-width="320"
@@ -263,8 +273,14 @@ const openDialog = (item) => {
     sell.value.value = item.sell
     colors.value.value = item.colors // 確保顏色陣列正確賦值
     sizes.value.value = item.sizes // 確保尺寸陣列正確賦值
+
+    // 清空文件記錄，保證fileAgent是空的
+    fileRecords.value = []
+    rawFileRecords.value = []
   } else {
     dialog.value.id = ''
+    fileRecords.value = [] // 清空文件記錄
+    rawFileRecords.value = []
   }
   dialog.value.open = true
 }
@@ -273,8 +289,9 @@ const closeDialog = () => {
   dialog.value.open = false
   resetForm()
   fileAgent.value.deleteFileRecord()
+  fileRecords.value = []
+  rawFileRecords.value = []
 }
-
 const openConfirmDialog = () => {
   confirmDialog.value.open = true
 }
@@ -332,6 +349,7 @@ const schema = yup.object({
   sell: yup
     .boolean()
 })
+
 const { handleSubmit, isSubmitting, resetForm } = useForm({
   validationSchema: schema,
   initialValues: {
@@ -356,26 +374,36 @@ const fileRecords = ref([])
 const rawFileRecords = ref([])
 
 const submit = handleSubmit(async (values) => {
-  if (fileRecords.value[0]?.error) return
+  if (fileRecords.value.some(record => record.error)) return
   if (dialog.value.id.length === 0 && fileRecords.value.length < 1) return
 
   try {
     const fd = new FormData()
-    // fd.append(key, value)
     fd.append('name', values.name)
     fd.append('price', values.price)
     fd.append('description', values.description)
-    fd.append('colors', values.colors)
-    fd.append('sizes', values.sizes)
+    values.colors.forEach(color => fd.append('colors', color))
+    values.sizes.forEach(size => fd.append('sizes', size))
     fd.append('category', values.category)
     fd.append('sell', values.sell)
 
-    for (const [key, value] of Object.entries(values)) {
-      console.log(`${key}: ${value}`)
+    // 添加新圖片文件
+    const existingImages = []
+    if (dialog.value.id !== '') {
+      const product = tableItems.value.find(item => item._id === dialog.value.id)
+      if (product && product.images) {
+        existingImages.push(...product.images)
+      }
     }
 
     if (fileRecords.value.length > 0) {
-      fd.append('image', fileRecords.value[0].file)
+      fileRecords.value.forEach((record) => {
+        if (record.file) {
+          fd.append('images', record.file)
+        }
+      })
+    } else if (dialog.value.id !== '') {
+      existingImages.forEach(image => fd.append('existingImages', image))
     }
 
     if (dialog.value.id === '') {
@@ -400,6 +428,9 @@ const submit = handleSubmit(async (values) => {
         color: 'red'
       }
     })
+  } finally {
+    fileRecords.value = []
+    rawFileRecords.value = []
   }
 })
 
@@ -410,7 +441,7 @@ const tableSortBy = ref([
 const tablePage = ref(1)
 const tableItems = ref([])
 const tableHeaders = [
-  { title: '圖片', align: 'left', sortable: false, key: 'image' },
+  { title: '圖片', align: 'left', sortable: false, key: 'images' },
   { title: '名稱', align: 'left', sortable: true, key: 'name' },
   { title: '顏色', align: 'left', sortable: true, key: 'colors' },
   { title: '尺寸', align: 'left', sortable: true, key: 'sizes' },
@@ -440,7 +471,7 @@ const tableLoadItems = async (reset) => {
     console.log(data)
     console.log(data.result.total)
   } catch (error) {
-    console.log(error)
+    console.log('提交表單時出錯', error)
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
@@ -480,10 +511,19 @@ const deleteProduct = async () => {
     isSubmitting.value = false
   }
 }
+
+const deleteUploadedFile = (index) => {
+  fileRecords.value.splice(index, 1)
+}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '/src/styles/settings.scss';
+  .images-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
 </style>
 
 <route lang="yaml">

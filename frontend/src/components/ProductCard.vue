@@ -7,7 +7,7 @@
   >
     <router-link :to="'/products/' + _id">
       <v-img
-        :src="image"
+        :src="images[0]"
         cover
         height="200"
       />
@@ -38,25 +38,30 @@
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { useSnackbar } from 'vuetify-use-dialog'
+import { ref } from 'vue'
 
-const user = userUserStore()
-const router = userRouter()
+const user = useUserStore()
+const router = useRouter()
 const createSnackbar = useSnackbar()
 
-defineProps(['_id', 'category', 'name', 'price', 'image', 'sell', 'description'])
+const props = defineProps(['_id', 'category', 'description', 'images', 'name', 'price', 'sell'])
+
+const loading = ref(false)
 
 const addCart = async () => {
   if (!user.isLogin) {
-    router.push('/loginregister')
+    router.push('/login')
     return
   }
+  loading.value = true
   const result = await user.addCart(props._id, 1)
   createSnackbar({
-    text: result,
+    text: result.text,
     snackbarProps: {
-      color: result === '成功加入購物車' ? 'green' : 'red'
+      color: result.color
     }
   })
+  loading.value = false
 }
 </script>
 

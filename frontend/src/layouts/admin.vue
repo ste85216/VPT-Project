@@ -6,7 +6,7 @@
   >
     <v-container
       class="d-flex align-center pa-0"
-      style="max-width: 1300px;"
+      style="max-width: 1400px;"
     >
       <v-btn
         to="/admin"
@@ -19,7 +19,7 @@
   </v-app-bar>
   <v-container
     class="d-flex align-center "
-    style="height:100%;max-width: 1300px;;"
+    style="height:100%;max-width: 1400px;;"
   >
     <v-row style="flex-wrap: nowrap;">
       <v-col

@@ -9,8 +9,17 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 })
 
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'products',
+    format: async (req, file) => 'png', // 支援格式
+    public_id: (req, file) => file.originalname.split('.')[0]
+  }
+})
+
 const upload = multer({
-  storage: new CloudinaryStorage({ cloudinary }),
+  storage,
   fileFilter (req, file, callback) {
     if (['image/jpeg', 'image/png'].includes(file.mimetype)) {
       callback(null, true)
@@ -19,12 +28,12 @@ const upload = multer({
     }
   },
   limits: {
-    fileSize: 1024 * 1024
+    fileSize: 1024 * 1024 // 限制檔案大小為 1MB
   }
 })
 
 export default (req, res, next) => {
-  upload.single('image')(req, res, error => {
+  upload.array('images', 10)(req, res, error => { // 修改這裡，支援多文件上傳
     if (error instanceof multer.MulterError) {
       let message = '上傳錯誤'
       if (error.code === 'LIMIT_FILE_SIZE') {
