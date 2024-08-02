@@ -62,17 +62,16 @@ export const useUserStore = defineStore('user', () => {
     account.value = ''
     role.value = UserRole.USER
     cart.value = 0
+    window.location.reload()
   }
 
   const addCart = async (product, quantity) => {
     try {
-      const { data } = await apiAuth.patch('/user/cart', {
-        product, quantity
-      })
-      cart.value = data.result
+      const { data } = await apiAuth.patch('/user/cart', { product, quantity })
+      cart.value = data.result.cartQuantity // 更新用戶商店中的購物車總數量
       return {
         color: 'green',
-        text: '成功加入購物車'
+        text: '成功'
       }
     } catch (error) {
       return {

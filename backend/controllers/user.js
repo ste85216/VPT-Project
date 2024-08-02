@@ -293,17 +293,10 @@ export const editCart = async (req, res) => {
 
     const idx = req.user.cart.findIndex(item => item.p_id.toString() === req.body.product)
     if (idx > -1) {
-      // 購物車內有這個商品，檢查修改後的數量
-      const quantity = req.user.cart[idx].quantity + parseInt(req.body.quantity)
-      if (quantity <= 0) {
-        // 修改後小於等於 0，刪除
-        req.user.cart.splice(idx, 1)
-      } else {
-        // 修改後還有，修改
-        req.user.cart[idx].quantity = quantity
-      }
+      // 購物車內有這個商品，直接修改數量
+      req.user.cart[idx].quantity = parseInt(req.body.quantity)
     } else {
-      // 購物車內沒這個商品，檢查商品是否存在
+      // 購物車內沒有這個商品，新增商品
       const product = await Product.findById(req.body.product).orFail(new Error('NOT FOUND'))
       if (!product.sell) throw new Error('SELL')
 

@@ -29,23 +29,24 @@
                 <v-col cols="3">
                   <v-btn
                     icon
-                    @click="updateQuantity(item, item.quantity - 1)"
+                    @click="changeQuantity(item, item.quantity - 1)"
                   >
                     -
                   </v-btn>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
-                    v-model="item.quantity"
+                    v-model.number="item.quantity"
                     type="number"
-                    min="0"
-                    @blur="updateQuantity(item, item.quantity)"
+                    min="1"
+                    @blur="updateQuantity(item)"
+                    @keypress.enter="updateQuantity(item)"
                   />
                 </v-col>
                 <v-col cols="3">
                   <v-btn
                     icon
-                    @click="updateQuantity(item, item.quantity + 1)"
+                    @click="changeQuantity(item, item.quantity + 1)"
                   >
                     +
                   </v-btn>
@@ -64,6 +65,7 @@
           <v-btn
             color="primary"
             class="mt-4"
+            :disabled="loading"
             @click="checkout"
           >
             結帳
@@ -73,13 +75,14 @@
     </v-row>
   </v-container>
 </template>
+
 <script setup>
 import { definePage } from 'vue-router/auto'
 import { useApi } from '@/composables/axios'
 import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/stores/user'
-import { ref, computed, watch } from 'vue'
 
 definePage({
   meta: {
@@ -95,16 +98,13 @@ const user = useUserStore()
 const createSnackbar = useSnackbar()
 
 const items = ref([])
+const loading = ref(false)
 
 const loadItems = async () => {
   try {
     const { data } = await apiAuth.get('/user/cart')
-    items.value = data.result.map(item => {
-      return {
-        ...item,
-        quantity: item.quantity // 確保每個商品的數量與資料庫同步
-      }
-    })
+    items.value = data.result // 確保每個商品的數量與資料庫同步
+    updateCartQuantity() // 更新購物車總數量
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
@@ -115,17 +115,44 @@ const loadItems = async () => {
   }
 }
 
-const updateQuantity = async (item, newQuantity) => {
+const changeQuantity = async (item, newQuantity) => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
+
   if (newQuantity < 1) {
     newQuantity = 1
   }
 
+  await updateQuantity(item, newQuantity, false)
+}
+
+const updateQuantity = async (item, newQuantity = null, showSnackbar = false) => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
+
   try {
-    // 直接更新商品的最終數量，而不是差值
-    const result = await user.addCart(item.p_id._id, newQuantity)
-    createSnackbar({ message: result.text, color: result.color })
-    item.quantity = newQuantity // 更新前端顯示的數量
+    loading.value = true
+    const quantity = newQuantity !== null ? newQuantity : item.quantity
+    const result = await user.addCart(item.p_id._id, quantity)
+    if (showSnackbar) {
+      createSnackbar({
+        text: result.text,
+        snackbarProps: {
+          color: result.color
+        }
+      })
+    }
+    if (result.color === 'green') {
+      item.quantity = quantity
+      updateCartQuantity()
+    }
+    loading.value = false
   } catch (error) {
+    loading.value = false
     console.log(error)
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
@@ -134,23 +161,17 @@ const updateQuantity = async (item, newQuantity) => {
   }
 }
 
-watch(
-  items,
-  (newItems) => {
-    newItems.forEach(item => {
-      if (item.quantity < 1) {
-        item.quantity = 1
-      }
-    })
-  },
-  { deep: true }
-)
+const updateCartQuantity = () => {
+  const totalQuantity = items.value.reduce((acc, item) => acc + item.quantity, 0)
+  user.cart = totalQuantity // 更新用戶商店中的購物車總數量
+}
 
 const totalPrice = computed(() => {
-  return items.value.reduce((acc, item) => acc + (item.p_id.price * item.quantity), 0);
+  return items.value.reduce((acc, item) => acc + (item.p_id.price * item.quantity), 0)
 })
 
 const checkout = async () => {
+  loading.value = true
   try {
     const result = await user.checkout()
     createSnackbar({ message: result.text, color: result.color })
@@ -160,6 +181,7 @@ const checkout = async () => {
   } catch (error) {
     createSnackbar({ message: '結帳失敗', color: 'error' })
   }
+  loading.value = false
 }
 
 loadItems()
