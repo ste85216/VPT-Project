@@ -352,5 +352,17 @@ export const editCart = async (req, res) => {
 }
 
 export const getCart = async (req, res) => {
-
+  try {
+    const result = await User.findById(req.user._id, 'cart').populate('cart.p_id')
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '',
+      result: result.cart
+    })
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '未知錯誤'
+    })
+  }
 }

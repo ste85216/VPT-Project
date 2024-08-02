@@ -1,17 +1,17 @@
 <template>
   <v-card
+    :to="'/products/' +_id"
     min-width="280"
     max-width="280"
     class="pb-2 rounded-lg border-sm mx-3"
     elevation="0"
   >
-    <router-link :to="'/products/' + _id">
-      <v-img
-        :src="images[0]"
-        cover
-        height="200"
-      />
-    </router-link>
+    <v-img
+      :src="images[0]"
+      cover
+      height="200"
+    />
+
     <v-card-title class="ps-0 pt-4">
       {{ name }}
     </v-card-title>
@@ -21,16 +21,6 @@
     >
       {{ price }}
     </v-card-text>
-    <v-card-actions class="pa-0">
-      <v-spacer />
-      <v-btn
-        color="primary"
-        prepend-icon="mdi-cart"
-        @click="addCart"
-      >
-        加入購物車
-      </v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 

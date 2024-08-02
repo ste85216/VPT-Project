@@ -4,6 +4,9 @@ import validator from 'validator'
 
 export const create = async (req, res) => {
   try {
+    console.log('Received body:', req.body)
+    console.log('Received files:', req.files)
+
     const images = req.files.map(file => file.path) // 處理多張圖片
     req.body.images = images
 
@@ -14,6 +17,7 @@ export const create = async (req, res) => {
       result
     })
   } catch (error) {
+    console.log('Error details:', error) // 打印錯誤詳細信息
     if (error.name === 'ValidationError') {
       const key = Object.keys(error.errors)[0]
       const message = error.errors[key].message
@@ -78,19 +82,30 @@ export const getAll = async (req, res) => {
 
 export const edit = async (req, res) => {
   try {
+    console.log('接收到的請求參數:', req.params.id) // 打印請求參數
+    console.log('接收到的請求數據:', req.body) // 打印請求數據
+    console.log('接收到的文件:', req.files) // 打印上傳的文件
+
     if (!validator.isMongoId(req.params.id)) throw new Error('ID')
 
-    const images = req.files.map(file => file.path) // 新上傳的圖片
-    const existingImages = req.body.existingImages ? req.body.existingImages : [] // 保留的舊圖片
-    req.body.images = images.length > 0 ? images : existingImages // 如果有新圖片就用新圖片，沒有就用舊圖片
+    const newImages = req.files.map(file => file.path) // 新上傳的圖片
+    const existingImages = JSON.parse(req.body.existingImages || '[]') // 保留的舊圖片
 
-    await Product.findByIdAndUpdate(req.params.id, req.body, { runValidators: true }).orFail(new Error('NOT FOUND'))
+    console.log('新圖片:', newImages)
+    console.log('舊圖片:', existingImages)
+
+    req.body.images = [...existingImages, ...newImages] // 合併舊圖片和新圖片
+
+    console.log('合併後的圖片:', req.body.images)
+
+    await Product.findByIdAndUpdate(req.params.id, req.body, { runValidators: true, new: true }).orFail(new Error('NOT FOUND'))
 
     res.status(StatusCodes.OK).json({
       success: true,
-      message: ''
+      message: '商品更新成功'
     })
   } catch (error) {
+    console.log('錯誤詳細信息:', error) // 打印錯誤詳細信息
     if (error.name === 'CastError' || error.message === 'ID') {
       res.status(StatusCodes.BAD_REQUEST).json({
         success: false,

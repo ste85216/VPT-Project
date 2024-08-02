@@ -24,7 +24,7 @@
         </v-col>
         <v-col>
           <h3>尺寸</h3>
-          <v-chip-group>
+          <v-chip-group class="pa-0">
             <v-chip
               v-for="(size, index) in product.sizes"
               :key="index"
@@ -35,7 +35,7 @@
         </v-col>
         <v-col>
           <h3>顏色</h3>
-          <v-chip-group>
+          <v-chip-group class="pa-0">
             <v-chip
               v-for="(color, index) in product.colors"
               :key="index"
@@ -49,20 +49,24 @@
           <!-- @click="addCart(item.p_id._id, -1)" -->
           <!-- <template #[`item.quantity`]="{item}"> -->
           <v-btn
+            size="x-small"
+            icon
             variant="text"
             color="red"
-            class="border-sm"
+            class="border-sm "
           >
-            -
+            <v-icon>mdi-minus</v-icon>
           </v-btn>
           <span class="px-5">0</span>
           <!-- @click="addCart(item.p_id._id, 1)" -->
           <v-btn
+            size="x-small"
+            icon
             variant="text"
             color="green"
             class="border-sm"
           >
-            +
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
           <!-- </template> -->
         </v-col>
@@ -158,5 +162,6 @@ load()
 h3 {
   font-size: 16px;
   font-weight: 400;
+  margin-bottom: 12px;
 }
 </style>

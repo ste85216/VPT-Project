@@ -10,12 +10,12 @@ const cartSchema = new Schema({
     required: [true, '請正確填寫商品 ID']
   },
   colors: {
-    type: String,
-    required: [true, '請選擇商品顏色']
+    type: String
+    // required: [true, '請選擇商品顏色']
   },
   sizes: {
-    type: String,
-    required: [true, '請選擇商品尺寸']
+    type: String
+    // required: [true, '請選擇商品尺寸']
   },
   quantity: {
     type: Number,

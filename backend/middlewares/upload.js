@@ -33,17 +33,22 @@ const upload = multer({
 })
 
 export default (req, res, next) => {
-  upload.array('images', 10)(req, res, error => { // 修改這裡，支援多文件上傳
+  upload.array('newImages', 10)(req, res, error => {
+    console.log('Files:', req.files) // 調試訊息，顯示上傳的文件
     if (error instanceof multer.MulterError) {
       let message = '上傳錯誤'
+      console.log('MulterError:', error) // 調試訊息，顯示Multer錯誤
       if (error.code === 'LIMIT_FILE_SIZE') {
         message = '檔案太大'
+      } else if (error.code === 'LIMIT_FILE_COUNT') {
+        message = '超過最大檔案數量'
       }
       res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
         message
       })
     } else if (error) {
+      console.log('OtherError:', error) // 調試訊息，顯示其他錯誤
       if (error.message === 'FORMAT') {
         res.status(StatusCodes.BAD_REQUEST).json({
           success: false,

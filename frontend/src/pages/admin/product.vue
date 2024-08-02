@@ -153,8 +153,65 @@
             label="說明"
             variant="outlined"
             density="compact"
+            clearable
+            no-resize
+            rows="3"
             :error-messages="description.errorMessage.value"
           />
+
+          <div
+            v-if="existingImages.length > 0"
+            class="mb-5 px-2 py-1"
+            style="border: 1px solid #ababab;border-radius: 4px;"
+          >
+            <div style="font-size: 14px;font-weight: 400; color:#333;">
+              現有圖片：
+            </div>
+            <v-row>
+              <v-col
+                v-for="(image, index) in existingImages"
+                :key="index"
+                cols="3"
+                class="position-relative"
+              >
+                <v-btn
+                  icon
+                  size="x-small"
+                  elevation="8"
+                  height="24"
+                  width="24"
+                  style="position: absolute; right: 0; top: 0;z-index: 1;"
+                  @click="removeExistingImage(index)"
+                >
+                  <v-icon
+                    size="small"
+                    color="error"
+                  >
+                    mdi-close
+                  </v-icon>
+                </v-btn>
+                <v-img
+                  :src="image.url"
+                  aspect-ratio="1"
+                  cover
+                >
+                  <template #placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      />
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-col>
+            </v-row>
+          </div>
+
           <vue-file-agent
             ref="fileAgent"
             v-model="fileRecords"
@@ -263,6 +320,8 @@ const confirmDialog = ref({
   open: false
 })
 
+const existingImages = ref([])
+
 const openDialog = (item) => {
   if (item) {
     dialog.value.id = item._id
@@ -271,18 +330,20 @@ const openDialog = (item) => {
     description.value.value = item.description
     category.value.value = item.category
     sell.value.value = item.sell
-    colors.value.value = item.colors // 確保顏色陣列正確賦值
-    sizes.value.value = item.sizes // 確保尺寸陣列正確賦值
+    colors.value.value = item.colors
+    sizes.value.value = item.sizes
 
-    // 清空文件記錄，保證fileAgent是空的
+    existingImages.value = item.images.map(url => ({ url, isExisting: true }))
     fileRecords.value = []
     rawFileRecords.value = []
   } else {
     dialog.value.id = ''
-    fileRecords.value = [] // 清空文件記錄
+    fileRecords.value = []
     rawFileRecords.value = []
+    existingImages.value = []
   }
   dialog.value.open = true
+  console.log('Dialog opened with id:', dialog.value.id) // 調試訊息
 }
 
 const closeDialog = () => {
@@ -291,7 +352,10 @@ const closeDialog = () => {
   fileAgent.value.deleteFileRecord()
   fileRecords.value = []
   rawFileRecords.value = []
+  existingImages.value = [] // 新增：清空现有图片
+  console.log('Dialog closed') // 調試訊息
 }
+
 const openConfirmDialog = () => {
   confirmDialog.value.open = true
 }
@@ -362,6 +426,7 @@ const { handleSubmit, isSubmitting, resetForm } = useForm({
     sell: true
   }
 })
+
 const name = useField('name')
 const price = useField('price')
 const description = useField('description')
@@ -374,8 +439,31 @@ const fileRecords = ref([])
 const rawFileRecords = ref([])
 
 const submit = handleSubmit(async (values) => {
-  if (fileRecords.value.some(record => record.error)) return
-  if (dialog.value.id.length === 0 && fileRecords.value.length < 1) return
+  console.log('Submit clicked') // 調試訊息
+
+  // 重置 isSubmitting 為 false 以確保開始新的提交
+  isSubmitting.value = false
+
+  if (isSubmitting.value) {
+    console.log('Already submitting') // 調試訊息
+    return
+  }
+
+  // 檢查是否有文件上傳錯誤
+  if (fileRecords.value.some(record => record.error)) {
+    console.log('File records have errors') // 調試訊息
+    return
+  }
+
+  // 檢查是否有需要提交的文件或現有圖片
+  if (dialog.value.id.length === 0 && fileRecords.value.length < 1 && existingImages.value.length === 0) {
+    console.log('No files to submit') // 調試訊息
+    return
+  }
+
+  // 設置 isSubmitting 為 true
+  isSubmitting.value = true
+  console.log('Start submitting') // 調試訊息
 
   try {
     const fd = new FormData()
@@ -387,30 +475,29 @@ const submit = handleSubmit(async (values) => {
     fd.append('category', values.category)
     fd.append('sell', values.sell)
 
-    // 添加新圖片文件
-    const existingImages = []
-    if (dialog.value.id !== '') {
-      const product = tableItems.value.find(item => item._id === dialog.value.id)
-      if (product && product.images) {
-        existingImages.push(...product.images)
+    const existingImageUrls = existingImages.value.map(image => image.url)
+    fd.append('existingImages', JSON.stringify(existingImageUrls))
+    console.log('FormData before files:', ...fd.entries()) // 調試訊息
+
+    fileRecords.value.forEach((record) => {
+      if (record.file) {
+        fd.append('newImages', record.file)
       }
+    })
+
+    for (const [key, value] of fd.entries()) {
+      console.log(key, value) // 調試訊息
     }
 
-    if (fileRecords.value.length > 0) {
-      fileRecords.value.forEach((record) => {
-        if (record.file) {
-          fd.append('images', record.file)
-        }
-      })
-    } else if (dialog.value.id !== '') {
-      existingImages.forEach(image => fd.append('existingImages', image))
-    }
-
+    let response
     if (dialog.value.id === '') {
-      await apiAuth.post('/product', fd)
+      console.log('Creating new product') // 調試訊息
+      response = await apiAuth.post('/product', fd)
     } else {
-      await apiAuth.patch('/product/' + dialog.value.id, fd)
+      console.log('Updating existing product') // 調試訊息
+      response = await apiAuth.patch('/product/' + dialog.value.id, fd)
     }
+    console.log('API response:', response.data) // 調試訊息
 
     createSnackbar({
       text: dialog.value.id === '' ? '新增成功' : '編輯成功',
@@ -421,7 +508,8 @@ const submit = handleSubmit(async (values) => {
     closeDialog()
     tableLoadItems(true)
   } catch (error) {
-    console.log(error)
+    console.log('Error:', error)
+    console.log('Error details:', error.response ? error.response.data : error.message) // 新增詳細錯誤訊息
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
@@ -429,10 +517,17 @@ const submit = handleSubmit(async (values) => {
       }
     })
   } finally {
+    console.log('Resetting isSubmitting') // 調試訊息
+    isSubmitting.value = false
     fileRecords.value = []
     rawFileRecords.value = []
+    existingImages.value = []
   }
 })
+
+const removeExistingImage = (index) => {
+  existingImages.value.splice(index, 1)
+}
 
 const tableItemsPerPage = ref(10)
 const tableSortBy = ref([
@@ -441,7 +536,24 @@ const tableSortBy = ref([
 const tablePage = ref(1)
 const tableItems = ref([])
 const tableHeaders = [
-  { title: '圖片', align: 'left', sortable: false, key: 'images' },
+  {
+    title: '圖片',
+    align: 'left',
+    sortable: false,
+    key: 'images',
+    width: '200px',
+    render: (value) => {
+      const displayImages = value.slice(0, 3)
+      return `
+        <div class="images-container" style="width: 200px;">
+          ${displayImages.map(image => `
+            <img src="${image}" style="height: 50px; width: 50px; object-fit: cover; margin-right: 5px;" />
+          `).join('')}
+          ${value.length > 3 ? `<span>+${value.length - 3} 更多</span>` : ''}
+        </div>
+      `
+    }
+  },
   { title: '名稱', align: 'left', sortable: true, key: 'name' },
   { title: '顏色', align: 'left', sortable: true, key: 'colors' },
   { title: '尺寸', align: 'left', sortable: true, key: 'sizes' },
@@ -512,9 +624,6 @@ const deleteProduct = async () => {
   }
 }
 
-const deleteUploadedFile = (index) => {
-  fileRecords.value.splice(index, 1)
-}
 </script>
 
 <style lang="scss" scoped>

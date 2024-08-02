@@ -12,7 +12,13 @@ const schema = new Schema({
   },
   images: {
     type: [String],
-    required: [true, '商品圖片必填']
+    required: [true, '商品圖片必填'],
+    validate: {
+      validator: function (v) {
+        return v.length > 0
+      },
+      message: '至少需要一張商品圖片'
+    }
   },
   colors: {
     type: [String]
