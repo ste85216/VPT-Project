@@ -1,5 +1,13 @@
 <template>
-  <swiper />
+  <v-container style="max-width: 1300px;">
+    <v-row>
+      <v-col
+        cols="4"
+        style="min-height: 680px; max-height: 800px;min-width: 360px;"
+      />
+      <v-col cols="6" />
+    </v-row>
+  </v-container>
   <v-sheet class="mt-16">
     <h1>新品上市</h1>
   </v-sheet>
@@ -10,8 +18,8 @@
 </template>
 
 <script setup>
-import swiper from '../components/Swiper.vue'
 import { definePage } from 'vue-router/auto'
+// import { Vue3Spline } from 'vue3-spline'
 
 definePage({
   meta: {

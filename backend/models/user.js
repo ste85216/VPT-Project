@@ -22,6 +22,9 @@ const cartSchema = new Schema({
     required: [true, '請選擇商品數量'],
     min: [1, '商品數量最少 1 個']
   }
+}, {
+  timestamps: true, // 使用者帳號建立時間、更新時間
+  versionKey: false // __V 欄位不顯示，改了幾次的紀錄，非必要
 })
 
 const schema = new Schema({

@@ -3,7 +3,7 @@
     v-if="mobile"
     v-model="drawer"
   >
-    <v-list class="ps-1 ">
+    <v-list class="ps-1">
       <template
         v-for="item in navItems"
         :key="item.to"
@@ -17,10 +17,10 @@
         >
           <template #append>
             <v-badge
-              v-if="item.to === '/cart' && user.cart > 0"
-              color="error"
-              :content="user.cart"
-              inline
+              v-if="item.to === '/cart' && user.cartQuantity > 0"
+              color="red"
+              :content="user.cartQuantity"
+              floating
             />
           </template>
         </v-list-item>
@@ -83,9 +83,9 @@
           >
             {{ item.text }}
             <v-badge
-              v-if="item.to === '/cart' && user.cart > 0"
+              v-if="item.to === '/cart' && user.cartQuantity > 0"
               color="red"
-              :content="user.cart"
+              :content="user.cartQuantity"
               floating
             />
           </v-btn>
@@ -112,7 +112,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -123,25 +123,23 @@ const user = useUserStore()
 const route = useRoute()
 const createSnackbar = useSnackbar()
 
+console.log(user.cartQuantity)
+
 const currentPath = route.path
 
-const isOnProductsPage = computed(() => {
-  return currentPath.includes('/products')
-})
+const isOnProductsPage = computed(() => currentPath.includes('/products'))
 
 const drawer = ref(false)
 
-const navItems = computed(() => {
-  return [
-    { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-    { to: '/products', text: '所有商品', icon: 'mdi-volleyball', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-    { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-    { to: '/venues', text: '球場資訊', icon: 'mdi-information', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-    { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-    { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' },
-    { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin, class: 'customBtn' }
-  ]
-})
+const navItems = computed(() => [
+  { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/products', text: '所有商品', icon: 'mdi-volleyball', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/venues', text: '球場資訊', icon: 'mdi-information', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' },
+  { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin, class: 'customBtn' }
+])
 
 const logout = async () => {
   await user.logout()
@@ -152,6 +150,20 @@ const logout = async () => {
     }
   })
 }
+
+// 當用戶登入時載入購物車數據
+watch(() => user.isLogin, async (isLogin) => {
+  if (isLogin) {
+    await user.loadCart()
+  }
+})
+
+// 當組件掛載時載入購物車數據（例如在頁面刷新後）
+onMounted(async () => {
+  if (user.isLogin) {
+    await user.loadCart()
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -185,7 +197,6 @@ const logout = async () => {
       height: 2px;
       background-color: $primary-color;
       transform: scaleX(0%);
-      // transform-origin: center;
       transition: 0.6s;
     }
     &:hover::before {
@@ -197,5 +208,4 @@ const logout = async () => {
       transform: scaleX(99.9%);
     }
   }
-
 </style>

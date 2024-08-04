@@ -128,7 +128,8 @@ export const getAll = async (req, res) => {
           { role, account: regex }, // 這裡也要注意
           { role, name: regex },
           { role, nickname: regex },
-          { role, email: regex }
+          { role, email: regex },
+          { role, phone: regex }
         ]
       })
       .sort({ [sortBy]: sortOrder })
@@ -289,19 +290,30 @@ export const remove = async (req, res) => {
 
 export const editCart = async (req, res) => {
   try {
-    if (!validator.isMongoId(req.body.product)) throw new Error('ID')
+    if (!validator.isMongoId(req.body.p_id)) throw new Error('ID')
 
-    const idx = req.user.cart.findIndex(item => item.p_id.toString() === req.body.product)
+    // 檢查購物車內是否已經有相同顏色和尺寸的商品
+    const idx = req.user.cart.findIndex(
+      item => item.p_id.toString() === req.body.p_id && item.colors === req.body.colors && item.sizes === req.body.sizes
+    )
+
     if (idx > -1) {
-      // 購物車內有這個商品，直接修改數量
-      req.user.cart[idx].quantity = parseInt(req.body.quantity)
+      if (req.body.quantity === 0) {
+        // 數量為0，從購物車中刪除該商品
+        req.user.cart.splice(idx, 1)
+      } else {
+        // 購物車內有相同顏色和尺寸的商品，直接修改數量
+        req.user.cart[idx].quantity = parseInt(req.body.quantity)
+      }
     } else {
-      // 購物車內沒有這個商品，新增商品
-      const product = await Product.findById(req.body.product).orFail(new Error('NOT FOUND'))
+      // 購物車內沒有相同顏色和尺寸的商品，新增商品
+      const product = await Product.findById(req.body.p_id).orFail(new Error('NOT FOUND'))
       if (!product.sell) throw new Error('SELL')
 
       req.user.cart.push({
         p_id: product._id,
+        colors: req.body.colors,
+        sizes: req.body.sizes,
         quantity: req.body.quantity
       })
     }
@@ -309,8 +321,8 @@ export const editCart = async (req, res) => {
     await req.user.save()
     res.status(StatusCodes.OK).json({
       success: true,
-      message: '',
-      result: req.user.cartQuantity
+      message: '商品以加入購物車',
+      result: { cart: req.user.cart } // 修改：返回整個購物車數據結構
     })
   } catch (error) {
     if (error.name === 'CastError' || error.message === 'ID') {

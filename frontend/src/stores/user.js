@@ -10,13 +10,14 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const account = ref('')
   const role = ref(UserRole.USER)
-  const cart = ref(0)
+  const cart = ref([]) // 確保購物車初始值為數組
 
-  const isLogin = computed(() => {
-    return token.value.length > 0
-  })
-  const isAdmin = computed(() => {
-    return role.value === UserRole.ADMIN
+  const isLogin = computed(() => token.value.length > 0)
+  const isAdmin = computed(() => role.value === UserRole.ADMIN)
+
+  // 計算購物車中的總數量
+  const cartQuantity = computed(() => {
+    return Array.isArray(cart.value) ? cart.value.reduce((total, item) => total + item.quantity, 0) : 0
   })
 
   const login = async (values) => {
@@ -28,7 +29,7 @@ export const useUserStore = defineStore('user', () => {
       token.value = data.result.token
       account.value = data.result.account
       role.value = data.result.role
-      cart.value = data.result.cart
+      cart.value = data.result.cart || [] // 確保賦值時是數組
       return '登入成功'
     } catch (error) {
       console.log(error)
@@ -43,12 +44,12 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await apiAuth.get('/user/profile')
       account.value = data.result.account
       role.value = data.result.role
-      cart.value = data.result.cart
+      cart.value = data.result.cart || [] // 確保賦值時是數組
     } catch (error) {
       token.value = ''
       account.value = ''
       role.value = UserRole.USER
-      cart.value = 0
+      cart.value = [] // 確保重置時是數組
     }
   }
 
@@ -61,14 +62,26 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     account.value = ''
     role.value = UserRole.USER
-    cart.value = 0
+    cart.value = [] // 確保重置時是數組
     window.location.reload()
   }
 
-  const addCart = async (product, quantity) => {
+  const loadCart = async () => {
+    if (!isLogin.value) return
+
     try {
-      const { data } = await apiAuth.patch('/user/cart', { product, quantity })
-      cart.value = data.result.cartQuantity // 更新用戶商店中的購物車總數量
+      const { data } = await apiAuth.get('/user/cart')
+      cart.value = data.result || [] // 確保賦值時是數組
+    } catch (error) {
+      console.log(error)
+      cart.value = [] // 確保重置時是數組
+    }
+  }
+
+  const addCart = async (product, quantity, colors, sizes) => {
+    try {
+      const { data } = await apiAuth.patch('/user/cart', { p_id: product, quantity, colors, sizes })
+      cart.value = data.result || [] // 確保賦值時是數組
       return {
         color: 'green',
         text: '成功'
@@ -86,12 +99,14 @@ export const useUserStore = defineStore('user', () => {
     account,
     role,
     cart,
+    cartQuantity,
     isLogin,
     isAdmin,
     login,
     profile,
     logout,
-    addCart
+    addCart,
+    loadCart
   }
 }, {
   persist: {

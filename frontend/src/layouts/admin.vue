@@ -68,6 +68,13 @@
         <router-view />
       </v-col>
     </v-row>
+    <div id="robot">
+      <Vue3Spline
+        :scene="{
+          url: 'https://prod.spline.design/W8p-HzHioYCMLszD/scene.splinecode',
+        }"
+      />
+    </div>
   </v-container>
 </template>
 
@@ -75,6 +82,7 @@
 import { useUserStore } from '@/stores/user'
 import { computed } from 'vue'
 import { useSnackbar } from 'vuetify-use-dialog'
+import { Vue3Spline } from 'vue3-spline'
 
 const user = useUserStore()
 const createSnackbar = useSnackbar()
@@ -137,4 +145,14 @@ const avatar = computed(() => {
   .custom-col {
     margin-top: 95%;
   }
+
+  #robot {
+  width: 20%;
+  height: 30%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  pointer-events: none;
+}
 </style>

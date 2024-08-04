@@ -1,64 +1,125 @@
 <template>
-  <v-container>
-    <h1>購物車</h1>
+  <v-container
+    class="pa-0 mt-10"
+    style="max-width: 1200px;"
+  >
+    <h3 class="mb-5">
+      購物車
+    </h3>
     <v-row>
       <!-- 左邊的商品清單 -->
-      <v-col cols="8">
+      <v-col cols="7">
         <v-card
           v-for="item in items"
           :key="item._id"
-          class="mb-4"
+          class="mb-4 cart-card"
         >
           <v-row>
             <!-- 商品圖片 -->
             <v-col cols="2">
               <v-img
                 :src="item.p_id.images[0]"
-                class="elevation-2"
+                elevation="0"
                 height="80"
+                width="80"
               />
             </v-col>
             <!-- 商品名稱和價格 -->
-            <v-col cols="6">
+            <v-col
+              cols="2"
+              class="d-flex flex-column justify-center"
+            >
               <div>{{ item.p_id.name }}</div>
               <div>{{ item.p_id.price }} 元</div>
             </v-col>
+            <!-- 商品顏色和尺寸 -->
+            <v-col
+              cols="3"
+              class="d-flex align-center"
+            >
+              <div>{{ item.colors }} / {{ item.sizes }}</div>
+            </v-col>
             <!-- 數量控制按鈕 -->
-            <v-col cols="4">
-              <v-row align="center">
-                <v-col cols="3">
+            <v-col
+              cols="4"
+              class="d-flex align-center"
+            >
+              <v-row>
+                <v-col
+                  cols="3"
+                  class="d-flex align-center"
+                >
                   <v-btn
                     icon
+                    size="x-small"
+                    elevation="0"
+                    class="quantity-btn"
                     @click="changeQuantity(item, item.quantity - 1)"
                   >
-                    -
+                    <v-icon
+                      icon="mdi-minus"
+                      size="small"
+                      class="minus-btn"
+                    />
                   </v-btn>
                 </v-col>
-                <v-col cols="6">
+                <v-col
+                  cols="5"
+                  class="d-flex align-center"
+                >
                   <v-text-field
                     v-model.number="item.quantity"
                     type="number"
                     min="1"
-                    @blur="updateQuantity(item)"
-                    @keypress.enter="updateQuantity(item)"
+                    variant="outlined"
+                    density="compact"
+                    @input="validateQuantity(item)"
+                    @blur="handleQuantityBlur(item)"
+                    @keypress.enter="handleQuantityBlur(item)"
                   />
                 </v-col>
-                <v-col cols="3">
+                <v-col
+                  cols="3"
+                  class="d-flex align-center"
+                >
                   <v-btn
                     icon
+                    size="x-small"
+                    elevation="0"
+                    class="quantity-btn"
                     @click="changeQuantity(item, item.quantity + 1)"
                   >
-                    +
+                    <v-icon
+                      icon="mdi-plus"
+                      size="small"
+                      class="plus-btn"
+                    />
                   </v-btn>
                 </v-col>
               </v-row>
+            </v-col>
+            <v-col class="d-flex align-center">
+              <v-btn
+                size="xl"
+                icon
+                variant="text"
+              >
+                <v-icon
+                  icon="mdi-delete"
+                  class="delete-btn"
+                  @click="deleteItem(item)"
+                />
+              </v-btn>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
       <!-- 右邊的總價和結帳按鈕 -->
-      <v-col cols="4">
-        <v-card class="pa-4">
+      <v-col cols="5">
+        <v-card
+          class="pa-4 cart-card"
+          height="400"
+        >
           <div class="text-h6">
             總價: {{ totalPrice }} 元
           </div>
@@ -83,6 +144,7 @@ import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/stores/user'
+import Swal from 'sweetalert2'
 
 definePage({
   meta: {
@@ -97,14 +159,15 @@ const router = useRouter()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
 
-const items = ref([])
-const loading = ref(false)
+const items = ref([]) // 購物車中的商品
+const loading = ref(false) // 標示是否正在載入或處理請求
 
 const loadItems = async () => {
   try {
     const { data } = await apiAuth.get('/user/cart')
-    items.value = data.result // 確保每個商品的數量與資料庫同步
-    updateCartQuantity() // 更新購物車總數量
+    // 將最新加入的商品排在最上面
+    items.value = data.result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    user.cart = data.result // 更新 user.cart 確保 cartQuantity 正確
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
@@ -115,6 +178,18 @@ const loadItems = async () => {
   }
 }
 
+const handleQuantityBlur = async (item) => {
+  if (!item.quantity || item.quantity < 1) {
+    item.quantity = 1
+  }
+  await updateQuantity(item, item.quantity)
+}
+
+const validateQuantity = (item) => {
+  if (isNaN(item.quantity) || item.quantity === null || item.quantity === '') {
+    item.quantity = 1
+  }
+}
 const changeQuantity = async (item, newQuantity) => {
   if (!user.isLogin) {
     router.push('/login')
@@ -122,13 +197,45 @@ const changeQuantity = async (item, newQuantity) => {
   }
 
   if (newQuantity < 1) {
-    newQuantity = 1
+    const result = await Swal.fire({
+      title: '確認要移除此商品嗎？',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '確認',
+      cancelButtonText: '取消'
+    })
+    if (result.isConfirmed) {
+      await updateQuantity(item, 0)
+      return
+    } else {
+      newQuantity = 1
+    }
   }
 
-  await updateQuantity(item, newQuantity, false)
+  item.quantity = newQuantity // 先更新本地數量
+  await updateQuantity(item, newQuantity)
 }
 
-const updateQuantity = async (item, newQuantity = null, showSnackbar = false) => {
+const deleteItem = async (item) => {
+  if (!user.isLogin) {
+    router.push('/login')
+    return
+  }
+
+  const result = await Swal.fire({
+    title: '確認要移除此商品嗎？',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: '確認',
+    cancelButtonText: '取消'
+  })
+
+  if (result.isConfirmed) {
+    await updateQuantity(item, 0)
+  }
+}
+
+const updateQuantity = async (item, newQuantity = null) => {
   if (!user.isLogin) {
     router.push('/login')
     return
@@ -137,18 +244,21 @@ const updateQuantity = async (item, newQuantity = null, showSnackbar = false) =>
   try {
     loading.value = true
     const quantity = newQuantity !== null ? newQuantity : item.quantity
-    const result = await user.addCart(item.p_id._id, quantity)
-    if (showSnackbar) {
+    const result = await user.addCart(item.p_id._id, quantity, item.colors, item.sizes)
+    if (result.color === 'green') {
+      if (quantity === 0) {
+        items.value = items.value.filter(i => i._id !== item._id) // 移除商品
+      } else {
+        item.quantity = quantity // 更新商品數量
+      }
+      user.cart = items.value.slice() // 直接更新引用來觸發更新
+    } else {
       createSnackbar({
         text: result.text,
         snackbarProps: {
           color: result.color
         }
       })
-    }
-    if (result.color === 'green') {
-      item.quantity = quantity
-      updateCartQuantity()
     }
     loading.value = false
   } catch (error) {
@@ -161,11 +271,6 @@ const updateQuantity = async (item, newQuantity = null, showSnackbar = false) =>
   }
 }
 
-const updateCartQuantity = () => {
-  const totalQuantity = items.value.reduce((acc, item) => acc + item.quantity, 0)
-  user.cart = totalQuantity // 更新用戶商店中的購物車總數量
-}
-
 const totalPrice = computed(() => {
   return items.value.reduce((acc, item) => acc + (item.p_id.price * item.quantity), 0)
 })
@@ -176,7 +281,7 @@ const checkout = async () => {
     const result = await user.checkout()
     createSnackbar({ message: result.text, color: result.color })
     if (result.color === 'green') {
-      router.push('/order-confirmation') // 導向結帳完成頁面
+      router.push('/order-confirmation')
     }
   } catch (error) {
     createSnackbar({ message: '結帳失敗', color: 'error' })
@@ -186,3 +291,30 @@ const checkout = async () => {
 
 loadItems()
 </script>
+
+<style lang="scss" scoped>
+@import "@/styles/settings.scss";
+:deep(.v-input__details) {
+  display: none;
+}
+.cart-card {
+  padding: 24px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: none;
+}
+.delete-btn {
+  color: $danger-color;
+}
+.quantity-btn {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  padding: 0;
+}
+.plus-btn {
+  color: $primary-color;
+}
+.minus-btn {
+  color: $danger-color;
+}
+</style>
