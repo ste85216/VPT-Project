@@ -14,6 +14,7 @@
   <v-container />
   <v-sheet class="mt-16">
     <h1>熱銷商品</h1>
+    <v-checkbox label="123"></v-checkbox>
   </v-sheet>
 </template>
 

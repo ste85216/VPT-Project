@@ -25,6 +25,7 @@
           <v-chip-group
             v-model="selectedSize"
             class="pa-0"
+            column
           >
             <v-chip
               v-for="(size, index) in product.sizes"
@@ -40,6 +41,7 @@
           <v-chip-group
             v-model="selectedColor"
             class="pa-0"
+            column
           >
             <v-chip
               v-for="(color, index) in product.colors"

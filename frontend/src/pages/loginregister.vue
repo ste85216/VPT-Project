@@ -46,12 +46,26 @@
                 clearable
                 @click:append-inner="showPasswordLogin = !showPasswordLogin"
               />
-              <v-container class=" pa-0">
-                <a
-                  class="forget"
-                  href=""
-                >忘記密碼?</a>
-              </v-container>
+              <v-row>
+                <v-col class="remember-me ps-2">
+                  <v-checkbox
+                    v-model="rememberMe"
+                    label="記住我"
+                    size="small"
+                    hide-details
+                    color="warning"
+                    density
+                  />
+                </v-col>
+                <v-col cols="3">
+                  <div
+                    class="link"
+                    @click="showForgetPassword"
+                  >
+                    忘記密碼
+                  </div>
+                </v-col>
+              </v-row>
               <v-btn
                 class="mt-4"
                 type="submit"
@@ -239,7 +253,7 @@
 
 <script setup>
 import validator from 'validator'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
@@ -262,6 +276,8 @@ const createSnackbar = useSnackbar()
 const showPasswordLogin = ref(false)
 const showPasswordRegister = ref(false)
 const showPasswordRegisterConfirm = ref(false)
+
+const rememberMe = ref(false)
 
 const showRegister = () => {
   const login = document.querySelector('.login')
@@ -413,6 +429,13 @@ const registerSubmit = handleRegisterSubmit(async (values) => {
 const loginSubmit = handleLoginSubmit(async (values) => {
   const result = await user.login(values)
   if (result === '登入成功') {
+    if (rememberMe.value) {
+      localStorage.setItem('rememberMe', true)
+      localStorage.setItem('account', values.Laccount)
+    } else {
+      localStorage.removeItem('rememberMe')
+      localStorage.removeItem('account')
+    }
     createSnackbar({
       text: result,
       snackbarProps: {
@@ -433,9 +456,20 @@ const loginSubmit = handleLoginSubmit(async (values) => {
     })
   }
 })
-
+onMounted(() => {
+  if (localStorage.getItem('rememberMe')) {
+    rememberMe.value = true
+    Laccount.value.value = localStorage.getItem('account')
+  }
+})
 </script>
 
 <style lang="scss" scoped>
 @import '/src/styles/settings.scss';
+.remember-me {
+  :deep(.v-label) {
+    font-family: "sans-serif";
+    font-weight: 400;
+  }
+}
 </style>

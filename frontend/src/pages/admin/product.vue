@@ -63,6 +63,7 @@
                 :key="index"
                 :src="image"
                 height="50"
+                width="50"
                 class="me-2"
               />
             </div>
@@ -198,7 +199,6 @@
                   <template #placeholder>
                     <v-row
                       class="fill-height ma-0"
-                      align="center"
                       justify="center"
                     >
                       <v-progress-circular
@@ -371,7 +371,12 @@ const colorItems = [
   '綠色',
   '紫色',
   '橘色',
-  '其他顏色請備註在訂單'
+  '星空灰',
+  '亮彩橘',
+  '亮粉紅',
+  '新款黑',
+  '新款白',
+  '顏色請備註在訂單'
 ]
 
 const sizeItems = [
@@ -382,7 +387,17 @@ const sizeItems = [
   'XL',
   '2XL',
   '3XL',
-  'F'
+  'F',
+  '21',
+  '22',
+  '23',
+  '24',
+  '25',
+  '26',
+  '27',
+  '28',
+  '29',
+  '尺寸請備註在訂單'
 ]
 
 const categories = ['球衣', '球褲', '球襪', '球鞋', '排球', '護具', '其他']

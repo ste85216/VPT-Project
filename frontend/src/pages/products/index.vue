@@ -57,7 +57,7 @@ const createSnackbar = useSnackbar()
 
 const page = ref(1)
 const pages = ref(1)
-const ITEMS_PER_PAGE = 9
+const ITEMS_PER_PAGE = 18
 const searchQuery = ref('')
 
 const products = ref([])

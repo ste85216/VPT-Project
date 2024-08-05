@@ -3,12 +3,12 @@
     class="pa-0 mt-10"
     style="max-width: 1200px;"
   >
-    <h3 class="mb-5">
+    <h2 class="mb-5">
       購物車
-    </h3>
+    </h2>
     <v-row>
       <!-- 左邊的商品清單 -->
-      <v-col cols="7">
+      <v-col cols="8">
         <v-card
           v-for="item in items"
           :key="item._id"
@@ -115,22 +115,31 @@
         </v-card>
       </v-col>
       <!-- 右邊的總價和結帳按鈕 -->
-      <v-col cols="5">
+      <v-col cols="4">
         <v-card
-          class="pa-4 cart-card"
-          height="400"
+          class="pa-4 pb-0 cart-card "
+          height="150"
         >
-          <div class="text-h6">
-            總價: {{ totalPrice }} 元
-          </div>
-          <v-btn
-            color="primary"
-            class="mt-4"
-            :disabled="loading"
-            @click="checkout"
-          >
-            結帳
-          </v-btn>
+          <v-row class="d-flex flex-column h-100">
+            <v-col class="d-flex justify-space-between">
+              <h4 style="font-size: 18px;">
+                結帳金額
+              </h4>
+              <div style="font-size: 18px;font-weight: 500;">
+                ${{ totalPrice }}
+              </div>
+            </v-col>
+            <v-col class="pb-0">
+              <v-btn
+                color="primary"
+                class="checkout-btn"
+                :disabled="loading"
+                @click="checkout"
+              >
+                結帳
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -165,9 +174,16 @@ const loading = ref(false) // 標示是否正在載入或處理請求
 const loadItems = async () => {
   try {
     const { data } = await apiAuth.get('/user/cart')
+    // 過濾掉 p_id 不存在或 p_id.sell 為 false 的商品
+    const validItems = data.result.filter(item => item.p_id && item.p_id.sell)
+    // 刪除無效商品
+    const invalidItems = data.result.filter(item => !item.p_id || !item.p_id.sell)
+    for (const item of invalidItems) {
+      await deleteItem(item, false) // false 表示不彈出確認對話框
+    }
     // 將最新加入的商品排在最上面
-    items.value = data.result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    user.cart = data.result // 更新 user.cart 確保 cartQuantity 正確
+    items.value = validItems.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    user.cart = validItems // 更新 user.cart 確保 cartQuantity 正確
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
@@ -200,9 +216,22 @@ const changeQuantity = async (item, newQuantity) => {
     const result = await Swal.fire({
       title: '確認要移除此商品嗎？',
       icon: 'warning',
+      iconColor: 'success',
       showCancelButton: true,
       confirmButtonText: '確認',
-      cancelButtonText: '取消'
+      confirmButtonColor: '#d9534f',
+      cancelButtonText: '取消',
+      cancelButtonColor: '#a1a1a1',
+      focusConfirm: false,
+      returnFocus: false,
+      width: '25%',
+      customClass: {
+        confirmButton: 'me-5 fw-light',
+        cancelButton: 'ms-5'
+      },
+      didOpen: () => {
+        document.body.style.paddingRight = '0px'
+      }
     })
     if (result.isConfirmed) {
       await updateQuantity(item, 0)
@@ -216,23 +245,40 @@ const changeQuantity = async (item, newQuantity) => {
   await updateQuantity(item, newQuantity)
 }
 
-const deleteItem = async (item) => {
+const deleteItem = async (item, showConfirmation = true) => {
   if (!user.isLogin) {
     router.push('/login')
     return
   }
 
-  const result = await Swal.fire({
-    title: '確認要移除此商品嗎？',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: '確認',
-    cancelButtonText: '取消'
-  })
+  if (showConfirmation) {
+    const result = await Swal.fire({
+      title: '確認要移除此商品嗎？',
+      icon: 'warning',
+      iconColor: 'success',
+      showCancelButton: true,
+      confirmButtonText: '確認',
+      confirmButtonColor: '#d9534f',
+      cancelButtonText: '取消',
+      cancelButtonColor: '#a1a1a1',
+      focusConfirm: false,
+      returnFocus: false,
+      width: '25%',
+      customClass: {
+        confirmButton: 'me-5 fw-light',
+        cancelButton: 'ms-5'
+      },
+      didOpen: () => {
+        document.body.style.paddingRight = '0px'
+      }
+    })
 
-  if (result.isConfirmed) {
-    await updateQuantity(item, 0)
+    if (!result.isConfirmed) {
+      return
+    }
   }
+
+  await updateQuantity(item, 0)
 }
 
 const updateQuantity = async (item, newQuantity = null) => {
@@ -277,16 +323,19 @@ const totalPrice = computed(() => {
 
 const checkout = async () => {
   loading.value = true
-  try {
-    const result = await user.checkout()
-    createSnackbar({ message: result.text, color: result.color })
-    if (result.color === 'green') {
-      router.push('/order-confirmation')
+  const result = await user.checkout()
+
+  createSnackbar({
+    text: result.text,
+    snackbarProps: {
+      color: result.color
     }
-  } catch (error) {
-    createSnackbar({ message: '結帳失敗', color: 'error' })
+  })
+
+  if (result.color === 'green') {
+    router.push('/order')
+    loading.value = false
   }
-  loading.value = false
 }
 
 loadItems()
@@ -316,5 +365,9 @@ loadItems()
 }
 .minus-btn {
   color: $danger-color;
+}
+
+.checkout-btn {
+  width: 100%;
 }
 </style>

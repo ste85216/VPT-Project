@@ -94,6 +94,22 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const checkout = async () => {
+    try {
+      await apiAuth.post('/order')
+      cart.value = []
+      return {
+        color: 'green',
+        text: '成功'
+      }
+    } catch (error) {
+      return {
+        color: 'red',
+        text: error?.response?.data?.message || '發生錯誤，請稍後再試'
+      }
+    }
+  }
+
   return {
     token,
     account,
@@ -106,7 +122,8 @@ export const useUserStore = defineStore('user', () => {
     profile,
     logout,
     addCart,
-    loadCart
+    loadCart,
+    checkout
   }
 }, {
   persist: {

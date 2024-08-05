@@ -34,7 +34,7 @@
         進入後台
       </v-list-item>
       <v-list-item
-        v-if="user.isLogin"
+        v-if="user.isLogin && user.isAdmin"
         class="mt-5"
         prepend-icon="mdi-account-arrow-right"
         title="登出"
@@ -97,6 +97,15 @@
           to="/admin/product"
         >
           進入後台
+        </v-btn>
+        <v-btn
+          v-if="user.isLogin && !user.isAdmin"
+          class="highlight"
+          prepend-icon="mdi-account-circle-outline"
+          to="/member/order"
+          @click="logout"
+        >
+          訂單
         </v-btn>
         <v-btn
           v-if="user.isLogin"
@@ -169,7 +178,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
   @import "@/styles/settings.scss";
   * {
-    font-family: "";
+    font-family: "Noto sans tc";
   }
   #nav_logo {
     height: 70px;
