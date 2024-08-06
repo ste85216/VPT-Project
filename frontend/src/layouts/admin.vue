@@ -68,13 +68,13 @@
         <router-view />
       </v-col>
     </v-row>
-    <div id="robot">
+    <!-- <div id="robot">
       <Vue3Spline
         :scene="{
           url: 'https://prod.spline.design/W8p-HzHioYCMLszD/scene.splinecode',
         }"
       />
-    </div>
+    </div> -->
   </v-container>
 </template>
 
@@ -82,7 +82,7 @@
 import { useUserStore } from '@/stores/user'
 import { computed } from 'vue'
 import { useSnackbar } from 'vuetify-use-dialog'
-import { Vue3Spline } from 'vue3-spline'
+// import { Vue3Spline } from 'vue3-spline'
 
 const user = useUserStore()
 const createSnackbar = useSnackbar()

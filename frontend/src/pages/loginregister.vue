@@ -51,13 +51,15 @@
                   <v-checkbox
                     v-model="rememberMe"
                     label="記住我"
-                    size="small"
                     hide-details
                     color="warning"
-                    density
+                    density="compact"
                   />
                 </v-col>
-                <v-col cols="3">
+                <v-col
+                  cols="3"
+                  class="d-flex align-center"
+                >
                   <div
                     class="link"
                     @click="showForgetPassword"

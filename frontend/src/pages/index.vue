@@ -1,20 +1,10 @@
 <template>
-  <v-container style="max-width: 1300px;">
-    <v-row>
-      <v-col
-        cols="4"
-        style="min-height: 680px; max-height: 800px;min-width: 360px;"
-      />
-      <v-col cols="6" />
-    </v-row>
-  </v-container>
   <v-sheet class="mt-16">
     <h1>新品上市</h1>
   </v-sheet>
   <v-container />
   <v-sheet class="mt-16">
     <h1>熱銷商品</h1>
-    <v-checkbox label="123"></v-checkbox>
   </v-sheet>
 </template>
 
