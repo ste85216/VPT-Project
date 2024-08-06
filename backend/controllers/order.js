@@ -76,3 +76,35 @@ export const getAll = async (req, res) => {
     })
   }
 }
+
+export const remove = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+    if (!order) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: '訂單不存在'
+      })
+    }
+
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(StatusCodes.FORBIDDEN).json({
+        success: false,
+        message: '無權限刪除此訂單'
+      })
+    }
+
+    await Order.findByIdAndDelete(req.params.id)
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '訂單已取消'
+    })
+  } catch (error) {
+    console.error('Error removing order:', error) // 紀錄具體錯誤信息
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '未知錯誤'
+    })
+  }
+}

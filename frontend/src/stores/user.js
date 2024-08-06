@@ -11,6 +11,9 @@ export const useUserStore = defineStore('user', () => {
   const account = ref('')
   const role = ref(UserRole.USER)
   const cart = ref([]) // 確保購物車初始值為數組
+  const avatar = ref('') // 確保頭像初始值為空
+  const name = ref('') // 確保名稱初始值為空
+  const userId = ref('') // 確保ID初始值為空
 
   const isLogin = computed(() => token.value.length > 0)
   const isAdmin = computed(() => role.value === UserRole.ADMIN)
@@ -29,6 +32,7 @@ export const useUserStore = defineStore('user', () => {
       token.value = data.result.token
       account.value = data.result.account
       role.value = data.result.role
+      avatar.value = data.result.avatar // 更新頭像
       cart.value = data.result.cart || [] // 確保賦值時是數組
       return '登入成功'
     } catch (error) {
@@ -44,12 +48,19 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await apiAuth.get('/user/profile')
       account.value = data.result.account
       role.value = data.result.role
+      avatar.value = data.result.avatar // 確保更新用戶的頭像URL
       cart.value = data.result.cart || [] // 確保賦值時是數組
+      console.log(avatar.value) // 確認 avatar 的值
+      name.value = data.result.name // 添加名稱
+      userId.value = data.result.userId // 添加ID
     } catch (error) {
       token.value = ''
       account.value = ''
       role.value = UserRole.USER
+      avatar.value = '' // 重置頭像URL
       cart.value = [] // 確保重置時是數組
+      name.value = '' // 重置名稱
+      userId.value = '' // 重置ID
     }
   }
 
@@ -62,7 +73,9 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     account.value = ''
     role.value = UserRole.USER
+    avatar.value = '' // 重置頭像URL
     cart.value = [] // 確保重置時是數組
+    userId.value = '' // 重置ID
     window.location.reload()
   }
 
@@ -114,6 +127,9 @@ export const useUserStore = defineStore('user', () => {
     token,
     account,
     role,
+    avatar,
+    name,
+    userId,
     cart,
     cartQuantity,
     isLogin,

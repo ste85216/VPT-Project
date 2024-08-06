@@ -74,7 +74,7 @@ const schema = new Schema({
   },
   avatar: {
     type: String,
-    default: 'https://i.imgur.com/5zJ6Y7E.png'
+    default: 'https://api.multiavatar.com/admin002.png'
   },
   birthday: {
     type: Date
@@ -91,6 +91,10 @@ const schema = new Schema({
   role: {
     type: Number,
     default: UserRole.USER
+  },
+  userId: {
+    type: String,
+    unique: true
   }
 }, {
   timestamps: true, // 使用者帳號建立時間、更新時間

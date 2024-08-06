@@ -1,7 +1,8 @@
 import { Router } from 'express'
+import { uploadAvatar } from '../middlewares/uploadAvatar.js'
 import admin from '../middlewares/admin.js'
-import { create, login, extend, profile, logout, getAll, edit, get, getId, remove, getCart, editCart } from '../controllers/user.js'
-import * as auth from '../middlewares/auth.js' // import { login } from '../middlewares/auth.js'
+import { create, login, extend, profile, logout, getAll, edit, get, getId, remove, getCart, editCart, updateAvatar } from '../controllers/user.js'
+import * as auth from '../middlewares/auth.js'
 
 const router = Router()
 
@@ -12,6 +13,7 @@ router.get('/profile', auth.jwt, profile)
 router.delete('/logout', auth.jwt, logout)
 router.patch('/cart', auth.jwt, editCart)
 router.get('/cart', auth.jwt, getCart)
+router.patch('/avatar', auth.jwt, uploadAvatar, updateAvatar)
 
 // 新增的路由
 router.get('/', get) // 獲取所有用戶

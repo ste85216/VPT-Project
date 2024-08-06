@@ -82,14 +82,24 @@
             color="#333"
           >
             {{ item.text }}
-            <v-badge
-              v-if="item.to === '/cart' && user.cartQuantity > 0"
-              color="red"
-              :content="user.cartQuantity"
-              floating
-            />
           </v-btn>
         </template>
+
+        <v-btn
+          v-if="user.isLogin && !user.isAdmin"
+          class="highlight"
+          prepend-icon="mdi-cart"
+          to="/cart"
+        >
+          購物車
+          <v-badge
+            v-if="user.isLogin && user.cartQuantity > 0"
+            class="custom-badge"
+            color="#039199"
+            :content="user.cartQuantity"
+            floating
+          />
+        </v-btn>
         <v-btn
           v-if="user.isLogin && user.isAdmin"
           class="highlight"
@@ -99,22 +109,60 @@
           進入後台
         </v-btn>
         <v-btn
-          v-if="user.isLogin && !user.isAdmin"
-          class="highlight"
-          prepend-icon="mdi-account-circle-outline"
-          to="/member/order"
-          @click="logout"
-        >
-          訂單
-        </v-btn>
-        <v-btn
-          v-if="user.isLogin"
+          v-if="user.isLogin && user.isAdmin"
           class="highlight"
           prepend-icon="mdi-account-arrow-right"
           @click="logout"
         >
           登出
         </v-btn>
+        <v-menu v-if="user.isLogin && !user.isAdmin">
+          <template #activator="{props}">
+            <v-btn
+              v-if="user.isLogin"
+              class="highlight"
+              prepend-icon="mdi-account"
+              v-bind="props"
+            >
+              會員中心
+            </v-btn>
+          </template>
+          <v-card
+            align="center"
+            class="pa-0"
+          >
+            <v-img
+              :src="user.avatar"
+              class="rounded-circle mt-8 mx-16"
+              height="100"
+              width="100"
+              cover
+            />
+            <v-card-title>{{ user.name }}</v-card-title>
+            <v-divider class="my-3" />
+            <v-list>
+              <v-list-item
+                v-for="item in memberNavItems"
+                :key="item.to"
+                :to="item.to"
+                :prepend-icon="item.icon"
+                :active="false"
+                class="px-7 mb-2 text-left"
+              >
+                {{ item.text }}
+              </v-list-item>
+              <v-list-item>
+                <v-btn
+                  color="#d9534f"
+                  class="w-100 my-4"
+                  @click="logout"
+                >
+                  登出
+                </v-btn>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-menu>
       </template>
     </v-container>
   </v-app-bar>
@@ -146,9 +194,15 @@ const navItems = computed(() => [
   { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
   { to: '/venues', text: '球場資訊', icon: 'mdi-information', show: user.isLogin || !user.isLogin, class: 'customBtn' },
   { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' },
-  { to: '/cart', text: '購物車', icon: 'mdi-cart', show: user.isLogin, class: 'customBtn' }
+  { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' }
 ])
+
+const memberNavItems = [
+  { to: '/member/profile', text: '個人資料管理', icon: ' mdi-account-cog' },
+  { to: '/member/order', text: '訂單管理', icon: 'mdi-list-box' },
+  { to: '/member/signup', text: '報名紀錄', icon: 'mdi-volleyball ' },
+  { to: '/member/post', text: '刊登場次', icon: 'mdi-post' }
+]
 
 const logout = async () => {
   await user.logout()
@@ -164,6 +218,7 @@ const logout = async () => {
 watch(() => user.isLogin, async (isLogin) => {
   if (isLogin) {
     await user.loadCart()
+    await user.profile()
   }
 })
 
@@ -216,5 +271,10 @@ onMounted(async () => {
     &::before {
       transform: scaleX(99.9%);
     }
+  }
+  .custom-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
   }
 </style>

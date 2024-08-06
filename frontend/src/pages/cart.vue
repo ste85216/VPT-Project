@@ -10,6 +10,14 @@
       <!-- 左邊的商品清單 -->
       <v-col cols="8">
         <v-card
+          v-if="items.length === 0"
+          class="mb-4 cart-card d-flex justify-center align-center"
+        >
+          <div class="text-gray">
+            購物車內尚未加入商品
+          </div>
+        </v-card>
+        <v-card
           v-for="item in items"
           :key="item._id"
           class="mb-4 cart-card"
@@ -133,7 +141,7 @@
               <v-btn
                 color="primary"
                 class="checkout-btn"
-                :disabled="loading"
+                :disabled="loading || items.length === 0"
                 @click="checkout"
               >
                 結帳
@@ -333,7 +341,7 @@ const checkout = async () => {
   })
 
   if (result.color === 'green') {
-    router.push('/order')
+    router.push('/member/order')
     loading.value = false
   }
 }

@@ -3,10 +3,27 @@ import Product from '../models/product.js'
 import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import validator from 'validator'
+import Sequence from '../models/sequence.js'
+
+const getNextSequence = async (name) => {
+  const sequence = await Sequence.findOneAndUpdate(
+    { name },
+    { $inc: { value: 1 } },
+    { new: true, upsert: true }
+  )
+  return sequence.value
+}
 
 export const create = async (req, res) => {
   try {
-    const result = await User.create(req.body)
+    let userId
+    if (req.body.role !== 1) {
+      const sequenceValue = await getNextSequence('user')
+      userId = `A${String(sequenceValue).padStart(6, '0')}`
+    }
+
+    const result = await User.create({ ...req.body, userId })
+
     res.status(StatusCodes.OK).json({
       success: true,
       message: '',
@@ -85,7 +102,10 @@ export const profile = (req, res) => {
       result: {
         account: req.user.account,
         role: req.user.role,
-        cart: req.user.cartQuantity
+        avatar: req.user.avatar, // 確保返回 avatar
+        cart: req.user.cartQuantity,
+        name: req.user.name,
+        userId: req.user.userId
       }
     })
   } catch (error) {
@@ -363,6 +383,40 @@ export const getCart = async (req, res) => {
       success: true,
       message: '',
       result: result.cart
+    })
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      message: '未知錯誤'
+    })
+  }
+}
+
+// controllers/user.js
+export const updateAvatar = async (req, res) => {
+  try {
+    if (!req.file || !req.file.path) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: '未提供頭像文件'
+      })
+    }
+
+    const user = await User.findById(req.user._id)
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: '找不到用戶'
+      })
+    }
+
+    user.avatar = req.file.path // 更新用戶的頭像URL
+    await user.save()
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      message: '頭像更新成功',
+      result: user.avatar // 返回更新後的頭像URL
     })
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
