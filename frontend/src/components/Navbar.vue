@@ -90,6 +90,7 @@
           class="highlight"
           prepend-icon="mdi-cart"
           to="/cart"
+          :active="false"
         >
           購物車
           <v-badge
@@ -129,16 +130,19 @@
           </template>
           <v-card
             align="center"
-            class="pa-0"
+            class="pa-0 rounded-b-lg"
           >
             <v-img
               :src="user.avatar"
-              class="rounded-circle mt-8 mx-16"
-              height="100"
-              width="100"
+              class="rounded-circle mt-8"
+              height="50"
+              width="50"
               cover
             />
-            <v-card-title>{{ user.name }}</v-card-title>
+            <v-card-title style="font-size: 16px;">
+              {{ user.name }}
+            </v-card-title>
+
             <v-divider class="my-3" />
             <v-list>
               <v-list-item
@@ -147,13 +151,14 @@
                 :to="item.to"
                 :prepend-icon="item.icon"
                 :active="false"
-                class="px-7 mb-2 text-left"
+                class="mb-1 text-left ps-12"
+                style=" width: 250px;;font-size: 14px;"
               >
                 {{ item.text }}
               </v-list-item>
               <v-list-item>
                 <v-btn
-                  color="#d9534f"
+                  color="#546E7A"
                   class="w-100 my-4"
                   @click="logout"
                 >

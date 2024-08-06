@@ -6,12 +6,12 @@
     <div class="d-flex justify-space-between ">
       <v-col
         id="profile"
-        class="px-8 me-4"
+        class="me-4 pa-0"
         cols="3"
       >
         <v-col>
           <v-card
-            class="d-flex flex-column align-center profile-card"
+            class="d-flex flex-column align-center profile-card pt-8 pb-4"
             elevation="0"
           >
             <v-img
@@ -49,21 +49,24 @@
               class="d-none"
               @change="handleFileChange"
             >
-            <v-card-title>{{ user.name }}</v-card-title>
+            <v-card-title style="font-size: 18px;">
+              {{ user.name }}
+            </v-card-title>
             <v-card-subtitle>{{ user.userId }}</v-card-subtitle>
           </v-card>
         </v-col>
         <v-divider />
-        <v-col>
-          <v-list width="100%">
+        <v-col class="pa-0">
+          <v-list width="100%" class="mt-4 mb-6">
             <v-list-item
               v-for="item in navItems"
               :key="item.to"
               :to="item.to"
               :prepend-icon="item.icon"
-              class="mb-4 opacity-90"
+              class="mb-4 opacity-90 ps-16"
               :ripple="false"
               :active="false"
+              style="font-size: 14px;"
             >
               {{ item.text }}
             </v-list-item>
@@ -82,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useUserStore } from '@/stores/user'
 import { useSnackbar } from 'vuetify-use-dialog'
@@ -91,10 +94,6 @@ const { apiAuth } = useApi()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
 const fileInput = ref(null)
-
-const avatar = computed(() => {
-  return `https://api.multiavatar.com/${user.account}.png`
-})
 
 const navItems = [
   { to: '/member/profile', text: '個人資料管理', icon: ' mdi-account-cog' },
@@ -168,8 +167,8 @@ onMounted(async () => {
     }
     .camera-icon {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    top:128px;
+    right: 60px;
     cursor: pointer;
     background-color: white;
     border-radius: 50%;

@@ -52,7 +52,7 @@
             </v-chip>
           </v-chip-group>
         </v-col>
-        <v-col>
+        <v-col class="mb-12">
           <h3>數量</h3>
           <v-btn
             size="x-small"
@@ -68,22 +68,27 @@
             size="x-small"
             icon
             variant="text"
-            color="green"
+            color="#039199"
             @click="changeQuantity(1)"
           >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-col>
-        <v-card-actions class="pa-0">
-          <v-spacer />
-          <v-btn
-            color="primary"
-            prepend-icon="mdi-cart"
-            @click="addToCart"
+        <v-col class="py-0">
+          <v-card-actions
+            class="pa-0 "
+            justify="center"
           >
-            加入購物車
-          </v-btn>
-        </v-card-actions>
+            <v-btn
+              class="addCart-btn"
+              prepend-icon="mdi-cart"
+              @click="addToCart"
+              width="100%"
+            >
+              加入購物車
+            </v-btn>
+          </v-card-actions>
+        </v-col>
       </v-col>
     </v-row>
     <v-col cols="12" />
@@ -222,9 +227,22 @@ watch(() => user.cart, (newCart) => {
 </route>
 
 <style lang="scss" scoped>
+@import "@/styles/settings.scss";
 h3 {
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 12px;
+}
+.addCart-btn {
+  color: $primary-color;
+  background: #03919910;
+  font-size: 14px;
+  border: 1px solid $primary-color;
+  font-weight: 500;
+  transition: 0.2s;
+  &:hover {
+    background-color: $primary-color;
+    color: #f6f6f6;
+  }
 }
 </style>

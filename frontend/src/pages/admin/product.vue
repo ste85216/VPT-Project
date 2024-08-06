@@ -56,14 +56,12 @@
           <template #[`item.images`]="{ value }">
             <div
               class="images-container"
-              style="width: 200px;"
             >
               <v-img
                 v-for="(image, index) in value"
                 :key="index"
                 :src="image"
                 height="50"
-                width="50"
                 class="me-2"
               />
             </div>
@@ -556,7 +554,7 @@ const tableHeaders = [
     align: 'left',
     sortable: false,
     key: 'images',
-    width: '200px',
+    width: '180px',
     render: (value) => {
       const displayImages = value.slice(0, 3)
       return `
@@ -569,13 +567,13 @@ const tableHeaders = [
       `
     }
   },
-  { title: '名稱', align: 'left', sortable: true, key: 'name' },
-  { title: '顏色', align: 'left', sortable: true, key: 'colors' },
-  { title: '尺寸', align: 'left', sortable: true, key: 'sizes' },
-  { title: '價格', align: 'left', sortable: true, key: 'price' },
-  { title: '分類', align: 'left', sortable: true, key: 'category' },
-  { title: '上架', align: 'left', sortable: true, key: 'sell' },
-  { title: '操作', align: 'left', sortable: false, key: 'action' }
+  { title: '名稱', align: 'left', sortable: true, key: 'name', width: '200px' },
+  { title: '顏色', align: 'left', sortable: true, key: 'colors', width: '220px' },
+  { title: '尺寸', align: 'left', sortable: true, key: 'sizes', width: '200px' },
+  { title: '價格', align: 'left', sortable: true, key: 'price', width: '120px' },
+  { title: '分類', align: 'left', sortable: true, key: 'category', width: '120px' },
+  { title: '上架', align: 'left', sortable: true, key: 'sell', width: '120px' },
+  { title: '操作', align: 'left', sortable: false, key: 'action', width: '120px' }
 ]
 const tableLoading = ref(true)
 const tableItemsLength = ref(0)

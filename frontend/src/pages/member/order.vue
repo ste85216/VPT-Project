@@ -133,7 +133,7 @@
           <v-list-item class="d-flex justify-end">
             <v-btn
               elevation="0"
-              class="border-sm opacity-80"
+              class="opacity-80 cancel-btn"
               @click="cancelOrder(order._id)"
             >
               取消訂單
@@ -242,6 +242,10 @@ onMounted(() => {
 <style scoped>
 .opacity-90 {
   opacity: 0.9;
+}
+.cancel-btn {
+  border: 1px solid #d9534f50;
+  color: #d9534f;
 }
 </style>
 
