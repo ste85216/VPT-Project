@@ -341,8 +341,7 @@ const registerSchema = yup.object({
     .string()
     .required('請輸入姓名'),
   nickname: yup
-    .string()
-    .required('請輸入暱稱'),
+    .string(),
   email: yup
     .string()
     .required('請輸入信箱')

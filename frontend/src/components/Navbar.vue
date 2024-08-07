@@ -132,13 +132,24 @@
             align="center"
             class="pa-0 rounded-b-lg"
           >
-            <v-img
-              :src="user.avatar"
-              class="rounded-circle mt-8"
+            <v-btn
               height="50"
               width="50"
-              cover
-            />
+              elevation="0"
+              variant="plain"
+              :active="false"
+              :ripple="false"
+              class="rounded-circle mt-8 pa-0 opacity-100"
+              to="/member/profile"
+            >
+              <v-img
+                :src="user.avatar"
+                class="rounded-circle"
+                height="50"
+                width="50"
+                cover
+              />
+            </v-btn>
             <v-card-title style="font-size: 16px;">
               {{ user.name }}
             </v-card-title>

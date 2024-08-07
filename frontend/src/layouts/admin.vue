@@ -18,13 +18,13 @@
     </v-container>
   </v-app-bar>
   <v-container
-    class="d-flex align-center "
-    style="height:100%;max-width: 1400px;;"
+    class="mt-16"
+    style="max-width: 1400px;"
   >
     <v-row style="flex-wrap: nowrap;">
       <v-col
         class="left-navigation"
-        style="min-width:200px ;max-width: 240px;"
+        style="min-width:200px ;max-width: 240px;height: 840px;"
       >
         <v-list>
           <v-list-item
@@ -33,26 +33,56 @@
           />
         </v-list>
         <v-divider />
-        <v-list class="h-80 overflow-hidden">
+        <v-list
+          class="h-80 overflow-hidden"
+        >
           <v-row class="h-100 d-flex flex-column justify-space-between">
             <v-col>
               <v-list-item
                 v-for="items in navItems"
                 :key="items.to"
-                class="mt-5 v-list-title"
+                class="mt-5"
                 :to="items.to"
+                :active="false"
                 :prepend-icon="items.icon"
+                base-color="#333"
+                fluid
               >
                 {{ items.text }}
               </v-list-item>
+              <v-list-group
+                v-model="open"
+                no-action
+                class="mt-5"
+                base-color="#333"
+              >
+                <template #activator="{ props }">
+                  <v-list-item
+                    v-bind="props"
+                    prepend-icon="mdi-web"
+                    :active="false"
+                  >
+                    網站管理
+                  </v-list-item>
+                </template>
+                <v-list-item
+                  to="/admin/venue"
+                  prepend-icon="mdi-information-outline"
+                  :active="false"
+                  base-color="#333"
+                >
+                  球場資訊
+                </v-list-item>
+              </v-list-group>
             </v-col>
             <v-divider class="mt-5" />
-            <v-col class="custom-col">
+            <v-col>
               <v-list-item
                 v-for="items in navItems2"
                 :key="items.to"
                 :to="items.to"
                 :prepend-icon="items.icon"
+                base-color="#333"
                 @click="items.click"
               >
                 {{ items.text }}
@@ -101,8 +131,7 @@ const navItems = [
   { to: '/admin/administrator', text: '管理者', icon: ' mdi-account-cog' },
   { to: '/admin/member', text: '會員管理', icon: 'mdi-account-details' },
   { to: '/admin/product', text: '商品管理', icon: 'mdi-shopping' },
-  { to: '/admin/order', text: '訂單管理', icon: 'mdi-list-box' },
-  { to: '/admin/website', text: '網站管理', icon: 'mdi-web' }
+  { to: '/admin/order', text: '訂單管理', icon: 'mdi-list-box' }
 
 ]
 
@@ -120,10 +149,10 @@ const avatar = computed(() => {
   @import '/src/styles/settings.scss';
   .left-navigation {
     border: 1px solid rgba(0,0,0,0.2);
+    border-right: none;
   }
   .main {
     border: 1px solid rgba(0,0,0,0.2);
-    border-left: none;
   }
   .logo-btn {
     height: 80px;
@@ -139,11 +168,6 @@ const avatar = computed(() => {
 
   .v-list-item {
     font-size: 14px;
-    color: $third-color;
-  }
-
-  .custom-col {
-    margin-top: 95%;
   }
 
   #robot {

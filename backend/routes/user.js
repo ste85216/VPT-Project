@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { uploadAvatar } from '../middlewares/uploadAvatar.js'
 import admin from '../middlewares/admin.js'
-import { create, login, extend, profile, logout, getAll, edit, get, getId, remove, getCart, editCart, updateAvatar, updateUserProfile, updatePassword } from '../controllers/user.js'
+import { create, login, extend, profile, logout, getAll, edit, get, getId, remove, getCart, editCart, updateAvatar, updateUserProfile } from '../controllers/user.js'
 import * as auth from '../middlewares/auth.js'
 
 const router = Router()
@@ -15,7 +15,6 @@ router.patch('/cart', auth.jwt, editCart)
 router.get('/cart', auth.jwt, getCart)
 router.patch('/avatar', auth.jwt, uploadAvatar, updateAvatar)
 router.patch('/profile', auth.jwt, updateUserProfile)
-router.patch('/password', auth.jwt, updatePassword)
 
 // 新增的路由
 router.get('/', get)
