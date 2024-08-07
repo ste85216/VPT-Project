@@ -1,4 +1,3 @@
-// Utilities
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import UserRole from '@/enums/UserRole.js'
@@ -10,15 +9,19 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const account = ref('')
   const role = ref(UserRole.USER)
-  const cart = ref([]) // 確保購物車初始值為數組
-  const avatar = ref('') // 確保頭像初始值為空
-  const name = ref('') // 確保名稱初始值為空
-  const userId = ref('') // 確保ID初始值為空
+  const cart = ref([])
+  const avatar = ref('')
+  const name = ref('')
+  const userId = ref('')
+  const address = ref('')
+  const phone = ref('')
+  const email = ref('')
+  const birthday = ref('')
+  const nickname = ref('')
 
   const isLogin = computed(() => token.value.length > 0)
   const isAdmin = computed(() => role.value === UserRole.ADMIN)
 
-  // 計算購物車中的總數量
   const cartQuantity = computed(() => {
     return Array.isArray(cart.value) ? cart.value.reduce((total, item) => total + item.quantity, 0) : 0
   })
@@ -32,8 +35,8 @@ export const useUserStore = defineStore('user', () => {
       token.value = data.result.token
       account.value = data.result.account
       role.value = data.result.role
-      avatar.value = data.result.avatar // 更新頭像
-      cart.value = data.result.cart || [] // 確保賦值時是數組
+      avatar.value = data.result.avatar
+      cart.value = data.result.cart || []
       return '登入成功'
     } catch (error) {
       console.log(error)
@@ -48,19 +51,31 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await apiAuth.get('/user/profile')
       account.value = data.result.account
       role.value = data.result.role
-      avatar.value = data.result.avatar // 確保更新用戶的頭像URL
-      cart.value = data.result.cart || [] // 確保賦值時是數組
-      console.log(avatar.value) // 確認 avatar 的值
-      name.value = data.result.name // 添加名稱
-      userId.value = data.result.userId // 添加ID
+      avatar.value = data.result.avatar
+      cart.value = data.result.cart || []
+      name.value = data.result.name
+      userId.value = data.result.userId
+      address.value = data.result.address
+      phone.value = data.result.phone
+      email.value = data.result.email
+      birthday.value = data.result.birthday
+      nickname.value = data.result.nickname
+
+      console.log(data)
     } catch (error) {
+      console.log(error)
       token.value = ''
       account.value = ''
       role.value = UserRole.USER
-      avatar.value = '' // 重置頭像URL
-      cart.value = [] // 確保重置時是數組
-      name.value = '' // 重置名稱
-      userId.value = '' // 重置ID
+      avatar.value = ''
+      cart.value = []
+      name.value = ''
+      userId.value = ''
+      address.value = ''
+      phone.value = ''
+      email.value = ''
+      birthday.value = ''
+      nickname.value = ''
     }
   }
 
@@ -73,9 +88,9 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     account.value = ''
     role.value = UserRole.USER
-    avatar.value = '' // 重置頭像URL
-    cart.value = [] // 確保重置時是數組
-    userId.value = '' // 重置ID
+    avatar.value = ''
+    cart.value = []
+    userId.value = ''
     window.location.reload()
   }
 
@@ -84,17 +99,17 @@ export const useUserStore = defineStore('user', () => {
 
     try {
       const { data } = await apiAuth.get('/user/cart')
-      cart.value = data.result || [] // 確保賦值時是數組
+      cart.value = data.result || []
     } catch (error) {
       console.log(error)
-      cart.value = [] // 確保重置時是數組
+      cart.value = []
     }
   }
 
   const addCart = async (product, quantity, colors, sizes) => {
     try {
       const { data } = await apiAuth.patch('/user/cart', { p_id: product, quantity, colors, sizes })
-      cart.value = data.result || [] // 確保賦值時是數組
+      cart.value = data.result || []
       return {
         color: 'green',
         text: '成功'
@@ -123,17 +138,50 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const updateProfile = async (profile) => {
+    try {
+      const { data } = await apiAuth.patch('/user/profile', profile)
+      account.value = data.result.account
+      role.value = data.result.role
+      avatar.value = data.result.avatar
+      cart.value = data.result.cart || []
+      name.value = data.result.name
+      userId.value = data.result.userId
+      address.value = data.result.address
+      phone.value = data.result.phone
+      email.value = data.result.email
+      birthday.value = data.result.birthday
+      nickname.value = data.result.nickname
+
+      // 返回更新後的數據以便在 Vue 組件中使用
+      return data.result
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const updatePassword = async (oldPassword, newPassword) => {
+    await apiAuth.patch('/user/password', { oldPassword, newPassword })
+  }
+
   return {
     token,
     account,
     role,
     avatar,
     name,
+    nickname,
     userId,
+    address,
+    phone,
+    email,
+    birthday,
     cart,
     cartQuantity,
     isLogin,
     isAdmin,
+    updateProfile,
+    updatePassword,
     login,
     profile,
     logout,

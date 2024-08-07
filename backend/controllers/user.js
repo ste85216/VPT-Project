@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import jwt from 'jsonwebtoken'
 import validator from 'validator'
 import Sequence from '../models/sequence.js'
+import bcrypt from 'bcrypt'
 
 const getNextSequence = async (name) => {
   const sequence = await Sequence.findOneAndUpdate(
@@ -105,7 +106,12 @@ export const profile = (req, res) => {
         avatar: req.user.avatar, // 確保返回 avatar
         cart: req.user.cartQuantity,
         name: req.user.name,
-        userId: req.user.userId
+        userId: req.user.userId,
+        nickname: req.user.nickname,
+        email: req.user.email,
+        phone: req.user.phone,
+        birthday: req.user.birthday,
+        address: req.user.address
       }
     })
   } catch (error) {
@@ -423,5 +429,40 @@ export const updateAvatar = async (req, res) => {
       success: false,
       message: '未知錯誤'
     })
+  }
+}
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user._id
+    const updatedData = req.body
+    const user = await User.findByIdAndUpdate(userId, updatedData, { new: true })
+    res.status(StatusCodes.OK).json({
+      success: true,
+      result: user
+    })
+  } catch (error) {
+    res.status(StatusCodes.FORBIDDEN).json({
+      success: false,
+      message: '權限不足'
+    })
+  }
+}
+
+export const updatePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body
+    const user = await User.findById(req.user._id)
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ success: false, message: 'User not found' })
+    }
+    if (!bcrypt.compareSync(oldPassword, user.password)) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ success: false, message: 'Old password is incorrect' })
+    }
+    user.password = bcrypt.hashSync(newPassword, 10) // 使用 bcrypt.hashSync
+    await user.save()
+    res.status(StatusCodes.OK).json({ success: true, message: 'Password updated' })
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ success: false, message: 'Unknown error' })
   }
 }

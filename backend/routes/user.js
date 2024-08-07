@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { uploadAvatar } from '../middlewares/uploadAvatar.js'
 import admin from '../middlewares/admin.js'
-import { create, login, extend, profile, logout, getAll, edit, get, getId, remove, getCart, editCart, updateAvatar } from '../controllers/user.js'
+import { create, login, extend, profile, logout, getAll, edit, get, getId, remove, getCart, editCart, updateAvatar, updateUserProfile, updatePassword } from '../controllers/user.js'
 import * as auth from '../middlewares/auth.js'
 
 const router = Router()
@@ -14,12 +14,14 @@ router.delete('/logout', auth.jwt, logout)
 router.patch('/cart', auth.jwt, editCart)
 router.get('/cart', auth.jwt, getCart)
 router.patch('/avatar', auth.jwt, uploadAvatar, updateAvatar)
+router.patch('/profile', auth.jwt, updateUserProfile)
+router.patch('/password', auth.jwt, updatePassword)
 
 // 新增的路由
-router.get('/', get) // 獲取所有用戶
-router.get('/all', auth.jwt, admin, getAll) // 只有管理員可以查看所有用戶
-router.get('/:id', auth.jwt, getId) // 根據 ID 獲取單個用戶
-router.patch('/:id', auth.jwt, admin, edit) // 只有管理員可以編輯用戶
-router.delete('/:id', auth.jwt, admin, remove) // 只有管理員可以刪除用戶
+router.get('/', get)
+router.get('/all', auth.jwt, admin, getAll)
+router.get('/:id', auth.jwt, getId)
+router.patch('/:id', auth.jwt, admin, edit)
+router.delete('/:id', auth.jwt, admin, remove)
 
 export default router

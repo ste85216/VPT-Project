@@ -82,8 +82,8 @@
             <v-btn
               class="addCart-btn"
               prepend-icon="mdi-cart"
-              @click="addToCart"
               width="100%"
+              @click="addToCart"
             >
               加入購物車
             </v-btn>

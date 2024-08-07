@@ -1,5 +1,8 @@
 <template>
-  signup
+  <h3 class="opacity-90 mb-4">
+    報名紀錄
+  </h3>
+  <v-divider />
 </template>
 
 <script setup>

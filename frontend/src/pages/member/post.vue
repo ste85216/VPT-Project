@@ -1,5 +1,8 @@
 <template>
-  post
+  <h3 class="opacity-90 mb-4">
+    刊登場次
+  </h3>
+  <v-divider />
 </template>
 
 <script setup>
