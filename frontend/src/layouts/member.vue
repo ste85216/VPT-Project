@@ -190,7 +190,7 @@ onMounted(async () => {
 @import '/src/styles/settings.scss';
   #profile {
     // border: 1px solid #03919960;
-    max-height: 580px;
+    max-height: 569px;
     border-radius: 20px;
     box-shadow: 0 0 12px 0 rgba(0,0,0,0.1);
   }

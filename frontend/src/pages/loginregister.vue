@@ -52,7 +52,7 @@
                     v-model="rememberMe"
                     label="記住我"
                     hide-details
-                    color="warning"
+                    color="#546e7a"
                     density="compact"
                   />
                 </v-col>

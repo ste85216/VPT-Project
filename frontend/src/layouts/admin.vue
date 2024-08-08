@@ -69,7 +69,6 @@
                   to="/admin/venue"
                   :active="false"
                   base-color="#333"
-                  density="compact"
                 >
                   <v-icon
                     icon="mdi-information-outline"

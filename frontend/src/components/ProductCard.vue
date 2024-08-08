@@ -3,7 +3,7 @@
     :to="'/products/' + _id"
     min-width="280"
     max-width="280"
-    class="pb-2 rounded-lg border-sm mx-3"
+    class="pa-6 pb-2 rounded-lg border-sm mx-3"
     elevation="0"
     :ripple="false"
   >

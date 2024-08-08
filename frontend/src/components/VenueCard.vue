@@ -13,21 +13,21 @@
         <v-card-title style="color: #1b2d3f;">
           {{ props.name }}  <!-- 綁定球場名稱 -->
         </v-card-title>
-        <v-card-text class="d-flex flex-column justify-space-between mt-2">
+        <v-card-text class="d-flex flex-column justify-space-between mt-2" style="height: 258px;">
           <div class="info-text">
             <v-icon color="#555">
               mdi-clock-outline
-            </v-icon> 營業時間 :<br> {{ props.time }}
+            </v-icon> 營業時間 : {{ props.time }}
           </div>
           <div class="info-text">
             <v-icon color="#555">
               mdi-phone
-            </v-icon> 電話 :<br> {{ props.phone }}  <!-- 綁定電話 -->
+            </v-icon> 電話 : {{ props.phone }}  <!-- 綁定電話 -->
           </div>
           <div class="info-text">
             <v-icon color="#555">
               mdi-map
-            </v-icon> 地址 : <br> {{ props.address }}  <!-- 綁定地址 -->
+            </v-icon> 地址 : {{ props.address }}  <!-- 綁定地址 -->
           </div>
           <v-btn
             elevation="0"
@@ -59,7 +59,7 @@ const props = defineProps(['name', 'address', 'phone', 'images', 'time', 'mapLin
 <style lang="scss" scoped>
 .custom-card {
   margin: 0;
-  padding: 20px 24px;
+  padding: 32px 20px 20px 32px;
   border-radius: 20px;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
   .v-card__title {

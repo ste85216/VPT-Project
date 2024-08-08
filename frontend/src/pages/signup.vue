@@ -1,5 +1,8 @@
 <template>
-  <h1>球場報名</h1>
+  <v-container
+    fluid
+    class="pa-0 h-25"
+  />
 </template>
 
 <script setup>
