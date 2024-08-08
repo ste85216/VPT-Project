@@ -13,7 +13,9 @@
             :to="category.to"
             :ripple="false"
             variant="plain"
-            class="pa-0 mt-5 custom"
+            disabled="true"
+            class="pa-0 mt-5 "
+            style="font-size: 15px;"
           >
             <v-list-item-title style="font-size: 15px; letter-spacing: 2px;">
               {{ category.title }}
@@ -160,7 +162,6 @@ watch(route, async (newRoute) => {
     await loadProductCategory(productId)
   }
   const subCategoryPath = subCategoryPathMap[productCategory.value] || ''
-  console.log(subCategoryPath)
   if (category) {
     breadcrumbs.value = [
       { title: category, disabled: false, to: newRoute.path }

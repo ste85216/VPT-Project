@@ -1,12 +1,9 @@
 <template>
-  <v-card
-
-    class="custom-card"
-  >
+  <v-card class="custom-card">
     <v-row>
       <v-col cols="6">
         <v-img
-          src="/src/assets/3D排球機器人.webp"
+          :src="props.images[0]"
           width="300"
           height="300"
           cover
@@ -14,29 +11,31 @@
       </v-col>
       <v-col cols="6">
         <v-card-title style="color: #1b2d3f;">
-          3D排球機器人
+          {{ props.name }}  <!-- 綁定球場名稱 -->
         </v-card-title>
         <v-card-text class="d-flex flex-column justify-space-between mt-2">
           <div class="info-text">
             <v-icon color="#555">
               mdi-clock-outline
-            </v-icon> 營業時間 :<br> 12:00 - 22:00
+            </v-icon> 營業時間 :<br> {{ props.time }}
           </div>
           <div class="info-text">
             <v-icon color="#555">
               mdi-phone
-            </v-icon> 電話 :<br> 02-1234-5678
+            </v-icon> 電話 :<br> {{ props.phone }}  <!-- 綁定電話 -->
           </div>
           <div class="info-text">
             <v-icon color="#555">
               mdi-map
-            </v-icon> 地址 : <br> 台北市大安區忠孝東路四段 200 號
+            </v-icon> 地址 : <br> {{ props.address }}  <!-- 綁定地址 -->
           </div>
           <v-btn
             elevation="0"
             :active="false"
             variant="text"
             class="opacity-100 map-btn"
+            :href="props.mapLink"
+            target="_blank"
           >
             <v-icon
               size="x-large"
@@ -52,6 +51,10 @@
     </v-row>
   </v-card>
 </template>
+
+<script setup>
+const props = defineProps(['name', 'address', 'phone', 'images', 'time', 'mapLink'])
+</script>
 
 <style lang="scss" scoped>
 .custom-card {

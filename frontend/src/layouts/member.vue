@@ -29,24 +29,31 @@
                 </v-row>
               </template>
             </v-img>
-            <v-hover>
-              <template #default="{isHovering, props}">
-                <!-- 添加相機圖標 -->
+            <v-tooltip
+              :text="'檔案最大不超過1MB'"
+              location="bottom"
+              :open-delay="50"
+              :close-delay="50"
+            >
+              <template #activator="{ props: tooltipProps }">
                 <v-icon
-                  v-bind="props"
+                  v-bind="tooltipProps"
                   :color="isHovering ? 'primary' : undefined"
                   class="camera-icon opacity-70"
                   @click="triggerFileInput"
+                  @mouseenter="isHovering = true"
+                  @mouseleave="isHovering = false"
                 >
                   mdi-camera
                 </v-icon>
               </template>
-            </v-hover>
+            </v-tooltip>
             <!-- 隱藏的文件輸入框 -->
             <input
               ref="fileInput"
               type="file"
               class="d-none"
+              accept="image/*"
               @change="handleFileChange"
             >
             <v-card-title style="font-size: 18px;">
@@ -57,7 +64,10 @@
         </v-col>
         <v-divider />
         <v-col class="pa-0">
-          <v-list width="100%" class="mt-4 mb-6">
+          <v-list
+            width="100%"
+            class="mt-4 mb-6"
+          >
             <v-list-item
               v-for="item in navItems"
               :key="item.to"
@@ -81,6 +91,22 @@
         <router-view />
       </v-col>
     </div>
+    <v-dialog
+      v-model="isUploading"
+      persistent
+      width="auto"
+    >
+      <v-card class="rounded-lg">
+        <v-card-text class="pa-3">
+          頭像上傳中...
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            class="ml-3"
+          />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -94,6 +120,8 @@ const { apiAuth } = useApi()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
 const fileInput = ref(null)
+const isUploading = ref(false)
+const isHovering = ref(false)
 
 const navItems = [
   { to: '/member/profile', text: '個人資料管理', icon: ' mdi-account-cog' },
@@ -109,13 +137,21 @@ const triggerFileInput = () => {
 const handleFileChange = (event) => {
   const file = event.target.files[0]
   if (file) {
-    uploadAvatar(file) // 傳遞文件對象而不是事件對象
+    if (file.size > 1024 * 1024) {
+      createSnackbar({
+        text: '檔案大小不能超過1MB',
+        snackbarProps: { color: 'error' }
+      })
+      return
+    }
+    uploadAvatar(file)
   }
 }
 
 const uploadAvatar = async (file) => {
   if (!file) return
 
+  isUploading.value = true
   try {
     const formData = new FormData()
     formData.append('avatar', file)
@@ -128,7 +164,7 @@ const uploadAvatar = async (file) => {
 
     createSnackbar({
       text: data.message,
-      snackbarProps: { color: 'green' }
+      snackbarProps: { color: 'success' }
     })
 
     await user.profile() // 更新用戶資料，確保新的頭像 URL 被加載
@@ -137,8 +173,10 @@ const uploadAvatar = async (file) => {
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '上傳失敗',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'error' }
     })
+  } finally {
+    isUploading.value = false // 確保在成功或失敗後都關閉對話框
   }
 }
 

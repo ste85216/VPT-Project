@@ -46,7 +46,7 @@
                 ${{ calculateTotal(order.cart) }}
               </v-col>
               <v-col cols="3">
-                {{ order.remarks || '無' }}
+                {{ order.note || '無' }}
               </v-col>
             </v-row>
           </v-col>

@@ -196,8 +196,6 @@ const user = useUserStore()
 const route = useRoute()
 const createSnackbar = useSnackbar()
 
-console.log(user.cartQuantity)
-
 const currentPath = route.path
 
 const isOnProductsPage = computed(() => currentPath.includes('/products'))

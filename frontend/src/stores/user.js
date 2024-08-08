@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', () => {
   const email = ref('')
   const birthday = ref('')
   const nickname = ref('')
+  const note = ref('')
 
   const isLogin = computed(() => token.value.length > 0)
   const isAdmin = computed(() => role.value === UserRole.ADMIN)
@@ -60,8 +61,6 @@ export const useUserStore = defineStore('user', () => {
       email.value = data.result.email
       birthday.value = data.result.birthday
       nickname.value = data.result.nickname
-
-      console.log(data)
     } catch (error) {
       console.log(error)
       token.value = ''
@@ -122,9 +121,9 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  const checkout = async () => {
+  const checkout = async (note) => {
     try {
-      await apiAuth.post('/order')
+      await apiAuth.post('/order', { note })
       cart.value = []
       return {
         color: 'green',
@@ -180,6 +179,7 @@ export const useUserStore = defineStore('user', () => {
     cartQuantity,
     isLogin,
     isAdmin,
+    note,
     updateProfile,
     updatePassword,
     login,

@@ -67,10 +67,16 @@
                 </template>
                 <v-list-item
                   to="/admin/venue"
-                  prepend-icon="mdi-information-outline"
                   :active="false"
                   base-color="#333"
+                  density="compact"
                 >
+                  <v-icon
+                    icon="mdi-information-outline"
+                    size="small"
+                    class="me-2"
+                    color="#333"
+                  />
                   球場資訊
                 </v-list-item>
               </v-list-group>
@@ -110,12 +116,13 @@
 
 <script setup>
 import { useUserStore } from '@/stores/user'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useSnackbar } from 'vuetify-use-dialog'
 // import { Vue3Spline } from 'vue3-spline'
 
 const user = useUserStore()
 const createSnackbar = useSnackbar()
+const open = ref(false)
 
 const logout = async () => {
   await user.logout()

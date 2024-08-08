@@ -38,6 +38,9 @@ const schema = new Schema({
       },
       message: '請正確放入購物車商品'
     }
+  },
+  note: {
+    type: String
   }
 }, {
   timestamps: true,

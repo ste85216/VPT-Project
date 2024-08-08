@@ -13,24 +13,49 @@
           max-width="240"
           append-inner-icon="mdi-magnify"
           placeholder="搜尋商品"
-          @input="onSearch"
+          :loading="isSearching"
+          clearable
+          @input="debounceSearch"
+          @click:clear="clearSearch"
         />
       </v-col>
       <v-col
-        v-for="product in products"
-        :key="product._id"
-        cols="auto"
-        class="px-0"
+        v-if="isLoading"
+        cols="12"
+        class="text-center"
       >
-        <ProductCard v-bind="product" />
+        <v-progress-circular
+          indeterminate
+          color="primary"
+        />
       </v-col>
-      <v-col cols="12">
+      <template v-else>
+        <v-col
+          v-for="product in products"
+          :key="product._id"
+          cols="auto"
+          class="px-0"
+        >
+          <ProductCard v-bind="product" />
+        </v-col>
+        <v-col
+          v-if="products.length === 0"
+          cols="12"
+          class="text-center"
+        >
+          <p>沒有找到相關商品</p>
+        </v-col>
+      </template>
+      <v-col
+        v-if="pages > 1"
+        cols="12"
+      >
         <v-pagination
           v-model="page"
           :length="pages"
           rounded="circle"
           density="compact"
-          @update:model-value="loadProducts"
+          @update:model-value="onPageChange"
         />
       </v-col>
     </v-row>
@@ -38,17 +63,19 @@
 </template>
 
 <script setup>
-import { definePage } from 'vue-router/auto'
-import { ref, watch } from 'vue'
+import { defineProps, ref, watch, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import ProductCard from '@/components/ProductCard.vue'
 
-definePage({
+defineProps({
   meta: {
-    title: '所有商品 | VPT',
-    login: false,
-    admin: false
+    type: Object,
+    default: () => ({
+      title: '所有商品 | VPT',
+      login: false,
+      admin: false
+    })
   }
 })
 
@@ -59,44 +86,78 @@ const page = ref(1)
 const pages = ref(1)
 const ITEMS_PER_PAGE = 18
 const searchQuery = ref('')
-
 const products = ref([])
+const isLoading = ref(false)
+const isSearching = ref(false)
+
 const loadProducts = async () => {
+  isLoading.value = true
   try {
-    const { data } = await api.get('/product', {
-      params: {
-        itemsPerPage: ITEMS_PER_PAGE,
-        page: page.value,
-        search: searchQuery.value // Add search query
-      }
-    })
-    pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE)
-    products.value.splice(0, products.value.length, ...data.result.data)
+    const params = {
+      itemsPerPage: ITEMS_PER_PAGE,
+      page: page.value,
+      search: searchQuery.value
+    }
+    const { data } = await api.get('/product', { params })
+
+    if (data.success) {
+      products.value = data.result.data
+      pages.value = Math.ceil(data.result.total / ITEMS_PER_PAGE)
+    } else {
+      throw new Error(data.message || '載入商品失敗')
+    }
   } catch (error) {
-    console.log(error)
+    console.error('載入商品時發生錯誤:', error)
     createSnackbar({
-      text: error?.response?.data?.message || '發生錯誤',
+      text: error.message || '載入商品時發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'error'
       }
     })
+    products.value = []
+    pages.value = 1
+  } finally {
+    isLoading.value = false
   }
 }
-loadProducts()
-// 搜尋時加載商品
-const onSearch = () => {
+
+const debounceSearch = (() => {
+  let timer
+  return () => {
+    isSearching.value = true
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      page.value = 1
+      loadProducts()
+      isSearching.value = false
+    }, 300)
+  }
+})()
+
+const clearSearch = () => {
+  searchQuery.value = ''
   page.value = 1
   loadProducts()
 }
 
-// 當頁碼改變時重新加載商品
-watch(page, () => {
+const onPageChange = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
   loadProducts()
+}
+
+watch(searchQuery, (newValue) => {
+  if (newValue === '') {
+    page.value = 1
+    loadProducts()
+  }
 })
 
+onMounted(() => {
+  loadProducts()
+})
 </script>
 
 <route lang="yaml">
-  meta:
-    layout: productdefault
-  </route>
+meta:
+  layout: productdefault
+</route>

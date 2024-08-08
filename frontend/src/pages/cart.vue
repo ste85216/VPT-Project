@@ -125,6 +125,36 @@
       <!-- 右邊的總價和結帳按鈕 -->
       <v-col cols="4">
         <v-card
+          class="pa-4 pb-0 cart-card mb-4"
+          height="160"
+        >
+          <v-row>
+            <v-col
+              cols="12"
+              class="pb-0"
+            >
+              <h4 style="font-weight: 500;">
+                訂單備註
+              </h4>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="pt-4">
+              <v-textarea
+                v-model="note"
+                rows="2"
+                variant="outlined"
+                auto-grow
+                base-color="#666"
+                hide-details
+                no-resize
+                max-rows="2"
+                :disabled="loading || items.length === 0"
+              />
+            </v-col>
+          </v-row>
+        </v-card>
+        <v-card
           class="pa-4 pb-0 cart-card "
           height="150"
         >
@@ -178,6 +208,7 @@ const createSnackbar = useSnackbar()
 
 const items = ref([]) // 購物車中的商品
 const loading = ref(false) // 標示是否正在載入或處理請求
+const note = ref('') // 訂單備註
 
 const loadItems = async () => {
   try {
@@ -331,7 +362,8 @@ const totalPrice = computed(() => {
 
 const checkout = async () => {
   loading.value = true
-  const result = await user.checkout()
+  const result = await user.checkout(note.value)
+  console.log(result)
 
   createSnackbar({
     text: result.text,

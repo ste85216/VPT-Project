@@ -5,6 +5,10 @@ const schema = new Schema({
     type: String,
     required: [true, '球場名稱必填']
   },
+  time: {
+    type: String,
+    required: [true, '球場營業時間必填']
+  },
   images: {
     type: [String],
     required: [true, '球場圖片必填'],
@@ -19,21 +23,17 @@ const schema = new Schema({
     type: String,
     required: [true, '球場地址必填']
   },
-  category: {
+  phone: {
     type: String,
-    required: [true, '商品分類必填'],
-    enum: {
-      values: ['球衣', '球褲', '球襪', '球鞋', '排球', '護具', '其他'],
-      message: '商品分類錯誤'
-    }
+    required: [true, '球場電話必填']
   },
-  sell: {
-    type: Boolean,
-    required: [true, '商品上架狀態必填']
+  mapLink: {
+    type: String,
+    required: [true, '球場連結必填']
   }
 }, {
   timestamps: true,
   versionKey: false
 })
 
-export default model('products', schema)
+export default model('venues', schema)

@@ -9,7 +9,10 @@ export const create = async (req, res) => {
     const ok = user.cart.every(item => item.p_id.sell)
     if (!ok) throw new Error('SOLD_OUT')
 
-    await Order.create({ user: req.user._id, cart: user.cart })
+    const { note } = req.body
+
+    await Order.create({ user: req.user._id, cart: user.cart, note: note || '' }) // 將備註存入數據庫
+
     // 清空購物車
     req.user.cart = []
     await req.user.save()

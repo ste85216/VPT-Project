@@ -110,7 +110,7 @@
         />
       </v-col>
     </v-row>
-    <v-row class="px-4 py-16">
+    <v-row class="px-4 py-10">
       <v-spacer />
       <v-btn
         elevation="0"

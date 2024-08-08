@@ -139,7 +139,6 @@ export const logout = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    console.log(req.query)
     const sortBy = req.query.sortBy || 'createdAt'
     const sortOrder = req.query.sortOrder || 'desc'
     const itemsPerPage = req.query.itemsPerPage * 1 || 10
@@ -160,7 +159,6 @@ export const getAll = async (req, res) => {
       .sort({ [sortBy]: sortOrder })
       .skip((page - 1) * itemsPerPage)
       .limit(itemsPerPage)
-    console.log(data.length)
     const memberTotal = await User.countDocuments({ role: 0 })
     const adminTotal = await User.countDocuments({ role: 1 }) // 有篩選身分的資料筆數 跟product不一樣 這邊仔細觀察
     res.status(StatusCodes.OK).json({

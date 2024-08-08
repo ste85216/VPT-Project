@@ -156,7 +156,7 @@ const tableHeaders = [
   { title: '會員ID', align: 'left', sortable: true, key: 'user.account' },
   { title: '訂單日期', align: 'left', sortable: true, key: 'createdAt' },
   { title: '訂單總額', align: 'left', sortable: false, key: 'total' },
-  { title: '訂單備註', align: 'left', sortable: false, key: 'remarks' },
+  { title: '訂單備註', align: 'left', sortable: false, key: 'note' },
   { title: '', key: 'data-table-expand' }
 ]
 const tableLoading = ref(true)
