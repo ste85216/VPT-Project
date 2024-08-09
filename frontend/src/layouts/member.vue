@@ -97,7 +97,7 @@
       width="auto"
     >
       <v-card class="rounded-lg">
-        <v-card-text class="pa-3">
+        <v-card-text class="pa-12">
           頭像上傳中...
           <v-progress-circular
             indeterminate

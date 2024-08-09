@@ -45,6 +45,8 @@
   <v-app-bar
     height="70"
     app
+    color="teal-lighten-1"
+    elevation="0"
   >
     <v-container
       class="d-flex align-center pa-0"
@@ -52,9 +54,10 @@
     >
       <v-btn
         to="/"
-        color="#fff"
         :active="false"
         :ripple="false"
+        variant="plain"
+        class="opacity-100"
         height="50"
       >
         <img
@@ -96,7 +99,7 @@
           <v-badge
             v-if="user.isLogin && user.cartQuantity > 0"
             class="custom-badge"
-            color="#039199"
+            color="warning"
             :content="user.cartQuantity"
             floating
           />
@@ -254,11 +257,15 @@ onMounted(async () => {
     color: transparent;
   }
 
+  .v-btn {
+    color: #fff !important;
+  }
+
   .highlight {
-    border: 2px solid rgba(0,0,0,0.2);
+    border: 2px solid #fff;
     margin-left: 20px;
     &:hover {
-      background-color: rgba(0,0,0,0.1);
+      background-color: teal;
     }
   }
 
@@ -273,7 +280,7 @@ onMounted(async () => {
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: $primary-color;
+      background-color: #fff;
       transform: scaleX(0%);
       transition: 0.6s;
     }

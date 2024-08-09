@@ -121,6 +121,7 @@ const subcategories = ref([
   { title: '球衣', to: '/products/shirts' },
   { title: '球褲', to: '/products/pants' },
   { title: '排球', to: '/products/balls' },
+  { title: '球鞋', to: '/products/shoes' },
   { title: '球襪', to: '/products/socks' },
   { title: '護具', to: '/products/protection' },
   { title: '其他', to: '/products/others' }

@@ -25,6 +25,7 @@
                 size="x-large"
                 variant="flat"
                 rounded="0"
+                to="/products"
               >
                 飛得更高
               </v-btn>
@@ -33,6 +34,7 @@
                 size="x-large"
                 variant="flat"
                 rounded="0"
+                to="/signup"
               >
                 一起飛翔
               </v-btn>
@@ -58,7 +60,7 @@
           class="mt-16"
         >
           <h4 class="text-center text-teal-lighten-1">
-            Best Seller
+            Equipment
           </h4>
           <h1 class="text-center mb-8">
             高手必備
@@ -80,11 +82,13 @@
                       :class="{'on-hover':isHovering}"
                       v-bind="props"
                       class="card1"
+                      to="/products/socks"
                     >
                       <v-img
-                        src="/src/assets/car.jpg"
+                        src="/src/assets/products/球襪02.webp"
                         cover
-                        height="100%"
+                        height="500px"
+                        fill-height
                       >
                         <div class="d-flex flex-row-reverse">
                           <v-btn
@@ -95,16 +99,16 @@
                             rounded="0"
                             elevation="12"
                           >
-                            3 packs
+                            立即裝備
                           </v-btn>
                         </div>
                         <div class="text-white top pa-4">
                           <h1 class="mt-4">
-                            Paris
+                            VPT機能排球襪
                           </h1>
                           <div>
                             <p class="ma-0 text-body-1 font-weight-bold">
-                              Start from $1231
+                              $350起
                             </p>
                           </div>
                         </div>
@@ -131,11 +135,12 @@
                           v-bind="props"
                           class="card1"
                           height="100%"
+                          to="/products/balls"
                         >
                           <v-img
-                            src="/src/assets/test400200.jpg"
+                            src="/src/assets/products/排球03.webp"
                             cover
-                            height="100%"
+                            height="238"
                           >
                             <div class="d-flex flex-row-reverse">
                               <v-btn
@@ -146,16 +151,16 @@
                                 rounded="0"
                                 elevation="12"
                               >
-                                3 packs
+                                選對武器
                               </v-btn>
                             </div>
                             <div class="text-white">
                               <h1 class="ms-6 mt-16">
-                                Paris
+                                VPT排球
                               </h1>
                               <div>
                                 <p class="ms-6 text-body-1 font-weight-bold">
-                                  Start from $1231
+                                  $380起
                                 </p>
                               </div>
                             </div>
@@ -176,10 +181,11 @@
                           v-bind="props"
                           class="card1"
                           height="100%"
+                          to="/products/shoes"
                         >
                           <v-img
-                            src="/src/assets/test400200.jpg"
-                            height="100%"
+                            src="/src/assets/products/球鞋01.webp"
+                            height="238"
                             cover
                             class="d-flex "
                           >
@@ -192,16 +198,16 @@
                                 rounded="0"
                                 elevation="12"
                               >
-                                3 packs
+                                有如神助
                               </v-btn>
                             </div>
                             <div class="text-white">
                               <h1 class=" ms-6 mt-16">
-                                Paris
+                                VPT排球鞋
                               </h1>
                               <div>
                                 <p class="ms-6 text-body-1 font-weight-bold">
-                                  Start from $1231
+                                  $1500起
                                 </p>
                               </div>
                             </div>
@@ -223,11 +229,12 @@
                       :class="{'on-hover':isHovering}"
                       v-bind="props"
                       class="card1"
+                      to="/products/shirts"
                     >
                       <v-img
-                        src="/src/assets/car.jpg"
+                        src="/src/assets/products/球衣01.webp"
                         cover
-                        height="100%"
+                        height="500"
                       >
                         <div class="d-flex flex-row-reverse">
                           <v-btn
@@ -238,16 +245,16 @@
                             rounded="0"
                             elevation="12"
                           >
-                            3 packs
+                            輕盈涼爽
                           </v-btn>
                         </div>
                         <div class="text-white top pa-4">
                           <h1 class="mt-4">
-                            Paris
+                            VPT透氣排球衣
                           </h1>
                           <div>
                             <p class="ma-0 text-body-1 font-weight-bold">
-                              Start from $1231
+                              $500起
                             </p>
                           </div>
                         </div>
@@ -297,6 +304,7 @@ definePage({
 
 .v-card.card1 {
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; /* 添加 transform 過渡效果 */
+
 }
 
 .v-card.card1.on-hover {
