@@ -14,10 +14,10 @@
               class="pt-5 ps-0"
             >
               <h1 class="title1">
-                正因為沒有翅膀<br>所以人們才去尋找飛翔的方法
+                正因為沒有翅膀<br>所以人們才去尋找<br>飛翔的方法
               </h1>
               <p class="p1 mt-4">
-                在球場上 我們用團結和汗水編織出一片屬於我們的天空 每一次跳躍都是對夢想的不懈追求
+                每一次跳躍都是對夢想的不懈追求 <br>以團結和汗水編織出一片屬於我們的天空
               </p>
               <v-btn
                 class="text-none mt-8 bt1"
@@ -58,10 +58,10 @@
           class="mt-16"
         >
           <h4 class="text-center text-teal-lighten-1">
-            Featured Tours
+            Best Seller
           </h4>
           <h1 class="text-center mb-8">
-            熱銷商品
+            高手必備
           </h1>
           <v-row justify="space-evenly">
             <v-col
