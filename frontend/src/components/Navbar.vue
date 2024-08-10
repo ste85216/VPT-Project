@@ -172,8 +172,8 @@
               </v-list-item>
               <v-list-item>
                 <v-btn
-                  color="#546E7A"
-                  class="w-100 my-4"
+                  elevation="0"
+                  class="w-100 my-4 logout-btn"
                   @click="logout"
                 >
                   登出
@@ -217,7 +217,7 @@ const navItems = computed(() => [
 const memberNavItems = [
   { to: '/member/profile', text: '個人資料管理', icon: ' mdi-account-cog' },
   { to: '/member/order', text: '訂單管理', icon: 'mdi-list-box' },
-  { to: '/member/signup', text: '報名紀錄', icon: 'mdi-volleyball ' },
+  { to: '/member/enrollment', text: '報名紀錄', icon: 'mdi-volleyball ' },
   { to: '/member/post', text: '刊登場次', icon: 'mdi-post' }
 ]
 
@@ -297,5 +297,11 @@ onMounted(async () => {
     position: absolute;
     top: 6px;
     right: 6px;
+  }
+  .logout-btn {
+    background-color: #78909C;
+    &:hover {
+      background-color: #455A64;
+    }
   }
 </style>

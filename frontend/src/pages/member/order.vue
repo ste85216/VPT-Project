@@ -143,14 +143,25 @@
       </v-expansion-panel-text>
     </v-expansion-panel>
   </v-expansion-panels>
+  <ConfirmDeleteDialog
+    v-model="confirmDialog.open"
+    title="確認要取消此訂單嗎？"
+    message="此操作不可恢復。"
+    confirm-text="確認"
+    cancel-text="取消"
+    confirm-color="error"
+    cancel-color="grey"
+    @confirm="confirmCancelOrder"
+    @cancel="closeConfirmDialog"
+  />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
-import Swal from 'sweetalert2'
 import { definePage } from 'vue-router/auto'
+import ConfirmDeleteDialog from '../../components/ConfirmDeleteDialog.vue'
 
 definePage({
   meta: {
@@ -164,6 +175,8 @@ const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 
 const orders = ref([])
+const confirmDialog = ref({ open: false })
+const orderIdToCancel = ref(null)
 
 const loadOrders = async () => {
   try {
@@ -190,39 +203,25 @@ const calculateTotal = (cart) => {
   return cart.reduce((total, item) => total + item.p_id.price * item.quantity, 0)
 }
 
-const cancelOrder = async (orderId) => {
+const cancelOrder = (orderId) => {
+  orderIdToCancel.value = orderId
+  confirmDialog.value.open = true
+}
+
+const closeConfirmDialog = () => {
+  confirmDialog.value.open = false
+}
+
+const confirmCancelOrder = async () => {
   try {
-    const result = await Swal.fire({
-      title: '確認要取消此訂單嗎？',
-      icon: 'warning',
-      iconColor: 'success',
-      showCancelButton: true,
-      confirmButtonText: '確認',
-      confirmButtonColor: '#d9534f',
-      cancelButtonText: '取消',
-      cancelButtonColor: '#a1a1a1',
-      focusConfirm: false,
-      returnFocus: false,
-      width: '25%',
-      customClass: {
-        confirmButton: 'me-5 fw-light',
-        cancelButton: 'ms-5'
-      },
-      didOpen: () => {
-        document.body.style.paddingRight = '0px'
+    await apiAuth.delete(`/order/${orderIdToCancel.value}`)
+    orders.value = orders.value.filter(order => order._id !== orderIdToCancel.value)
+    createSnackbar({
+      text: '訂單已取消',
+      snackbarProps: {
+        color: 'green'
       }
     })
-
-    if (result.isConfirmed) {
-      await apiAuth.delete(`/order/${orderId}`)
-      orders.value = orders.value.filter(order => order._id !== orderId)
-      createSnackbar({
-        text: '訂單已取消',
-        snackbarProps: {
-          color: 'green'
-        }
-      })
-    }
   } catch (error) {
     console.log(error)
     createSnackbar({
@@ -231,6 +230,8 @@ const cancelOrder = async (orderId) => {
         color: 'red'
       }
     })
+  } finally {
+    closeConfirmDialog()
   }
 }
 

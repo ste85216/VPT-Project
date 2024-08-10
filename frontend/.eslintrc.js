@@ -7,15 +7,16 @@
 module.exports = {
   root: true,
   env: {
-    node: true,
+    node: true
   },
   extends: [
     'plugin:vue/vue3-recommended',
     'eslint:recommended',
-    '@vue/standard',
+    '@vue/standard'
   ],
   rules: {
     'vue/multi-word-component-names': 'off',
+    camelcase: 'off'
   },
   overrides: [
     {

@@ -9,6 +9,8 @@ import routeUser from './routes/user.js'
 import routeProduct from './routes/product.js'
 import routeOrder from './routes/order.js'
 import routerVenue from './routes/venue.js'
+import routerSession from './routes/session.js'
+import routerEnrollment from './routes/enrollment.js'
 import './passport/passport.js'
 
 const app = express()
@@ -53,6 +55,8 @@ app.use('/user', routeUser)
 app.use('/product', routeProduct)
 app.use('/order', routeOrder)
 app.use('/venue', routerVenue)
+app.use('/session', routerSession)
+app.use('/enrollment', routerEnrollment)
 
 app.all('*', (req, res) => {
   res.status(StatusCodes.NOT_FOUND).json({

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import UserRole from '@/enums/UserRole.js'
 import { useApi } from '@/composables/axios'
+import router from '@/router'
 
 export const useUserStore = defineStore('user', () => {
   const { api, apiAuth } = useApi()

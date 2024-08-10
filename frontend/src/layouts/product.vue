@@ -136,6 +136,7 @@ const subCategoriesMap = {
   '/products/pants': '球褲',
   '/products/balls': '排球',
   '/products/socks': '球襪',
+  '/products/shoes': '球鞋',
   '/products/protection': '護具',
   '/products/others': '其他'
 }
@@ -151,6 +152,7 @@ const subCategoryPathMap = {
   球褲: '/products/pants',
   排球: '/products/balls',
   球襪: '/products/socks',
+  球鞋: '/products/shoes',
   護具: '/products/protection',
   其他: '/products/others'
 }

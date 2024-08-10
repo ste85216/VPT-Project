@@ -93,7 +93,7 @@
       :disabled="isSubmitting"
       @submit.prevent="submit"
     >
-      <v-card class="rounded-xl">
+      <v-card class="rounded-xl pa-4 pt-6">
         <v-card-title style="font-size: 18px;">
           {{ dialog.id ? '編輯商品' : '新增商品' }}
         </v-card-title>

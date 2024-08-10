@@ -79,7 +79,7 @@
         :disabled="isSubmitting"
         @submit.prevent="submit"
       >
-        <v-card class="rounded-xl">
+        <v-card class="rounded-xl pa-4 pt-6">
           <v-card-title style="font-size: 18px;">
             {{ dialog.id ? '編輯球場資訊' : '新增球場資訊' }}
           </v-card-title>

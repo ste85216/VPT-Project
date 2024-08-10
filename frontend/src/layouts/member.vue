@@ -126,7 +126,7 @@ const isHovering = ref(false)
 const navItems = [
   { to: '/member/profile', text: '個人資料管理', icon: ' mdi-account-cog' },
   { to: '/member/order', text: '訂單管理', icon: 'mdi-list-box' },
-  { to: '/member/signup', text: '報名紀錄', icon: 'mdi-volleyball ' },
+  { to: '/member/enrollment', text: '報名紀錄', icon: 'mdi-volleyball ' },
   { to: '/member/post', text: '刊登場次', icon: 'mdi-post' }
 ]
 

@@ -4,9 +4,7 @@
     style="max-width: 1200px;margin-top: 32px;"
   >
     <v-row>
-      <v-col
-        cols="12"
-      >
+      <v-col cols="12">
         <v-row>
           <v-col
             cols="12"
@@ -19,27 +17,38 @@
             sm="3"
             class="py-0 px-4"
           >
-            <v-form>
+            <v-form @submit.prevent="applyFilters">
               <v-card
                 class="pa-4 card-search"
                 elevation="4"
               >
                 <v-row no-gutters>
-                  <v-col
-                    cols="12"
-                  >
+                  <v-col cols="12">
                     <h4 class="title-search py-4">
                       搜尋篩選
                     </h4>
                   </v-col>
-                  <v-col
-                    cols="12"
-                  >
+                  <v-col cols="12">
                     <div class="region">
                       地區: <v-select
+                        v-model="filters.city"
                         variant="outlined"
                         density="compact"
                         :items="cities"
+                      />
+                    </div>
+                  </v-col>
+                  <v-col cols="12">
+                    <div class="venue">
+                      球場: <v-autocomplete
+                        v-model="filters.venueId"
+                        :items="venueOptions"
+                        item-title="name"
+                        item-value="id"
+                        variant="outlined"
+                        density="compact"
+                        clearable
+                        @change="onVenueChange"
                       />
                     </div>
                   </v-col>
@@ -50,6 +59,7 @@
                     <div>
                       日期:
                       <v-text-field
+                        v-model="filters.date"
                         type="date"
                         density="compact"
                         variant="outlined"
@@ -63,14 +73,21 @@
                     <div>
                       網高:
                       <v-chip-group
+                        v-model="filters.netheight"
                         filter
                         color="primary"
                         variant="outlined"
                       >
-                        <v-chip label>
+                        <v-chip
+                          label
+                          value="男網"
+                        >
                           男網
                         </v-chip>
-                        <v-chip label>
+                        <v-chip
+                          label
+                          value="女網"
+                        >
                           女網
                         </v-chip>
                       </v-chip-group>
@@ -83,24 +100,40 @@
                     <div>
                       程度:
                       <v-chip-group
+                        v-model="filters.level"
                         filter
                         color="primary"
                         column
                         variant="outlined"
                       >
-                        <v-chip label>
+                        <v-chip
+                          label
+                          value="C"
+                        >
                           C
                         </v-chip>
-                        <v-chip label>
+                        <v-chip
+                          label
+                          value="B"
+                        >
                           B
                         </v-chip>
-                        <v-chip label>
+                        <v-chip
+                          label
+                          value="B+"
+                        >
                           B+
                         </v-chip>
-                        <v-chip label>
-                          A以上
+                        <v-chip
+                          label
+                          value="A"
+                        >
+                          A
                         </v-chip>
-                        <v-chip label>
+                        <v-chip
+                          label
+                          value="新手友善"
+                        >
                           新手友善
                         </v-chip>
                       </v-chip-group>
@@ -110,13 +143,28 @@
                     cols="12"
                     class="my-4"
                   >
-                    <v-btn
-                      block
-                      color="primary"
-                      class="mt-4"
-                    >
-                      搜尋
-                    </v-btn>
+                    <v-row>
+                      <v-col cols="2">
+                        <v-btn
+                          block
+                          color="blue-grey-darken-1"
+                          class="mt-2"
+                          @click="clearFilters"
+                        >
+                          <v-icon icon="mdi-arrow-u-left-top" />
+                        </v-btn>
+                      </v-col>
+                      <v-col>
+                        <v-btn
+                          block
+                          color="primary"
+                          class="mt-2"
+                          @click="applyFilters"
+                        >
+                          搜尋
+                        </v-btn>
+                      </v-col>
+                    </v-row>
                   </v-col>
                 </v-row>
               </v-card>
@@ -128,23 +176,6 @@
             class="elevation-4 rounded-sm pa-8 mt-4 mt-sm-0"
           >
             <v-row>
-              <v-col
-                cols="12"
-                sm="4"
-                class="ps-2"
-              >
-                <v-text-field
-                  v-model="searchQuery"
-                  label="搜尋"
-                  append-inner-icon="mdi-magnify"
-                  variant="outlined"
-                  density="compact"
-                  clearable
-                  @input="debounceSearch"
-                  @click:clear="clearSearch"
-                />
-              </v-col>
-              <v-divider />
               <v-col cols="12">
                 <v-row>
                   <v-col cols="12">
@@ -153,16 +184,29 @@
                     </h3>
                   </v-col>
                   <v-col>
+                    <v-sheet
+                      v-if="filteredSessions.length === 0"
+                      class="text-center"
+                    >
+                      目前沒有搜尋到相關場次
+                    </v-sheet>
                     <v-expansion-panels>
-                      <v-expansion-panel>
+                      <v-expansion-panel
+                        v-for="(session, index) in filteredSessions"
+                        :key="session._id"
+                        elevation="0"
+                        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }"
+                      >
                         <v-expansion-panel-title>
                           <v-row class="text-center">
-                            <v-col cols="12">
+                            <v-col
+                              cols="12"
+                            >
                               <v-row
                                 align="center"
                                 justify="center"
                               >
-                                <v-col>會原編號</v-col>
+                                <v-col>會員編號</v-col>
                                 <v-col>地區</v-col>
                                 <v-col>球場</v-col>
                                 <v-col>日期</v-col>
@@ -178,26 +222,24 @@
                             </v-col>
                             <v-col cols="12">
                               <v-row style="line-height: 32px;">
-                                <v-col>A0000001</v-col>
-                                <v-col>新北市</v-col>
-                                <v-col>NVA</v-col>
-                                <v-col>2024/08/08</v-col>
+                                <v-col>{{ session.userId.userId }}</v-col>
+                                <v-col>{{ getVenueCity(session.v_id) }}</v-col>
+                                <v-col>{{ getVenueName(session.v_id) }}</v-col>
+                                <v-col>{{ formatDate(session.date) }}</v-col>
                                 <v-col cols="2">
-                                  12:00-15:00
+                                  {{ session.time }}
                                 </v-col>
-                                <v-col>女網</v-col>
-                                <v-col>B</v-col>
+                                <v-col>{{ session.netheight }}</v-col>
+                                <v-col>{{ session.level }}</v-col>
                               </v-row>
                             </v-col>
                           </v-row>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                          <v-row>
+                          <v-row class="pa-4">
                             <v-col cols="12">
                               <v-row>
-                                <v-col
-                                  cols="2"
-                                >
+                                <v-col cols="2">
                                   報名狀態
                                 </v-col>
                                 <v-col cols="2">
@@ -212,17 +254,25 @@
                             <v-col cols="12">
                               <v-row>
                                 <v-col cols="2">
-                                  尚需:2男
+                                  尚需:{{ formatRemainingPlayers(session) }}
                                 </v-col>
                                 <v-col cols="2">
-                                  $280/人
+                                  ${{ session.fee }}/人
                                 </v-col>
                                 <v-col cols="2">
-                                  開冷氣多加$20/人
+                                  {{ session.note || '無備註' }}
                                 </v-col>
                                 <v-col />
-                                <v-col cols="2">
-                                  <v-btn>我要報名</v-btn>
+                                <v-col cols="3">
+                                  <v-btn
+                                    size="large"
+                                    block
+                                    variant="outlined"
+                                    color="deep-orange-darken-1"
+                                    @click="openEnrollDialog(session)"
+                                  >
+                                    我要報名
+                                  </v-btn>
                                 </v-col>
                               </v-row>
                             </v-col>
@@ -239,11 +289,76 @@
       </v-col>
     </v-row>
   </v-container>
+  <v-dialog
+    v-model="enrollDialog.open"
+    max-width="400px"
+  >
+    <v-card>
+      <v-card-title>報名場次</v-card-title>
+      <v-card-text>
+        <v-list-item>
+          <v-list-item-title>球場：{{ enrollDialog.session?.v_id.name }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title>日期：{{ formatDate(enrollDialog.session?.date) }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title>時段：{{ enrollDialog.session?.time }}</v-list-item-title>
+        </v-list-item>
+        <v-text-field
+          v-model="enrollDialog.male"
+          label="男生人數"
+          type="number"
+          min="0"
+        />
+        <v-text-field
+          v-model="enrollDialog.female"
+          label="女生人數"
+          type="number"
+          min="0"
+        />
+        <v-text-field
+          v-model="enrollDialog.nopreference"
+          label="不限性別人數"
+          type="number"
+          min="0"
+        />
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="closeEnrollDialog"
+        >
+          取消
+        </v-btn>
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="submitEnrollment"
+        >
+          確認
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup>
+import { ref, onMounted, computed, onBeforeUnmount } from 'vue'
+import { useApi } from '@/composables/axios'
+import { useRouter } from 'vue-router'
+import { useSnackbar } from 'vuetify-use-dialog'
+import { useUserStore } from '@/stores/user'
 import { definePage } from 'vue-router/auto'
 
+const { api, apiAuth } = useApi()
+const router = useRouter()
+const createSnackbar = useSnackbar()
+const user = useUserStore()
+
+// 城市清單
 const cities = [
   '台北市', '新北市', '桃園市', '台中市', '台南市', '高雄市',
   '基隆市', '新竹市', '嘉義市', '新竹縣', '苗栗縣', '彰化縣',
@@ -251,10 +366,313 @@ const cities = [
   '台東縣', '澎湖縣', '金門縣', '連江縣'
 ]
 
-definePage({
-  meta: {
-    title: '場次報名 | VPT'
+const needsRefresh = ref(false)
+// 存放所有場次資料
+const sessions = ref([])
+// 存放球場資料
+const venues = ref({})
+// 添加 venueOptions
+const venueOptions = ref([])
+// 過濾條件
+const filters = ref({
+  city: '',
+  venueId: '', // 新增 venueId
+  date: '',
+  netheight: [],
+  level: []
+})
+
+// 表示是否已進行過濾的狀態
+const isFiltered = ref(false)
+// 臨時存放篩選結果
+const tempFilteredSessions = ref([])
+
+const enrollDialog = ref({
+  open: false,
+  session: null,
+  male: 0,
+  female: 0,
+  nopreference: 0
+})
+
+const openEnrollDialog = (session) => {
+  enrollDialog.value = {
+    open: true,
+    session,
+    male: 0,
+    female: 0,
+    nopreference: 0
+  }
+}
+
+const validateEnrollment = (male, female, nopreference, session) => {
+  console.log('Validating enrollment:', { male, female, nopreference, session })
+
+  const totalRequested = male + female + nopreference
+  const availableMale = session.male - (session.participantMale || 0)
+  const availableFemale = session.female - (session.participantFemale || 0)
+  const availableNoPreference = session.nopreference - (session.participantNoPreference || 0)
+  const totalAvailable = availableMale + availableFemale + availableNoPreference
+
+  if (totalRequested > totalAvailable) {
+    return false
+  }
+
+  if (nopreference > 0) {
+    return nopreference <= availableNoPreference
+  } else {
+    return male <= availableMale && female <= availableFemale
+  }
+}
+const submitEnrollment = async () => {
+  if (!user.token) {
+    createSnackbar({
+      text: '請先登錄',
+      snackbarProps: { color: 'error' }
+    })
+    return
+  }
+
+  const male = parseInt(enrollDialog.value.male) || 0
+  const female = parseInt(enrollDialog.value.female) || 0
+  const nopreference = parseInt(enrollDialog.value.nopreference) || 0
+  const session = enrollDialog.value.session
+
+  console.log('Enrollment attempt:', { male, female, nopreference, session })
+
+  if (male + female + nopreference === 0) {
+    createSnackbar({
+      text: '請至少報名一人',
+      snackbarProps: { color: 'error' }
+    })
+    return
+  }
+
+  if (!validateEnrollment(male, female, nopreference, session)) {
+    console.log('Validation failed')
+    createSnackbar({
+      text: `報名人數超過可報名人數，當前剩餘: ${formatRemainingPlayers(session)}`,
+      snackbarProps: { color: 'error' }
+    })
+    return
+  }
+
+  try {
+    console.log('Sending enrollment request')
+    const response = await apiAuth.post('/enrollment', {
+      s_id: session._id,
+      male,
+      female,
+      nopreference
+    })
+    console.log('Enrollment response:', response.data)
+
+    // 更新本地的剩餘名額
+    const updatedSession = response.data.result.session // 假設後端返回更新後的場次資訊
+    const sessionIndex = sessions.value.findIndex(s => s._id === updatedSession._id)
+    if (sessionIndex !== -1) {
+      sessions.value[sessionIndex] = { ...sessions.value[sessionIndex], ...updatedSession }
+    }
+
+    closeEnrollDialog()
+    createSnackbar({
+      text: '報名成功',
+      snackbarProps: { color: 'success' }
+    })
+    await loadSessions() // 重新加載場次數據
+    router.push('/member/enrollment')
+  } catch (error) {
+    console.error('Enrollment error:', error)
+    createSnackbar({
+      text: error?.response?.data?.message || '報名失敗',
+      snackbarProps: { color: 'error' }
+    })
+  }
+}
+
+const closeEnrollDialog = () => {
+  enrollDialog.value.open = false
+}
+
+// 加載場次資料
+const loadSessions = async () => {
+  try {
+    const params = {}
+    if (filters.value.date) {
+      params.date = filters.value.date
+    }
+    console.log('Sending request with params:', params)
+    const { data } = await api.get('/session', { params })
+    console.log('Received data:', data)
+    if (Array.isArray(data.result)) {
+      sessions.value = data.result
+      const uniqueVenueIds = [...new Set(sessions.value.map(s => s.v_id.$oid))]
+      await Promise.all(uniqueVenueIds.map(loadVenue))
+    } else {
+      createSnackbar({
+        text: '接收到的資料格式不正確',
+        snackbarProps: { color: 'red' }
+      })
+    }
+  } catch (error) {
+    createSnackbar({
+      text: error?.response?.data?.message || '無法加載場次資料',
+      snackbarProps: { color: 'red' }
+    })
+  }
+}
+
+// 加載球場資料
+const loadVenue = async () => {
+  try {
+    const { data } = await api.get('/venue')
+    const venuesData = data.result.data.map(venue => ({
+      id: venue._id.$oid || venue._id,
+      name: venue.name,
+      city: extractCity(venue.address)
+    }))
+
+    venues.value = venuesData.reduce((acc, venue) => {
+      acc[venue.id] = venue
+      return acc
+    }, {})
+
+    venueOptions.value = venuesData
+    console.log('Venue options:', venueOptions.value)
+  } catch (error) {
+    console.error('Error loading venues:', error)
+    createSnackbar({
+      text: error?.response?.data?.message || '無法加載球場資料',
+      snackbarProps: { color: 'red' }
+    })
+  }
+}
+
+// 添加 extractCity 函數
+const extractCity = (address) => {
+  const addressWithoutPostalCode = address.replace(/^\d{3,5}\s*/, '')
+  const cityCountyMatch = addressWithoutPostalCode.match(/^(.+?[市縣])/)
+  return cityCountyMatch ? cityCountyMatch[1] : '未知地區'
+}
+
+// 返回場地名稱
+const getVenueName = (v_id) => {
+  const id = v_id._id || v_id
+  return venues.value[id]?.name || '未知場地'
+}
+
+// 返回場地城市
+const getVenueCity = (v_id) => {
+  const id = v_id._id || v_id
+  return venues.value[id]?.city || '未知地區'
+}
+
+// 日期格式化
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('zh-TW')
+}
+
+const formatRemainingPlayers = (session) => {
+  console.log('Formatting remaining players:', session)
+  const remainingMale = session.male - (session.participantMale || 0)
+  const remainingFemale = session.female - (session.participantFemale || 0)
+  const remainingNoPreference = session.nopreference - (session.participantNoPreference || 0)
+
+  if (remainingMale === 0 && remainingFemale === 0 && remainingNoPreference === 0) {
+    return '名額已滿'
+  }
+  if (remainingNoPreference > 0) {
+    return `不限${remainingNoPreference}人`
+  } else {
+    const result = []
+    if (remainingMale > 0) result.push(`男${remainingMale}人`)
+    if (remainingFemale > 0) result.push(`女${remainingFemale}人`)
+    return result.join(' ')
+  }
+}
+
+// 過濾場次
+const applyFilters = async () => {
+  isFiltered.value = true
+  await loadSessions()
+  console.log('Sessions before filtering:', sessions.value)
+  console.log('Current filters:', filters.value)
+
+  tempFilteredSessions.value = sessions.value.filter(session => {
+    const v_id = session.v_id._id || session.v_id
+    console.log('Checking session:', session)
+    console.log('Session v_id:', v_id)
+    console.log('Filter venueId:', filters.value.venueId)
+
+    if (filters.value.city && getVenueCity(v_id) !== filters.value.city) {
+      console.log('City mismatch')
+      return false
+    }
+    if (filters.value.venueId && v_id !== filters.value.venueId) {
+      console.log('Venue mismatch')
+      return false
+    }
+    if (filters.value.netheight.length && !filters.value.netheight.includes(session.netheight)) {
+      console.log('Net height mismatch')
+      return false
+    }
+    if (filters.value.level.length && !filters.value.level.includes(session.level)) {
+      console.log('Level mismatch')
+      return false
+    }
+    return true
+  })
+
+  console.log('Filtered sessions:', tempFilteredSessions.value)
+}
+
+// 清除過濾條件
+const clearFilters = async () => {
+  filters.value = {
+    city: '',
+    venueId: '',
+    date: '',
+    netheight: [],
+    level: []
+  }
+  isFiltered.value = false
+  await loadSessions()
+  tempFilteredSessions.value = []
+}
+
+// 返回已過濾的場次
+const filteredSessions = computed(() => {
+  return isFiltered.value ? tempFilteredSessions.value : sessions.value
+})
+
+const onVenueChange = (value) => {
+  console.log('Selected venue:', value)
+  console.log('Current filters:', filters.value)
+  applyFilters()
+}
+
+onBeforeUnmount(() => {
+  if (router.currentRoute.value.path === '/member/enrollment') {
+    needsRefresh.value = true
   }
 })
 
+onMounted(async () => {
+  if (needsRefresh.value) {
+    await loadSessions()
+    needsRefresh.value = false
+  } else {
+    loadSessions()
+    loadVenue()
+  }
+})
+
+definePage({
+  meta: {
+    title: '場次報名 | VPT',
+    login: false,
+    admin: false
+  }
+})
 </script>

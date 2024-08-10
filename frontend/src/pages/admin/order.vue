@@ -147,7 +147,7 @@ definePage({
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 
-const tableItemsPerPage = ref(5)
+const tableItemsPerPage = ref(10)
 const tableSortBy = ref([{ key: 'createdAt', order: 'desc' }])
 const tablePage = ref(1)
 const tableItems = ref([])
