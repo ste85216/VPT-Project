@@ -477,7 +477,7 @@ const deleteProduct = async () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '/src/styles/settings.scss';
 
 </style>

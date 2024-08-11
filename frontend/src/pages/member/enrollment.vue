@@ -1,6 +1,9 @@
 <template>
   <v-row class="mt-4">
-    <v-col cols="12">
+    <v-col
+      cols="12"
+      class="pt-0"
+    >
       <v-row>
         <v-col
           cols="12"
@@ -12,11 +15,16 @@
         </v-col>
       </v-row>
     </v-col>
-    <v-divider />
+    <v-col class="pt-0 pb-2">
+      <v-divider />
+    </v-col>
     <v-col cols="12">
       <v-row class="mb-4">
         <v-col cols="12">
-          <v-row class="px-4 text-center">
+          <v-row
+            class="px-4 text-center"
+            style="font-size: 15px;"
+          >
             <v-col cols="2">
               球場
             </v-col>
@@ -62,11 +70,11 @@
         :key="enrollment._id"
         elevation="0"
         class="pa-4 py-8 post-card"
-        :style="{ backgroundColor: index % 2 === 0 ? '#ECEFF1' : '#ffffff' }"
+        :style="{ backgroundColor: index % 2 === 0 ? '#ECEFF1' : '#f0f0f080' }"
       >
         <v-row>
           <v-col cols="12">
-            <v-row class="align-center text-center text-subtitle-2">
+            <v-row class="align-center text-center text-subtitle-2 text-blue-grey-darken-2">
               <v-col cols="2">
                 {{ getVenueName(enrollment.s_id) }}
               </v-col>
@@ -120,42 +128,53 @@
   <!-- 編輯對話框 -->
   <v-dialog
     v-model="editDialog.open"
-    max-width="400px"
+    max-width="320px"
   >
-    <v-card>
-      <v-card-title>編輯報名</v-card-title>
+    <v-card class="px-2 py-5 rounded-lg">
+      <v-card-title
+        class="ps-6"
+        style="font-size: 16px;"
+      >
+        編輯報名
+      </v-card-title>
       <v-card-text>
         <v-text-field
           v-model="editDialog.male"
           label="男生人數"
+          variant="outlined"
+          density="compact"
           type="number"
           min="0"
         />
         <v-text-field
           v-model="editDialog.female"
           label="女生人數"
+          variant="outlined"
+          density="compact"
           type="number"
           min="0"
         />
         <v-text-field
           v-model="editDialog.nopreference"
           label="不限性別人數"
+          variant="outlined"
+          density="compact"
           type="number"
           min="0"
         />
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="px-5">
         <v-spacer />
         <v-btn
-          color="blue darken-1"
-          text
+          color="red-darken-1"
+          variant="outlined"
           @click="closeEditDialog"
         >
           取消
         </v-btn>
         <v-btn
-          color="blue darken-1"
-          text
+          color="teal-lighten-1"
+          variant="outlined"
           @click="submitEdit"
         >
           確認
@@ -169,20 +188,28 @@
     v-model="deleteDialog.open"
     max-width="300px"
   >
-    <v-card>
-      <v-card-title>確認刪除</v-card-title>
-      <v-card-text>確定要刪除這個報名嗎？</v-card-text>
+    <v-card class="py-4 px-3">
+      <v-card-title style="font-size: 16px;">
+        取消確認
+      </v-card-title>
+      <v-card-text style="font-size: 15px;">
+        確定要取消報名嗎？
+      </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
-          color="blue darken-1"
+          color="blue-grey-darken-1"
+          variant="outlined"
+          size="small"
           text
           @click="closeDeleteDialog"
         >
           取消
         </v-btn>
         <v-btn
-          color="red darken-1"
+          color="red-darken-3"
+          variant="outlined"
+          size="small"
           text
           @click="submitDelete"
         >

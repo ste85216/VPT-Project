@@ -3,21 +3,27 @@
     v-model="isOpen"
     :max-width="width"
   >
-    <v-card class="pt-5  pa-4">
-      <v-card-title>{{ title }}</v-card-title>
-      <v-card-text>{{ message }}</v-card-text>
+    <v-card class="pt-5 pa-4">
+      <v-card-title :class="titleClass">
+        {{ title }}
+      </v-card-title>
+      <v-card-text :class="textClass">
+        {{ message }}
+      </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
           :color="cancelColor"
-          text
+          :size="cancelSize"
+          variant="outlined"
           @click="cancel"
         >
           {{ cancelText }}
         </v-btn>
         <v-btn
           :color="confirmColor"
-          text
+          :size="confirmSize"
+          variant="outlined"
           @click="confirm"
         >
           {{ confirmText }}
@@ -28,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -54,17 +60,36 @@ const props = defineProps({
   },
   cancelColor: {
     type: String,
-    default: 'blue-grey'
+    default: 'blue-grey-darken-2'
   },
   width: {
     type: String,
     default: '320px'
+  },
+  confirmSize: {
+    type: String,
+    default: 'default'
+  },
+  cancelSize: {
+    type: String,
+    default: 'default'
+  },
+  titleSize: {
+    type: String,
+    default: '1.25rem'
+  },
+  textSize: {
+    type: String,
+    default: '1rem'
   }
 })
 
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
 
 const isOpen = ref(props.modelValue)
+
+const titleClass = computed(() => `custom-title text-${props.titleSize}`)
+const textClass = computed(() => `custom-text text-${props.textSize}`)
 
 watch(() => props.modelValue, (newValue) => {
   isOpen.value = newValue
@@ -84,3 +109,12 @@ const cancel = () => {
   isOpen.value = false
 }
 </script>
+
+<style scoped>
+.custom-title {
+  font-size: v-bind('props.titleSize');
+}
+.custom-text {
+  font-size: v-bind('props.textSize');
+}
+</style>

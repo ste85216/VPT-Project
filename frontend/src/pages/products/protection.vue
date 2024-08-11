@@ -63,19 +63,17 @@
 </template>
 
 <script setup>
-import { defineProps, ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import ProductCard from '@/components/ProductCard.vue'
+import { definePage } from 'vue-router/auto'
 
-defineProps({
+definePage({
   meta: {
-    type: Object,
-    default: () => ({
-      title: '球褲商品 | VPT',
-      login: false,
-      admin: false
-    })
+    title: '護具 | VPT',
+    login: false,
+    admin: false
   }
 })
 

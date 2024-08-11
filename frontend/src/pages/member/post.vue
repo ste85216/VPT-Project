@@ -1,13 +1,16 @@
 <template>
   <v-row class="mt-4">
-    <v-col cols="12">
+    <v-col
+      cols="12"
+      class="pt-0"
+    >
       <v-row>
         <v-col
           cols="12"
           sm="3"
         >
           <h3 class="opacity-90 mb-4">
-            刊登場次
+            刊登列表
           </h3>
         </v-col>
         <v-spacer />
@@ -27,19 +30,21 @@
         </v-col>
       </v-row>
     </v-col>
-    <v-divider />
+    <v-col class="pt-0 pb-2">
+      <v-divider />
+    </v-col>
     <v-col cols="12">
       <v-row class="mb-4">
         <v-col cols="12">
-          <v-row class="px-4 text-center">
-            <v-col cols="2">
+          <v-row
+            class="px-4 text-center"
+            style="font-size: 15px;"
+          >
+            <v-col>
               球場
             </v-col>
             <v-col cols="2">
-              日期
-            </v-col>
-            <v-col cols="1">
-              時段
+              日期/時段
             </v-col>
             <v-col cols="1">
               網高
@@ -47,13 +52,13 @@
             <v-col cols="1">
               程度
             </v-col>
-            <v-col cols="2">
+            <v-col>
               人數
             </v-col>
             <v-col cols="1">
               費用
             </v-col>
-            <v-col cols="1">
+            <v-col>
               備註
             </v-col>
             <v-col cols="1">
@@ -77,18 +82,19 @@
         :key="session._id.$oid || session._id"
         elevation="0"
         class="pa-4 py-8 post-card"
-        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }"
+        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#EFEBE990' }"
       >
         <v-row>
           <v-col cols="12">
-            <v-row class="align-center text-center text-subtitle-2">
-              <v-col cols="2">
+            <v-row
+              class="align-center text-center text-blue-grey-darken-2"
+              style="font-size: 13px; font-weight: 500;"
+            >
+              <v-col>
                 {{ getVenueName(session.v_id) }}
               </v-col>
               <v-col cols="2">
-                {{ formatDate(session.date) }}
-              </v-col>
-              <v-col cols="1">
+                {{ formatDate(session.date) }} <br>
                 {{ session.time }}
               </v-col>
               <v-col cols="1">
@@ -97,15 +103,15 @@
               <v-col cols="1">
                 {{ session.level }}
               </v-col>
-              <v-col cols="2">
-                男:{{ session.male }} (已報名:{{ session.participantMale }})
-                女:{{ session.female }} (已報名:{{ session.participantFemale }})
+              <v-col>
+                男:{{ session.male }} (已報名:{{ session.participantMale }}) <br>
+                女:{{ session.female }} (已報名:{{ session.participantFemale }}) <br>
                 不限:{{ session.nopreference }} (已報名:{{ session.participantNoPreference }})
               </v-col>
-              <v-col col="1">
+              <v-col cols="1">
                 {{ session.fee }}/人
               </v-col>
-              <v-col cols="1">
+              <v-col>
                 {{ session.note || '無備註' }}
               </v-col>
               <v-col cols="1">
@@ -122,6 +128,7 @@
                   size="x-small"
                   color="teal-darken-1"
                   variant="outlined"
+                  class="mt-1"
                   @click="openDialog(session)"
                 >
                   <v-icon icon="mdi-pen" />
@@ -130,7 +137,7 @@
                   size="x-small"
                   color="red-darken-3"
                   variant="outlined"
-                  class="mt-2"
+                  class="mt-1"
                   @click="openConfirmDialog(session._id.$oid || session._id)"
                 >
                   <v-icon icon="mdi-delete" />
@@ -226,33 +233,42 @@
             density="compact"
             required
           />
-          <v-text-field
-            v-model="male.value.value"
-            :error-messages="male.errorMessage.value"
-            label="男生人數"
-            variant="outlined"
-            density="compact"
-            type="number"
-            required
-          />
-          <v-text-field
-            v-model="female.value.value"
-            :error-messages="female.errorMessage.value"
-            label="女生人數"
-            variant="outlined"
-            density="compact"
-            type="number"
-            required
-          />
-          <v-text-field
-            v-model="nopreference.value.value"
-            :error-messages="nopreference.errorMessage.value"
-            label="不限性別人數"
-            variant="outlined"
-            density="compact"
-            type="number"
-            required
-          />
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="male.value.value"
+                :error-messages="male.errorMessage.value"
+                label="男生人數"
+                variant="outlined"
+                density="compact"
+                type="number"
+                required
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="female.value.value"
+                :error-messages="female.errorMessage.value"
+                label="女生人數"
+                variant="outlined"
+                density="compact"
+                type="number"
+                required
+              />
+            </v-col>
+            <v-col>
+              <v-text-field
+                v-model="nopreference.value.value"
+                :error-messages="nopreference.errorMessage.value"
+                label="不限性別人數"
+                variant="outlined"
+                density="compact"
+                type="number"
+                required
+              />
+            </v-col>
+          </v-row>
+
           <v-text-field
             v-model="fee.value.value"
             :error-messages="fee.errorMessage.value"
@@ -273,6 +289,7 @@
         <v-card-actions>
           <v-btn
             color="red-lighten-1"
+            variant="outlined"
             @click="closeDialog"
           >
             取消
@@ -315,9 +332,11 @@
         </v-sheet>
         <div v-else>
           <v-alert
-            color="info"
+            color="blue-grey-lighten-1"
             icon="mdi-information"
             class="mb-4"
+            density="compact"
+            variant="flat"
           >
             報名狀態: {{ formatRemainingPlayers(enrollmentRecordDialog.session) }}
           </v-alert>
@@ -326,12 +345,15 @@
               v-for="enrollment in enrollmentRecordDialog.enrollments"
               :key="enrollment._id"
             >
-              <v-list-item-title>會員ID: {{ enrollment.userId.userId }}</v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-title class="text-subtitle-2">
+                會員編號: {{ enrollment.userId.userId }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="mt-2 mb-4">
                 姓名: {{ enrollment.userId.name }} |
                 電話: {{ enrollment.userId.phone }} |
                 {{ formatEnrollmentCount(enrollment) }}
               </v-list-item-subtitle>
+              <v-divider />
             </v-list-item>
           </v-list>
         </div>
@@ -339,7 +361,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-          color="blue darken-1"
+          color="blue-grey-darken-2"
           text
           @click="closeEnrollmentRecordDialog"
         >

@@ -1,175 +1,189 @@
 <template>
-  <h3 class="opacity-90 mb-4">
-    訂單管理
-  </h3>
-  <v-divider />
-  <v-expansion-panels
-    class="mt-4"
-    multiple
-  >
-    <v-expansion-panel
-      v-for="order in orders"
-      :key="order._id"
-      class="rounded-lg py-4"
+  <v-row class="mt-4">
+    <v-col
+      cols="12"
+      class="pt-0"
     >
-      <v-expansion-panel-title class="text-center">
-        <v-row>
-          <v-col cols="2">
-            <v-img
-              :src="order.cart[0].p_id.images[0]"
-              height="80"
-            />
-          </v-col>
-          <v-col>
-            <v-row>
-              <v-col cols="4">
-                訂單編號
-              </v-col>
-              <v-col cols="3">
-                訂單日期
-              </v-col>
-              <v-col cols="2">
-                訂單總額
-              </v-col>
-              <v-col cols="3">
-                訂單備註
-              </v-col>
-            </v-row>
-            <v-row class="mt-4">
-              <v-col cols="4">
-                {{ order._id }}
-              </v-col>
-              <v-col cols="3">
-                {{ formatDate(order.createdAt) }}
-              </v-col>
-              <v-col cols="2">
-                ${{ calculateTotal(order.cart) }}
-              </v-col>
-              <v-col cols="3">
-                {{ order.note || '無' }}
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-expansion-panel-title>
-      <v-expansion-panel-text>
-        <v-divider />
+      <v-row>
+        <v-col
+          cols="12"
+          sm="3"
+        >
+          <h3 class="opacity-90 mb-4">
+            訂單管理
+          </h3>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col class="pt-0 pb-2">
+      <v-divider />
+    </v-col>
+    <v-col cols="12">
+      <v-sheet
+        v-if="orders.length === 0"
+        height="100%"
+        align="center"
+        class="opacity-80"
+      >
+        目前您沒有任何訂單
+      </v-sheet>
 
-        <v-list>
-          <v-list-item
-            class="mb-3 opacity-90"
-            style="font-size: 12px;"
+      <!-- 訂單列表 -->
+      <v-expansion-panels>
+        <v-expansion-panel
+          v-for="(order, index) in orders"
+          :key="order._id"
+          class="mb-4"
+        >
+          <v-expansion-panel-title
+            :style="{ backgroundColor: index % 2 === 0 ? '#ECEFF190' : '#f0f0f080' }"
           >
             <v-row
-              style="font-size: 14px; font-weight: 500;"
-              class="text-center"
+              class="text-center py-4"
+              style="font-size: 15px;"
             >
-              <v-col cols="2">
-                商品縮圖
+              <v-col cols="4">
+                <div class="text-subtitle-2 font-weight-bold mb-4">
+                  訂單編號
+                </div>
+                <div>{{ order._id }}</div>
               </v-col>
-              <v-col cols="2">
-                商品名稱
+              <v-col>
+                <div class="text-subtitle-2 font-weight-bold mb-4">
+                  訂單日期
+                </div>
+                <div>{{ formatDate(order.createdAt) }}</div>
               </v-col>
-              <v-col cols="2">
-                商品規格
+              <v-col>
+                <div class="text-subtitle-2 font-weight-bold mb-4">
+                  訂單總額
+                </div>
+                <div>${{ calculateTotal(order.cart) }}</div>
               </v-col>
-              <v-col cols="2">
-                商品價格
-              </v-col>
-              <v-col cols="2">
-                商品數量
-              </v-col>
-              <v-col cols="2">
-                商品小計
+              <v-col c>
+                <div class="text-subtitle-2 font-weight-bold mb-4">
+                  訂單備註
+                </div>
+                <div>{{ order.note || '無' }}</div>
               </v-col>
             </v-row>
-          </v-list-item>
-          <v-list-item
-            v-for="item in order.cart"
-            :key="item.p_id._id"
-          >
-            <v-row
-              style="font-size: 14px;"
-              class="text-center"
-            >
-              <v-col cols="2">
-                <v-img
-                  :src="item.p_id.images[0]"
-                  height="50"
-                />
-              </v-col>
-              <v-col
-                cols="2"
-                class="align-self-center"
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <v-list>
+              <v-list-item
+                class="mb-3 opacity-90"
+                style="font-size: 12px;"
               >
-                {{ item.p_id.name }}
-              </v-col>
-              <v-col
-                cols="2"
-                class="align-self-center"
+                <v-row
+                  style="font-size: 14px; font-weight: 500;"
+                  class="text-center"
+                >
+                  <v-col cols="2">
+                    商品縮圖
+                  </v-col>
+                  <v-col cols="2">
+                    商品名稱
+                  </v-col>
+                  <v-col cols="2">
+                    商品規格
+                  </v-col>
+                  <v-col cols="2">
+                    商品價格
+                  </v-col>
+                  <v-col cols="2">
+                    商品數量
+                  </v-col>
+                  <v-col cols="2">
+                    商品小計
+                  </v-col>
+                </v-row>
+              </v-list-item>
+              <v-list-item
+                v-for="item in order.cart"
+                :key="item.p_id._id"
               >
-                {{ item.colors }} / {{ item.sizes }}
-              </v-col>
-              <v-col
-                cols="2"
-                class="align-self-center"
+                <v-row
+                  style="font-size: 14px;"
+                  class="text-center"
+                >
+                  <v-col cols="2">
+                    <v-img
+                      :src="item.p_id.images[0]"
+                      height="50"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    {{ item.p_id.name }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    {{ item.colors }} / {{ item.sizes }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    ${{ item.p_id.price }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    {{ item.quantity }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    ${{ item.p_id.price * item.quantity }}
+                  </v-col>
+                </v-row>
+              </v-list-item>
+            </v-list>
+            <v-col class="d-flex justify-end pe-6">
+              <v-btn
+
+                color="red-darken-3"
+                variant="outlined"
+                @click.stop="cancelOrder(order._id)"
               >
-                ${{ item.p_id.price }}
-              </v-col>
-              <v-col
-                cols="2"
-                class="align-self-center"
-              >
-                {{ item.quantity }}
-              </v-col>
-              <v-col
-                cols="2"
-                class="align-self-center"
-              >
-                ${{ item.p_id.price * item.quantity }}
-              </v-col>
-            </v-row>
-          </v-list-item>
-          <v-list-item class="d-flex justify-end">
-            <v-btn
-              elevation="0"
-              class="opacity-80 cancel-btn"
-              @click="cancelOrder(order._id)"
-            >
-              取消訂單
-            </v-btn>
-          </v-list-item>
-        </v-list>
-      </v-expansion-panel-text>
-    </v-expansion-panel>
-  </v-expansion-panels>
+                取消訂單
+              </v-btn>
+            </v-col>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-col>
+  </v-row>
+
+  <!-- 確認取消對話框 -->
   <ConfirmDeleteDialog
     v-model="confirmDialog.open"
     title="確認要取消此訂單嗎？"
-    message="此操作不可恢復。"
+    message="取消後不可恢復。"
     confirm-text="確認"
     cancel-text="取消"
-    confirm-color="error"
-    cancel-color="grey"
+    confirm-color="red-darken-3"
+    cancel-color="blue-grey-darken-1"
+    cancel-size="small"
+    confirm-size="small"
     @confirm="confirmCancelOrder"
     @cancel="closeConfirmDialog"
   />
 </template>
 
 <script setup>
+// Script 部分保持不變
 import { ref, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { definePage } from 'vue-router/auto'
 import ConfirmDeleteDialog from '../../components/ConfirmDeleteDialog.vue'
-
-definePage({
-  meta: {
-    title: '訂單管理 | VPT',
-    login: true,
-    admin: false
-  }
-})
 
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
@@ -238,19 +252,23 @@ const confirmCancelOrder = async () => {
 onMounted(() => {
   loadOrders()
 })
+
+definePage({
+  meta: {
+    title: '訂單管理 | VPT',
+    login: true,
+    admin: false
+  }
+})
 </script>
 
 <style scoped>
 .opacity-90 {
   opacity: 0.9;
 }
-.cancel-btn {
-  border: 1px solid #d9534f50;
-  color: #d9534f;
-}
 </style>
 
 <route lang="yaml">
-  meta:
-    layout: member
+meta:
+  layout: member
 </route>

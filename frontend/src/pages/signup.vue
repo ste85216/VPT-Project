@@ -8,7 +8,7 @@
         <v-row>
           <v-col
             cols="12"
-            class="ps-5 pb-10"
+            class="ps-5 pb-10 text-grey-darken-1"
           >
             <h2>零打報名系統</h2>
           </v-col>
@@ -24,7 +24,7 @@
               >
                 <v-row no-gutters>
                   <v-col cols="12">
-                    <h4 class="title-search py-4">
+                    <h4 class="title-search py-4 text-grey-darken-3">
                       搜尋篩選
                     </h4>
                   </v-col>
@@ -188,14 +188,14 @@
                       v-if="filteredSessions.length === 0"
                       class="text-center"
                     >
-                      目前沒有搜尋到相關場次
+                      未搜尋到相關場次
                     </v-sheet>
                     <v-expansion-panels>
                       <v-expansion-panel
                         v-for="(session, index) in filteredSessions"
                         :key="session._id"
                         elevation="0"
-                        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f0' : '#ffffff' }"
+                        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#EFEBE9' }"
                       >
                         <v-expansion-panel-title>
                           <v-row class="text-center">
@@ -206,75 +206,179 @@
                                 align="center"
                                 justify="center"
                               >
-                                <v-col>會員編號</v-col>
-                                <v-col>地區</v-col>
-                                <v-col>球場</v-col>
-                                <v-col>日期</v-col>
-                                <v-col cols="2">
+                                <v-col
+                                  cols="4"
+                                  sm
+                                >
+                                  會員編號
+                                </v-col>
+                                <v-col
+                                  cols="4"
+                                  sm
+                                >
+                                  地區
+                                </v-col>
+                                <v-col
+                                  cols="4"
+                                  sm
+                                >
+                                  球場
+                                </v-col>
+                                <v-col
+                                  cols="3"
+                                  sm="2"
+                                >
+                                  日期
+                                </v-col>
+                                <v-col
+                                  cols="3"
+                                  sm
+                                >
                                   時段
                                 </v-col>
-                                <v-col>網高</v-col>
-                                <v-col>程度</v-col>
+                                <v-col
+                                  cols="3"
+                                  sm
+                                >
+                                  網高
+                                </v-col>
+                                <v-col
+                                  cols="3"
+                                  sm
+                                >
+                                  程度
+                                </v-col>
                               </v-row>
                             </v-col>
                             <v-col class="pe-sm-6">
                               <v-divider />
                             </v-col>
                             <v-col cols="12">
-                              <v-row style="line-height: 32px;">
-                                <v-col>{{ session.userId.userId }}</v-col>
-                                <v-col>{{ getVenueCity(session.v_id) }}</v-col>
-                                <v-col>{{ getVenueName(session.v_id) }}</v-col>
-                                <v-col>{{ formatDate(session.date) }}</v-col>
-                                <v-col cols="2">
+                              <v-row
+                                style="line-height: 32px;font-size: 14px"
+                                class="text-blue-grey-darken-3"
+                              >
+                                <v-col
+                                  cols="4"
+                                  sm
+                                >
+                                  {{ session.userId.userId }}
+                                </v-col>
+                                <v-col
+                                  cols="4"
+                                  sm
+                                >
+                                  {{ getVenueCity(session.v_id) }}
+                                </v-col>
+                                <v-col
+                                  cols="4"
+                                  sm
+                                >
+                                  {{ getVenueName(session.v_id) }}
+                                </v-col>
+                                <v-col
+                                  cols="3"
+                                  sm="2"
+                                >
+                                  {{ formatDate(session.date) }}
+                                </v-col>
+                                <v-col
+                                  cols="3"
+                                  sm
+                                >
                                   {{ session.time }}
                                 </v-col>
-                                <v-col>{{ session.netheight }}</v-col>
-                                <v-col>{{ session.level }}</v-col>
+                                <v-col
+                                  cols="3"
+                                  sm
+                                >
+                                  {{ session.netheight }}
+                                </v-col>
+                                <v-col
+                                  cols="3"
+                                  sm
+                                >
+                                  {{ session.level }}
+                                </v-col>
                               </v-row>
                             </v-col>
                           </v-row>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                          <v-row class="pa-4">
-                            <v-col cols="12">
+                          <v-row
+                            class="pa-4 ps-0 text-center"
+                            style="font-size: 15px"
+                          >
+                            <v-col cols="9">
                               <v-row>
-                                <v-col cols="2">
-                                  報名狀態
+                                <v-col cols="12">
+                                  <v-row>
+                                    <v-col
+                                      cols="4"
+                                      sm="2"
+                                    >
+                                      價錢
+                                    </v-col>
+                                    <v-col
+                                      cols="4"
+                                      sm="2"
+                                    >
+                                      備註
+                                    </v-col>
+                                    <v-col cols="3">
+                                      報名狀態
+                                    </v-col>
+                                  </v-row>
                                 </v-col>
-                                <v-col cols="2">
-                                  價錢
+                                <v-col
+                                  cols="12"
+                                  sm="7"
+                                >
+                                  <v-divider />
                                 </v-col>
-                                <v-col cols="2">
-                                  備註
+                                <v-col cols="12">
+                                  <v-row
+                                    class="text-blue-grey-darken-3"
+                                    style="font-size: 14px;"
+                                  >
+                                    <v-col
+                                      cols="4"
+                                      sm="2"
+                                    >
+                                      ${{ session.fee }}/人
+                                    </v-col>
+                                    <v-col
+                                      cols="4"
+                                      sm="2"
+                                    >
+                                      {{ session.note || '無備註' }}
+                                    </v-col>
+                                    <v-col cols="3">
+                                      尚需:{{ formatRemainingPlayers(session) }}
+                                    </v-col>
+                                  </v-row>
                                 </v-col>
-                                <v-col />
                               </v-row>
                             </v-col>
-                            <v-col cols="12">
-                              <v-row>
-                                <v-col cols="2">
-                                  尚需:{{ formatRemainingPlayers(session) }}
-                                </v-col>
-                                <v-col cols="2">
-                                  ${{ session.fee }}/人
-                                </v-col>
-                                <v-col cols="2">
-                                  {{ session.note || '無備註' }}
-                                </v-col>
-                                <v-col />
-                                <v-col cols="3">
-                                  <v-btn
-                                    size="large"
-                                    block
-                                    variant="outlined"
-                                    color="deep-orange-darken-1"
-                                    @click="openEnrollDialog(session)"
-                                  >
-                                    我要報名
-                                  </v-btn>
-                                </v-col>
-                              </v-row>
+                            <v-col
+                              cols="12"
+                              sm="3"
+                              class="d-flex align-center"
+                            >
+                              <v-btn
+                                size="large"
+                                block
+                                variant="outlined"
+                                color="cyan-darken-3"
+                                :disabled="isSessionFull(session)"
+                                @click="openEnrollDialog(session)"
+                              >
+                                {{ isSessionFull(session) ? '名額已滿' : '我要報名' }}
+                                <v-icon
+                                  icon="mdi-playlist-check"
+                                  class="ms-2"
+                                />
+                              </v-btn>
                             </v-col>
                           </v-row>
                         </v-expansion-panel-text>
@@ -293,9 +397,9 @@
     v-model="enrollDialog.open"
     max-width="400px"
   >
-    <v-card>
+    <v-card class="px-4 py-5">
       <v-card-title>報名場次</v-card-title>
-      <v-card-text>
+      <v-card-text class="pa-0">
         <v-list-item>
           <v-list-item-title>球場：{{ enrollDialog.session?.v_id.name }}</v-list-item-title>
         </v-list-item>
@@ -306,36 +410,54 @@
           <v-list-item-title>時段：{{ enrollDialog.session?.time }}</v-list-item-title>
         </v-list-item>
         <v-text-field
+          v-if="!enrollDialog.maleDisabled"
           v-model="enrollDialog.male"
           label="男生人數"
+          class="px-3 pt-2"
+          variant="outlined"
+          density="compact"
           type="number"
+          hide-details
           min="0"
+          :disabled="enrollDialog.maleDisabled"
         />
         <v-text-field
+          v-if="!enrollDialog.femaleDisabled"
           v-model="enrollDialog.female"
           label="女生人數"
+          class="px-3 pt-2"
+          variant="outlined"
+          density="compact"
           type="number"
+          hide-details
           min="0"
+          :disabled="enrollDialog.femaleDisabled"
         />
         <v-text-field
+          v-if="!enrollDialog.nopreferenceDisabled"
           v-model="enrollDialog.nopreference"
           label="不限性別人數"
+          class="px-3 pt-2"
+          variant="outlined"
+          density="compact"
           type="number"
+          hide-details
           min="0"
+          :disabled="enrollDialog.nopreferenceDisabled"
         />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn
-          color="blue darken-1"
-          text
+          color="red-lighten-1"
+          variant="outlined"
           @click="closeEnrollDialog"
         >
           取消
         </v-btn>
         <v-btn
-          color="blue darken-1"
-          text
+          color="teal-darken-1"
+          variant="outlined"
           @click="submitEnrollment"
         >
           確認
@@ -396,12 +518,23 @@ const enrollDialog = ref({
 })
 
 const openEnrollDialog = (session) => {
+  if (isSessionFull(session)) {
+    createSnackbar({
+      text: '此場次名額已滿',
+      snackbarProps: { color: 'warning' }
+    })
+    return
+  }
+
   enrollDialog.value = {
     open: true,
     session,
     male: 0,
     female: 0,
-    nopreference: 0
+    nopreference: 0,
+    maleDisabled: session.male === 0,
+    femaleDisabled: session.female === 0,
+    nopreferenceDisabled: session.nopreference === 0
   }
 }
 
@@ -424,6 +557,7 @@ const validateEnrollment = (male, female, nopreference, session) => {
     return male <= availableMale && female <= availableFemale
   }
 }
+
 const submitEnrollment = async () => {
   if (!user.token) {
     createSnackbar({
@@ -433,9 +567,9 @@ const submitEnrollment = async () => {
     return
   }
 
-  const male = parseInt(enrollDialog.value.male) || 0
-  const female = parseInt(enrollDialog.value.female) || 0
-  const nopreference = parseInt(enrollDialog.value.nopreference) || 0
+  const male = !enrollDialog.value.maleDisabled ? parseInt(enrollDialog.value.male) || 0 : 0
+  const female = !enrollDialog.value.femaleDisabled ? parseInt(enrollDialog.value.female) || 0 : 0
+  const nopreference = !enrollDialog.value.nopreferenceDisabled ? parseInt(enrollDialog.value.nopreference) || 0 : 0
   const session = enrollDialog.value.session
 
   console.log('Enrollment attempt:', { male, female, nopreference, session })
@@ -650,6 +784,13 @@ const onVenueChange = (value) => {
   console.log('Selected venue:', value)
   console.log('Current filters:', filters.value)
   applyFilters()
+}
+
+const isSessionFull = (session) => {
+  const remainingMale = session.male - (session.participantMale || 0)
+  const remainingFemale = session.female - (session.participantFemale || 0)
+  const remainingNoPreference = session.nopreference - (session.participantNoPreference || 0)
+  return remainingMale <= 0 && remainingFemale <= 0 && remainingNoPreference <= 0
 }
 
 onBeforeUnmount(() => {

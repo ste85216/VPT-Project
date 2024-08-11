@@ -519,7 +519,10 @@ const submit = handleSubmit(async (values) => {
       }
     })
     closeDialog()
-    tableLoadItems(true)
+    // 保存當前頁碼
+    const currentPage = tablePage.value
+    // 使用保存的頁碼重新載入表格
+    tableLoadItems(false, currentPage)
   } catch (error) {
     console.log('Error:', error)
     console.log('Error details:', error.response ? error.response.data : error.message) // 新增詳細錯誤訊息
@@ -578,8 +581,12 @@ const tableHeaders = [
 const tableLoading = ref(true)
 const tableItemsLength = ref(0)
 const tableSearch = ref('')
-const tableLoadItems = async (reset) => {
-  if (reset) tablePage.value = 1
+const tableLoadItems = async (reset, specificPage = null) => {
+  if (reset) {
+    tablePage.value = 1
+  } else if (specificPage !== null) {
+    tablePage.value = specificPage
+  }
   tableLoading.value = true
   try {
     const { data } = await apiAuth.get('/product/all', {
@@ -593,8 +600,6 @@ const tableLoadItems = async (reset) => {
     })
     tableItems.value.splice(0, tableItems.value.length, ...data.result.data)
     tableItemsLength.value = data.result.total
-    console.log(data)
-    console.log(data.result.total)
   } catch (error) {
     console.log('提交表單時出錯', error)
     createSnackbar({

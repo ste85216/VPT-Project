@@ -199,7 +199,7 @@ onMounted(async () => {
     .avatar {
       width: 120px;
       height: 120px;
-      border: 1px solid #333;
+      border: 1px solid #039199;
       border-radius: 50%;
       position: relative;
     }

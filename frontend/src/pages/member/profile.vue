@@ -7,7 +7,10 @@
     :disabled="isSubmitting"
     @submit.prevent="submitProfile"
   >
-    <v-row style="font-size: 14px;">
+    <v-row
+      style="font-size: 14px;"
+      class="text-blue-grey-darken-2"
+    >
       <v-col
         class="px-4 py-0"
         cols="4"
@@ -53,7 +56,7 @@
       </v-col>
     </v-row>
     <v-row
-      class="mt-4"
+      class="mt-4 text-blue-grey-darken-2"
       style="font-size: 14px;"
     >
       <v-col
@@ -91,7 +94,7 @@
       </v-col>
     </v-row>
     <v-row
-      class="mt-4"
+      class="mt-4 text-blue-grey-darken-2"
       style="font-size: 14px;"
     >
       <v-col class="px-4 py-0">
@@ -115,7 +118,8 @@
       <v-btn
         elevation="0"
         size="large"
-        style="color: #039199; border: 1px solid #03919950"
+        color="teal-darken-1"
+        variant="outlined"
         type="submit"
         :loading="isSubmitting"
       >

@@ -12,8 +12,8 @@
             :key="category.to"
             :to="category.to"
             :ripple="false"
+            :disabled="true"
             variant="plain"
-            disabled="true"
             class="pa-0 mt-5 "
             style="font-size: 15px;"
           >
