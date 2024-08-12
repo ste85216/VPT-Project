@@ -202,7 +202,7 @@
                           to="/products/shoes"
                         >
                           <v-img
-                            src="/src/assets/products/球鞋01.webp"
+                            src="/src/assets/products/排球襪動漫風.webp"
                             height="238"
                             cover
                             class="d-flex "
@@ -221,7 +221,7 @@
                             </div>
                             <div class="text-white">
                               <h1 class=" ms-6 mt-16">
-                                VPT排球鞋
+                                VPT機能排球襪
                               </h1>
                               <div>
                                 <p class="ms-6 text-body-1 font-weight-bold">
@@ -332,7 +332,7 @@ definePage({
 }
 
 .v-card.card1:not(.on-hover) {
-  opacity: 0.7; /* 正常狀態的透明度 */
+  opacity: 0.6; /* 正常狀態的透明度 */
 }
 
 .show-btns {

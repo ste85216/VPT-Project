@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="pa-0 mt-10"
+    class="pa-0 mt-10 h-75"
     style="max-width: 1200px;"
   >
     <h2 class="mb-5">

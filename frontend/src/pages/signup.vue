@@ -2,7 +2,8 @@
   <!-- 主容器 -->
   <v-container
     fluid
-    style="max-width: 1200px;margin-top: 32px;margin-bottom: 120px;"
+    style="max-width: 1200px;margin-top: 32px;"
+    class="h-75 mb-12"
   >
     <v-row>
       <v-col cols="12">

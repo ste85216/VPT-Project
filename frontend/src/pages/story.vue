@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="h-75">
     <h3>品牌故事待開發</h3>
   </v-container>
 </template>

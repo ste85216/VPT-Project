@@ -38,10 +38,23 @@ const schema = new Schema({
       message: '商品分類錯誤'
     }
   },
+  // tags: {
+  //   type: [String],
+  //   enum: ['新品', '特價', '熱銷']
+  // },
   sell: {
     type: Boolean,
     required: [true, '商品上架狀態必填']
   }
+  // stock: {
+  //   type: Number,
+  //   // required: [true, '商品庫存必填'],
+  //   min: [0, '商品庫存不能小於 0']
+  // },
+  // sold: {
+  //   type: Number,
+  //   default: 0
+  // }
 }, {
   timestamps: true,
   versionKey: false

@@ -140,6 +140,7 @@
             :items="categories"
             variant="outlined"
             density="compact"
+            clearable
             :error-messages="category.errorMessage.value"
           />
           <v-checkbox
