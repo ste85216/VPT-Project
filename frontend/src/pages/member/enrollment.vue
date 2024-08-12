@@ -139,6 +139,7 @@
       </v-card-title>
       <v-card-text>
         <v-text-field
+          v-if="editDialog.showMale"
           v-model="editDialog.male"
           label="男生人數"
           variant="outlined"
@@ -147,6 +148,7 @@
           min="0"
         />
         <v-text-field
+          v-if="editDialog.showFemale"
           v-model="editDialog.female"
           label="女生人數"
           variant="outlined"
@@ -155,6 +157,7 @@
           min="0"
         />
         <v-text-field
+          v-if="editDialog.showNopreference"
           v-model="editDialog.nopreference"
           label="不限性別人數"
           variant="outlined"
@@ -291,7 +294,10 @@ const openEditDialog = (enrollment) => {
     originalMale: enrollment.male || 0,
     originalFemale: enrollment.female || 0,
     originalNopreference: enrollment.nopreference || 0,
-    session: enrollment.s_id
+    session: enrollment.s_id,
+    showMale: enrollment.s_id.male > 0,
+    showFemale: enrollment.s_id.female > 0,
+    showNopreference: enrollment.s_id.nopreference > 0
   }
 }
 
@@ -301,9 +307,9 @@ const closeEditDialog = () => {
 
 const submitEdit = async () => {
   try {
-    const newMale = parseInt(editDialog.value.male)
-    const newFemale = parseInt(editDialog.value.female)
-    const newNopreference = parseInt(editDialog.value.nopreference)
+    const newMale = editDialog.value.showMale ? parseInt(editDialog.value.male) : 0
+    const newFemale = editDialog.value.showFemale ? parseInt(editDialog.value.female) : 0
+    const newNopreference = editDialog.value.showNopreference ? parseInt(editDialog.value.nopreference) : 0
     const oldMale = editDialog.value.originalMale
     const oldFemale = editDialog.value.originalFemale
     const oldNopreference = editDialog.value.originalNopreference
@@ -323,11 +329,12 @@ const submitEdit = async () => {
       }
     }
 
-    await apiAuth.patch(`/enrollment/${editDialog.value.id}`, {
-      male: newMale,
-      female: newFemale,
-      nopreference: newNopreference
-    })
+    const updateData = {}
+    if (editDialog.value.showMale) updateData.male = newMale
+    if (editDialog.value.showFemale) updateData.female = newFemale
+    if (editDialog.value.showNopreference) updateData.nopreference = newNopreference
+
+    await apiAuth.patch(`/enrollment/${editDialog.value.id}`, updateData)
     createSnackbar({
       text: '報名更新成功',
       snackbarProps: { color: 'success' }

@@ -55,6 +55,9 @@
           :length="pages"
           rounded="circle"
           density="compact"
+          next-icon="mdi-menu-right"
+          prev-icon="mdi-menu-left"
+          color="teal-darken-1"
           @update:model-value="onPageChange"
         />
       </v-col>

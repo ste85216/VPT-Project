@@ -1,6 +1,8 @@
 <template>
   <Navbar />
   <router-view v-if="!isOnProductsPage" />
+  <Footer v-if="!isOnProductsPage" />
+
   <!-- <div id="robot">
     <Vue3Spline
       :scene="{
@@ -11,6 +13,7 @@
 </template>
 <script setup>
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 // import { Vue3Spline } from 'vue3-spline'

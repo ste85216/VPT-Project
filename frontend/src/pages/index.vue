@@ -56,11 +56,29 @@
         </v-col>
         <v-col
           cols="12"
+          class="mt-16"
+        >
+          <v-row>
+            <v-col cols="12">
+              <h4 class="text-center text-teal-lighten-1">
+                New Arrivals
+              </h4>
+              <h1 class="text-center mb-8">
+                展翼新裝
+              </h1>
+            </v-col>
+            <v-col cols="12">
+              <Swiper />
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col
+          cols="12"
           sm="12"
           class="mt-16"
         >
           <h4 class="text-center text-teal-lighten-1">
-            Equipment
+            Shop All
           </h4>
           <h1 class="text-center mb-8">
             高手必備
@@ -85,7 +103,7 @@
                       to="/products/socks"
                     >
                       <v-img
-                        src="/src/assets/products/球襪02.webp"
+                        src="/src/assets/products/排球鞋動漫風.webp"
                         cover
                         height="500px"
                         fill-height
@@ -104,11 +122,11 @@
                         </div>
                         <div class="text-white top pa-4">
                           <h1 class="mt-4">
-                            VPT機能排球襪
+                            VPT排球鞋
                           </h1>
                           <div>
                             <p class="ma-0 text-body-1 font-weight-bold">
-                              $350起
+                              $1200起
                             </p>
                           </div>
                         </div>
@@ -138,7 +156,7 @@
                           to="/products/balls"
                         >
                           <v-img
-                            src="/src/assets/products/排球03.webp"
+                            src="/src/assets/products/排球動漫風.webp"
                             cover
                             height="238"
                           >
@@ -232,7 +250,7 @@
                       to="/products/shirts"
                     >
                       <v-img
-                        src="/src/assets/products/球衣01.webp"
+                        src="/src/assets/products/牌球衣動漫風.webp"
                         cover
                         height="500"
                       >
@@ -273,6 +291,7 @@
 
 <script setup>
 import { definePage } from 'vue-router/auto'
+import Swiper from '../components/Swiper.vue'
 // import { Vue3Spline } from 'vue3-spline'
 
 definePage({

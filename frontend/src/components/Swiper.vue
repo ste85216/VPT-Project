@@ -1,5 +1,15 @@
 <template>
   <swiper
+    :effect="'coverflow'"
+    :centered-slides="true"
+    :slides-per-view="'auto'"
+    :coverflow-effect="{
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    }"
     :navigation="{
       nextEl: '.swiper-button-next',
       prevEl: '.swiper-button-prev',
@@ -20,11 +30,10 @@
       v-for="(image,index) in images"
       :key="index"
     >
-      <v-img
+      <img
         :src="image"
-        width="100%"
-        height="800"
-      />
+        alt="slide image"
+      >
     </swiper-slide>
     <div class="swiper-button-next" />
     <div class="swiper-button-prev" />
@@ -36,6 +45,8 @@
 import socks from '../assets/排球襪.webp'
 import socks2 from '../assets/排球襪2.webp'
 import people from '../assets/人物圖.webp'
+import pic1 from '../assets/products/ProductImage/排球02.png'
+import pic2 from '../assets/products/ProductImage/排球01.png'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 
@@ -46,30 +57,48 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
 // import required modules
-import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination, EffectCoverflow } from 'swiper/modules'
 
 const images = [
   socks,
   socks2,
-  people
+  people,
+  pic1,
+  pic2,
+  pic2
 ]
 
-const modules = [Autoplay, Navigation, Pagination]
+const modules = [Autoplay, Navigation, Pagination, EffectCoverflow]
 
 </script>
 
 <style lang="scss" scoped>
   @import '../styles/settings.scss';
-  .v-img {
-    width: 100%;
-  }
+  .mySwiper {
+  width: 100%;
+
+  padding-bottom: 50px;
+}
+
+  .swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 280px;
+  height: 320px;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
   .swiper-button-next,
   .swiper-button-prev {
     width: 60px;
     height: 60px;
     color: white;
-    background-color: #256fbb;
+    background-color: #26A69A;
     border-radius: 50%;
     transition: 0.8s;
     display: none;
@@ -97,7 +126,7 @@ const modules = [Autoplay, Navigation, Pagination]
   :deep(.swiper-pagination-bullet-active) {
   width: 50px; /* 改變點點的寬度 */
   height: 8px; /* 改變點點的高度 */
-  background-color: #256fbb; /* 改變點點的背景顏色 */
+  background-color: #26A69A; /* 改變點點的背景顏色 */
   opacity: 1; /* 讓點點不透明 */
   border-radius: 23rem;
   transition: 0.35s;

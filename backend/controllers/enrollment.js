@@ -119,10 +119,18 @@ export const edit = async (req, res) => {
     }
 
     const sessionDoc = await Session.findById(enrollment.s_id).session(session)
+    if (!sessionDoc) {
+      throw new Error('SESSION_NOT_FOUND')
+    }
+
     const oldMale = enrollment.male
     const oldFemale = enrollment.female
     const oldNopreference = enrollment.nopreference || 0
-    const { male: newMale, female: newFemale, nopreference: newNopreference } = req.body
+
+    // 只允許編輯場次需要的性別欄位
+    const newMale = sessionDoc.male > 0 ? (req.body.male || oldMale) : oldMale
+    const newFemale = sessionDoc.female > 0 ? (req.body.female || oldFemale) : oldFemale
+    const newNopreference = sessionDoc.nopreference > 0 ? (req.body.nopreference || oldNopreference) : oldNopreference
 
     // 檢查並更新場次名額
     const maleDiff = newMale - oldMale
@@ -133,7 +141,7 @@ export const edit = async (req, res) => {
     const availableFemale = sessionDoc.female - sessionDoc.participantFemale + oldFemale
     const availableNoPreference = sessionDoc.nopreference - sessionDoc.participantNoPreference + oldNopreference
 
-    if (newNopreference > 0) {
+    if (sessionDoc.nopreference > 0) {
       if (newNopreference > availableNoPreference) {
         throw new Error('EXCEEDS_AVAILABLE_NO_PREFERENCE_SLOTS')
       }
@@ -175,6 +183,8 @@ export const edit = async (req, res) => {
         return handleError(res, StatusCodes.BAD_REQUEST, '報名 ID 格式錯誤')
       case 'ENROLLMENT_NOT_FOUND':
         return handleError(res, StatusCodes.NOT_FOUND, '查無報名資訊')
+      case 'SESSION_NOT_FOUND':
+        return handleError(res, StatusCodes.NOT_FOUND, '查無場次資訊')
       case 'UNAUTHORIZED':
         return handleError(res, StatusCodes.FORBIDDEN, '您無權編輯此報名')
       case 'EXCEEDS_AVAILABLE_NO_PREFERENCE_SLOTS':

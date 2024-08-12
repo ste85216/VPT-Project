@@ -8,9 +8,12 @@
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
+import '@fortawesome/fontawesome-free/css/all.css'
+
 // Composables
 import { createVuetify } from 'vuetify'
 
+import { aliases, fa } from 'vuetify/iconsets/fa'
 import { zhHant } from 'vuetify/locale'
 import colors from 'vuetify/util/colors'
 

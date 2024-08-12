@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="mt-8"
+    class="mt-8 mb-12"
     style="max-width: 1200px;"
   >
     <h2>球場資訊</h2>
@@ -87,7 +87,7 @@
               next-icon="mdi-menu-right"
               prev-icon="mdi-menu-left"
               :total-visible="8"
-              color="#039199"
+              color="teal-darken-1"
               @update:model-value="onPageChange"
             />
           </v-col>

@@ -153,7 +153,7 @@ const tablePage = ref(1)
 const tableItems = ref([])
 const tableHeaders = [
   { title: '訂單編號', align: 'left', sortable: true, key: '_id' },
-  { title: '會員ID', align: 'left', sortable: true, key: 'user.account' },
+  { title: '會員編號', align: 'left', sortable: true, key: 'user.account' },
   { title: '訂單日期', align: 'left', sortable: true, key: 'createdAt' },
   { title: '訂單總額', align: 'left', sortable: false, key: 'total' },
   { title: '訂單備註', align: 'left', sortable: false, key: 'note' },

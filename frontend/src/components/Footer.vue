@@ -1,8 +1,298 @@
 <template>
-  <v-footer app>
-    <v-container>
-      <v-img src="/src/assets/VPT_LOGO_1.png"></v-img>
-      
+  <v-footer
+    class="pa-0 bg-blue-grey-darken-3 justify-center"
+    height="280"
+  >
+    <v-container
+      class="ma-0"
+      style="max-width: 1200px;"
+    >
+      <v-row class="d-flex justify-space-between">
+        <v-col
+          cols="12"
+          sm="2"
+        >
+          <v-row>
+            <v-col cols="10">
+              <v-row>
+                <v-col
+                  cols="10"
+                  class="px-0"
+                >
+                  <h4 class="text-end pe-2">
+                    神裝加持
+                  </h4>
+                </v-col>
+                <v-col
+                  cols="1"
+                  class="px-0"
+                >
+                  <v-icon
+                    icon="mdi-sword"
+                    size="small"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col
+              cols="12"
+              class="d-flex flex-column justify-center"
+            >
+              <v-btn
+                variant="plain"
+                to="/products"
+                :active="false"
+                :ripple="false"
+                class="opacity-100"
+              >
+                所有商品
+              </v-btn>
+              <v-btn
+                variant="plain"
+                to="/products/shirts"
+                :active="false"
+                :ripple="false"
+                class="opacity-100"
+              >
+                熱銷商品
+              </v-btn>
+              <v-btn
+                variant="plain"
+                to="/products/pants"
+                :active="false"
+                :ripple="false"
+                class="opacity-100"
+              >
+                新品上市
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="2"
+        >
+          <v-row>
+            <v-col cols="10">
+              <v-row>
+                <v-col
+                  cols="10"
+                  class="px-0"
+                >
+                  <h4 class="text-end pe-2">
+                    我想打球
+                  </h4>
+                </v-col>
+                <v-col
+                  cols="1"
+                  class="px-0"
+                >
+                  <v-icon
+                    icon="mdi-hand-back-right-outline"
+                    size="small"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col
+              cols="12"
+              class="d-flex flex-column justify-center"
+            >
+              <v-btn
+                variant="plain"
+                to="/signup"
+                :active="false"
+                :ripple="false"
+                class="opacity-100"
+              >
+                場次報名
+              </v-btn>
+              <v-btn
+                variant="plain"
+                to="/venues"
+                :active="false"
+                :ripple="false"
+                class="opacity-100"
+              >
+                球場資訊
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="2"
+        >
+          <v-row>
+            <v-col cols="10">
+              <v-row>
+                <v-col
+                  cols="10"
+                  class="px-0"
+                >
+                  <h4 class="text-end pe-2">
+                    請求支援
+                  </h4>
+                </v-col>
+                <v-col
+                  cols="1"
+                  class="px-0"
+                >
+                  <v-icon
+                    icon="mdi-shield-half-full"
+                    size="small"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col
+              cols="12"
+              class="d-flex justify-center"
+            >
+              <v-btn
+                variant="plain"
+                to="/contact"
+                :active="false"
+                :ripple="false"
+                class="opacity-100"
+              >
+                聯絡我們
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="2"
+        >
+          <v-row>
+            <v-col cols="10">
+              <v-row>
+                <v-col
+                  cols="10"
+                  class="px-0"
+                >
+                  <h4 class="text-end pe-2">
+                    關注VPT
+                  </h4>
+                </v-col>
+                <v-col
+                  cols="1"
+                  class="px-0"
+                >
+                  <v-icon
+                    icon="mdi-heart-outline"
+                    size="small"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col
+              cols="12"
+            >
+              <v-row no-gutters>
+                <v-col cols="2" />
+                <v-col
+                  cols="2"
+                  class="me-1 ms-1"
+                >
+                  <v-btn
+                    variant="plain"
+                    :ripple="false"
+                    class="opacity-100"
+                    :active="false"
+                  >
+                    <v-icon
+                      icon="mdi-instagram"
+                      size="x-large"
+                    />
+                  </v-btn>
+                </v-col>
+                <v-col
+                  cols="2"
+                  class="me-1"
+                >
+                  <v-btn
+                    variant="plain"
+                    :ripple="false"
+                    class="opacity-100"
+                    :active="false"
+                  >
+                    <v-icon
+                      icon="mdi-facebook"
+                      size="x-large"
+                    />
+                  </v-btn>
+                </v-col>
+                <v-col
+                  cols="2"
+                  class="me-1"
+                >
+                  <v-btn
+                    variant="plain"
+                    :ripple="false"
+                    class="opacity-100"
+                    :active="false"
+                  >
+                    <v-icon
+                      icon="mdi-twitter"
+                      size="x-large"
+                    />
+                  </v-btn>
+                </v-col>
+                <v-col
+                  cols="2"
+                  class="me-1"
+                >
+                  <v-btn
+                    variant="plain"
+                    :ripple="false"
+                    class="opacity-100"
+                    :active="false"
+                  >
+                    <v-icon
+                      icon="mdi-youtube"
+                      size="x-large"
+                    />
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="3"
+          class="d-flex justify-center"
+        >
+          <v-btn
+            variant="plain"
+            class="opacity-100"
+            :active="false"
+            :ripple="false"
+            to="/"
+          >
+            <v-img
+              src="/src/assets/VPT_LOGO_1.png"
+              width="120"
+            />
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-container>
   </v-footer>
 </template>
+
+<style lang="scss" scoped>
+.v-btn {
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-transform: none;
+  padding: 0;
+  margin: 0;
+  &:hover {
+    color: #64FFDA;
+  }
+}
+</style>
