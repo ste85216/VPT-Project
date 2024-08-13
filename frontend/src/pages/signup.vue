@@ -213,7 +213,7 @@
                         v-for="(session, index) in filteredSessions"
                         :key="session._id"
                         elevation="0"
-                        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#EFEBE9' }"
+                        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#ECEFF1' }"
                       >
                         <v-expansion-panel-title>
                           <v-row class="text-center">
@@ -593,6 +593,7 @@ const submitEnrollment = async () => {
       text: '請先登錄',
       snackbarProps: { color: 'error' }
     })
+    router.push('/loginregister')
     return
   }
 
@@ -664,7 +665,8 @@ const loadSessions = async () => {
     const { data } = await api.get('/session', { params })
 
     if (Array.isArray(data.result)) {
-      sessions.value = data.result
+      // 對場次進行排序，日期最近的排在前面
+      sessions.value = data.result.sort((a, b) => new Date(a.date) - new Date(b.date))
       const uniqueVenueIds = [...new Set(sessions.value.map(s => s.v_id.$oid))]
       await Promise.all(uniqueVenueIds.map(loadVenue))
     } else {
@@ -684,8 +686,32 @@ const loadSessions = async () => {
 // 加載球場資料
 const loadVenue = async () => {
   try {
-    const { data } = await api.get('/venue')
-    const venuesData = data.result.data.map(venue => ({
+    let allVenues = []
+    let page = 1
+    let hasMoreData = true
+
+    while (hasMoreData) {
+      const { data } = await api.get('/venue', {
+        params: {
+          page,
+          itemsPerPage: 100 // 每次請求100條記錄
+        }
+      })
+
+      if (Array.isArray(data.result.data) && data.result.data.length > 0) {
+        allVenues = allVenues.concat(data.result.data)
+        page++
+      } else {
+        hasMoreData = false
+      }
+
+      // 如果獲取的數據量等於或超過總數，就停止請求
+      if (data.result.total && allVenues.length >= data.result.total) {
+        hasMoreData = false
+      }
+    }
+
+    const venuesData = allVenues.map(venue => ({
       id: venue._id.$oid || venue._id,
       name: venue.name,
       city: extractCity(venue.address)
@@ -755,47 +781,49 @@ const applyFilters = async () => {
   isFiltered.value = true
   await loadSessions()
 
-  tempFilteredSessions.value = sessions.value.filter(session => {
-    let isMatch = true
+  tempFilteredSessions.value = sessions.value
+    .filter(session => {
+      let isMatch = true
 
-    // 城市過濾
-    if (filters.value.city && getVenueCity(session.v_id) !== filters.value.city) {
-      isMatch = false
-    }
-
-    // 場地過濾
-    if (isMatch && filters.value.venueId) {
-      const sessionVenueId = session.v_id._id || session.v_id
-      if (sessionVenueId !== filters.value.venueId) {
+      // 城市過濾
+      if (filters.value.city && getVenueCity(session.v_id) !== filters.value.city) {
         isMatch = false
       }
-    }
 
-    // 日期過濾
-    if (isMatch && filters.value.date) {
-      const sessionDate = new Date(session.date).toISOString().split('T')[0]
-      if (sessionDate !== filters.value.date) {
-        isMatch = false
+      // 場地過濾
+      if (isMatch && filters.value.venueId) {
+        const sessionVenueId = session.v_id._id || session.v_id
+        if (sessionVenueId !== filters.value.venueId) {
+          isMatch = false
+        }
       }
-    }
 
-    // 網高過濾
-    if (isMatch && filters.value.netheight.length) {
-      if (!filters.value.netheight.includes(session.netheight)) {
-        isMatch = false
+      // 日期過濾
+      if (isMatch && filters.value.date) {
+        const sessionDate = new Date(session.date).toISOString().split('T')[0]
+        if (sessionDate !== filters.value.date) {
+          isMatch = false
+        }
       }
-    }
 
-    // 等級過濾
-    if (isMatch && filters.value.level && filters.value.level.length) {
-      const levelMatch = filters.value.level.some(level => level === session.level)
-      if (!levelMatch) {
-        isMatch = false
+      // 網高過濾
+      if (isMatch && filters.value.netheight.length) {
+        if (!filters.value.netheight.includes(session.netheight)) {
+          isMatch = false
+        }
       }
-    }
 
-    return isMatch
-  })
+      // 等級過濾
+      if (isMatch && filters.value.level && filters.value.level.length) {
+        const levelMatch = filters.value.level.some(level => level === session.level)
+        if (!levelMatch) {
+          isMatch = false
+        }
+      }
+
+      return isMatch
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date)) // 確保過濾後的結果也按日期排序
 }
 
 // 清除過濾條件
@@ -814,7 +842,8 @@ const clearFilters = async () => {
 
 // 計算過濾後的場次
 const filteredSessions = computed(() => {
-  return isFiltered.value ? tempFilteredSessions.value : sessions.value
+  const sessionsToDisplay = isFiltered.value ? tempFilteredSessions.value : sessions.value
+  return sessionsToDisplay.sort((a, b) => new Date(a.date) - new Date(b.date))
 })
 
 // 場地變更時的處理函數

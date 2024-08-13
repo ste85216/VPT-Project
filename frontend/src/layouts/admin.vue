@@ -5,20 +5,16 @@
     class="v-toolbar"
   >
     <v-container
-      class="d-flex align-center pa-0"
+      class="d-flex align-center pa-0 "
       style="max-width: 1400px;"
     >
-      <v-btn
-        to="/admin"
-        class="logo-btn ps-0"
-        text="VPT 管理者後台"
-        variant="plain"
-        :ripple="false"
-      />
+      <h1 class="nav-title ms-2">
+        VPT管理者後台
+      </h1>
     </v-container>
   </v-app-bar>
   <v-container
-    class="mt-16"
+    class="mt-16 responsive-container"
     style="max-width: 1400px;"
   >
     <v-row style="flex-wrap: nowrap;">
@@ -153,19 +149,23 @@ const avatar = computed(() => {
 
 <style lang="scss" scoped>
   @import '/src/styles/settings.scss';
+  .nav-title {
+    font-size: 32px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 4px;
+  }
+
+  .responsive-container {
+    overflow-x: auto;
+  }
+
   .left-navigation {
     border: 1px solid rgba(0,0,0,0.2);
     border-right: none;
   }
   .main {
     border: 1px solid rgba(0,0,0,0.2);
-  }
-  .logo-btn {
-    height: 80px;
-    opacity: 1;
-    font-size: 28px;
-    font-weight: 500;
-    // color: transparent
   }
   .v-toolbar {
     background: #020d2a;

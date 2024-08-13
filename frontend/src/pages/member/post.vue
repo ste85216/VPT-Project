@@ -592,8 +592,32 @@ const formatDate = (dateString) => {
 
 const loadVenues = async () => {
   try {
-    const { data } = await apiAuth.get('/venue')
-    venues.value = data.result.data.map(venue => {
+    let allVenues = []
+    let page = 1
+    let hasMoreData = true
+    const itemsPerPage = 100 // 每頁獲取的記錄數，可以根據需要調整
+
+    while (hasMoreData) {
+      const { data } = await apiAuth.get('/venue', {
+        params: {
+          page,
+          itemsPerPage
+        }
+      })
+
+      if (Array.isArray(data.result.data) && data.result.data.length > 0) {
+        allVenues = allVenues.concat(data.result.data)
+        if (data.result.data.length < itemsPerPage) {
+          hasMoreData = false
+        } else {
+          page++
+        }
+      } else {
+        hasMoreData = false
+      }
+    }
+
+    venues.value = allVenues.map(venue => {
       const addressWithoutPostalCode = venue.address.replace(/^\d{3,5}\s*/, '')
       const cityCountyMatch = addressWithoutPostalCode.match(/^(.+?[市縣])/)
       const cityCounty = cityCountyMatch ? cityCountyMatch[1] : '未知地區'
@@ -605,7 +629,10 @@ const loadVenues = async () => {
         fullName: `[${cityCounty}] ${venue.name}`
       }
     }).sort((a, b) => a.city.localeCompare(b.city, 'zh-TW'))
+
+    console.log(`Loaded ${venues.value.length} venues`)
   } catch (error) {
+    console.error('Error loading venues:', error)
     createSnackbar({
       text: error?.response?.data?.message || '無法加載球場資料',
       snackbarProps: { color: 'red' }

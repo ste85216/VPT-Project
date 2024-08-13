@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    v-if="mobile"
+    v-if="!mdAndUp"
     v-model="drawer"
   >
     <v-list class="ps-1">
@@ -66,7 +66,7 @@
         >
       </v-btn>
       <v-spacer />
-      <template v-if="mobile">
+      <template v-if="!mdAndUp">
         <v-app-bar-nav-icon @click="drawer = true" />
       </template>
       <template v-else>
@@ -194,7 +194,7 @@ import { useUserStore } from '@/stores/user'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useRoute } from 'vue-router'
 
-const { mobile } = useDisplay()
+const { mdAndUp } = useDisplay()
 const user = useUserStore()
 const route = useRoute()
 const createSnackbar = useSnackbar()

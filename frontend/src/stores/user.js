@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import UserRole from '@/enums/UserRole.js'
 import { useApi } from '@/composables/axios'
-import router from '@/router'
 
 export const useUserStore = defineStore('user', () => {
   const { api, apiAuth } = useApi()
@@ -160,10 +159,6 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  const updatePassword = async (oldPassword, newPassword) => {
-    await apiAuth.patch('/user/password', { oldPassword, newPassword })
-  }
-
   return {
     token,
     account,
@@ -182,7 +177,6 @@ export const useUserStore = defineStore('user', () => {
     isAdmin,
     note,
     updateProfile,
-    updatePassword,
     login,
     profile,
     logout,

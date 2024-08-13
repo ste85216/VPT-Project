@@ -33,7 +33,7 @@
       v-for="product in products"
       :key="product._id"
     >
-      <router-link :to="`/products/${product._id}`">
+      <router-link :to="`/products/${product._id}?category=${product.category}`">
         <img
           :src="product.images[0]"
           :alt="product.name"

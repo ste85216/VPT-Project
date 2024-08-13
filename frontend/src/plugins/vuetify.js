@@ -17,6 +17,8 @@ import { aliases, fa } from 'vuetify/iconsets/fa'
 import { zhHant } from 'vuetify/locale'
 import colors from 'vuetify/util/colors'
 
+import { VDateInput } from 'vuetify/labs/VDateInput'
+
 // https://vuetifyjs.com/en/introduction/why-vuetify/#feature-guides
 export default createVuetify({
   theme: {
@@ -34,5 +36,8 @@ export default createVuetify({
     locale: 'zhHant',
     fallback: 'en',
     messages: { zhHant }
+  },
+  components: {
+    VDateInput
   }
 })

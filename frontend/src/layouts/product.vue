@@ -1,10 +1,14 @@
 <template>
   <v-container
-    style="max-width: 1280px; height: 100%;"
-    class="pa-0 pt-10"
+    style="max-width: 1280px;"
+    class="pa-0 pt-10 mb-16"
   >
-    <v-row class="ps-16 h-100">
-      <v-col style="max-width: 240px;">
+    <v-row class=" h-100 px-8">
+      <v-col
+        v-if="mdAndUp"
+        style="width: 240px;"
+        class="px-10 pt-6"
+      >
         <h3>分類</h3>
         <v-list class="pa-0">
           <v-list-item
@@ -65,11 +69,12 @@
         </v-expansion-panels>
       </v-col>
       <v-col
-        cols="9"
-        class="pa-0 ps-10"
+        cols="12"
+        md="9"
+        class="pa-0"
         style="max-height: 100%;"
       >
-        <v-container class="pa-0 h-100">
+        <v-container class="pa-4 h-100">
           <!-- 麵包屑 -->
           <v-breadcrumbs
             :items="breadcrumbs"
@@ -87,18 +92,22 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
+import { useDisplay } from 'vuetify'
 
+const { mdAndUp } = useDisplay()
 const route = useRoute()
 const { api } = useApi()
 const createSnackbar = useSnackbar()
-
+const breadcrumbs = ref([
+  { title: '所有商品', disabled: false, to: '/products' }
+])
 const productCategory = ref(null)
 
 const loadProductCategory = async (id) => {
   try {
     const { data } = await api.get(`/product/${id}`)
     productCategory.value = data.result.category
-    console.log(data.result.category)
+    updateBreadcrumbs()
   } catch (error) {
     console.log(error)
     createSnackbar({
@@ -127,10 +136,6 @@ const subcategories = ref([
   { title: '其他', to: '/products/others' }
 ])
 
-const breadcrumbs = ref([
-  { title: '所有商品', disabled: false, to: '/products' }
-])
-
 const subCategoriesMap = {
   '/products/shirts': '球衣',
   '/products/pants': '球褲',
@@ -157,31 +162,44 @@ const subCategoryPathMap = {
   其他: '/products/others'
 }
 
-watch(route, async (newRoute) => {
-  const subCategory = subCategoriesMap[newRoute.path]
-  const category = categoriesMap[newRoute.path]
-  const productId = newRoute.params.id
-  if (productId) {
-    await loadProductCategory(productId)
-  }
-  const subCategoryPath = subCategoryPathMap[productCategory.value] || ''
+const updateBreadcrumbs = () => {
+  const subCategory = subCategoriesMap[route.path]
+  const category = categoriesMap[route.path]
+  const productId = route.params.id
+  const queryCategory = route.query.category
+  const subCategoryPath = subCategoryPathMap[productCategory.value || queryCategory] || ''
+
   if (category) {
     breadcrumbs.value = [
-      { title: category, disabled: false, to: newRoute.path }
+      { title: category, disabled: false, to: route.path }
     ]
   } else if (subCategory) {
     breadcrumbs.value = [
       { title: '所有商品', disabled: false, to: '/products' },
-      { title: subCategory, disabled: false, to: newRoute.path }
+      { title: subCategory, disabled: false, to: route.path }
+    ]
+  } else if (productId && (productCategory.value || queryCategory)) {
+    breadcrumbs.value = [
+      { title: '所有商品', disabled: false, to: '/products' },
+      { title: productCategory.value || queryCategory, disabled: false, to: subCategoryPath },
+      { title: '商品詳情', disabled: true }
     ]
   } else {
     breadcrumbs.value = [
-      { title: '所有商品', disabled: false, to: '/products' },
-      { title: productCategory, disabled: false, to: subCategoryPath },
-      { title: '商品詳情', disabled: true }
+      { title: '所有商品', disabled: false, to: '/products' }
     ]
   }
-})
+}
+
+watch(route, async (newRoute) => {
+  if (newRoute.params.id) {
+    await loadProductCategory(newRoute.params.id)
+  } else {
+    updateBreadcrumbs()
+  }
+}, { immediate: true, deep: true })
+
+// 移除原來的 onMounted 钩子，因為 watch 的 immediate: true 會在組件掛載時立即執行一次
 </script>
 
 <style lang="scss" scoped>

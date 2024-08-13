@@ -3,7 +3,8 @@
     <v-row>
       <v-col
         class="pa-0 pt-5"
-        cols="6"
+        cols="12"
+        md="6"
       >
         <v-img
           :src="product.images[0]"
@@ -13,8 +14,9 @@
         />
       </v-col>
       <v-col
-        cols="6"
-        class="ps-16"
+        cols="12"
+        md="6"
+        class="ps-md-10"
       >
         <v-col>
           <h2>{{ product.name }}</h2>
@@ -31,6 +33,8 @@
               v-for="(size, index) in product.sizes"
               :key="index"
               :value="size"
+              size="large"
+              color="teal-lighten-1"
             >
               {{ size }}
             </v-chip>
@@ -47,6 +51,8 @@
               v-for="(color, index) in product.colors"
               :key="index"
               :value="color"
+              size="large"
+              color="teal-lighten-1"
             >
               {{ color }}
             </v-chip>
@@ -82,7 +88,8 @@
             <v-btn
               class="addCart-btn"
               prepend-icon="mdi-cart"
-              width="100%"
+              block
+              variant="outlined"
               @click="addToCart"
             >
               加入購物車
@@ -96,12 +103,13 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useApi } from '@/composables/axios'
 import { definePage } from 'vue-router/auto'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
 
 definePage({
   meta: {
@@ -146,6 +154,9 @@ const load = async () => {
     }
 
     document.title = `${product.value.name} | VPT`
+
+    // 發送商品分類信息到父組件
+    emit('update:category', product.value.category)
   } catch (error) {
     console.log(error)
     createSnackbar({
@@ -157,6 +168,13 @@ const load = async () => {
   }
 }
 
+onMounted(() => {
+  load()
+})
+
+// 定義 emits
+const emit = defineEmits(['update:category'])
+
 const changeQuantity = (amount) => {
   quantity.value = Math.max(1, quantity.value + amount)
 }
@@ -166,9 +184,10 @@ const addToCart = async () => {
     createSnackbar({
       text: '請先登入',
       snackbarProps: {
-        color: 'red'
+        color: 'red-darken-3'
       }
     })
+    router.push('/loginregister')
     return
   }
 
@@ -234,12 +253,10 @@ h3 {
   margin-bottom: 12px;
 }
 .addCart-btn {
-  color: $primary-color;
-  background: #03919910;
   font-size: 14px;
-  border: 1px solid $primary-color;
   font-weight: 500;
   transition: 0.2s;
+  color: teal;
   &:hover {
     background-color: $primary-color;
     color: #f6f6f6;

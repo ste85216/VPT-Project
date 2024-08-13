@@ -1,19 +1,32 @@
 <template>
-  <v-card class="custom-card">
-    <v-row>
-      <v-col cols="6">
+  <v-card
+    class="custom-card d-flex flex-column"
+    width="100%"
+  >
+    <v-row
+      class="flex-grow-1"
+    >
+      <v-col
+        cols="12"
+        md="6"
+      >
         <v-img
           :src="props.images[0]"
-          width="300"
+          width="100%"
           height="300"
           cover
         />
       </v-col>
-      <v-col cols="6">
-        <v-card-title style="color: #1b2d3f;">
-          {{ props.name }}  <!-- 綁定球場名稱 -->
-        </v-card-title>
-        <v-card-text class="d-flex flex-column justify-space-between mt-2" style="height: 258px;">
+      <v-col
+        cols="12"
+        md="6"
+      >
+        <v-card-text
+          class="d-flex flex-column justify-space-between h-100 py-0"
+        >
+          <v-card-title class="px-0 text-blue-grey-darken-3">
+            {{ props.name }}  <!-- 綁定球場名稱 -->
+          </v-card-title>
           <div class="info-text">
             <v-icon color="#555">
               mdi-clock-outline
@@ -61,7 +74,7 @@ const props = defineProps(['name', 'address', 'phone', 'images', 'time', 'mapLin
   margin: 0;
   padding: 32px 20px 20px 32px;
   border-radius: 20px;
-  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.2);
   .v-card__title {
     font-size: 24px;
     font-weight: 700;

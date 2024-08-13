@@ -14,5 +14,10 @@ const compat = new FlatCompat({ baseDirectory: __dirname, recommendedConfig: plu
 export default [
   { languageOptions: { globals: globals.node } },
   ...compat.extends('standard'),
-  ...pluginVue.configs['flat/essential']
+  ...pluginVue.configs['flat/essential'],
+  {
+    rules: {
+      camelcase: 'off' // 禁用camelcase規則
+    }
+  }
 ]

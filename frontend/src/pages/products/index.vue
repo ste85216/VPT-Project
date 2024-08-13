@@ -5,19 +5,25 @@
         cols="12"
         class="d-flex justify-space-between pb-0"
       >
-        <h2>所有商品</h2>
-        <v-text-field
-          v-model="searchQuery"
-          variant="outlined"
-          density="compact"
-          max-width="240"
-          append-inner-icon="mdi-magnify"
-          placeholder="搜尋商品"
-          :loading="isSearching"
-          clearable
-          @input="debounceSearch"
-          @click:clear="clearSearch"
-        />
+        <v-row>
+          <v-col><h2>所有商品</h2></v-col>
+          <v-col
+            sm="3"
+          >
+            <v-text-field
+              v-model="searchQuery"
+              variant="outlined"
+              density="compact"
+              max-width="240"
+              append-inner-icon="mdi-magnify"
+              placeholder="搜尋商品"
+              :loading="isSearching"
+              clearable
+              @input="debounceSearch"
+              @click:clear="clearSearch"
+            />
+          </v-col>
+        </v-row>
       </v-col>
       <v-col
         v-if="isLoading"
@@ -33,8 +39,9 @@
         <v-col
           v-for="product in products"
           :key="product._id"
-          cols="auto"
-          class="px-0"
+          cols="6"
+          md="4"
+          class="px-0 d-flex justify-center"
         >
           <ProductCard v-bind="product" />
         </v-col>

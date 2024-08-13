@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%;background-color: #fafdf7;">
+  <div style="width: 100%; height: 95%;background-color: #fafdf7;">
     <v-container
       fluid
       class="pa-0"
@@ -10,7 +10,7 @@
           <v-row>
             <v-col
               cols="12"
-              sm="6"
+              md="6"
               class="pt-5 ps-0"
             >
               <h1 class="title1">
@@ -30,7 +30,7 @@
                 飛得更高
               </v-btn>
               <v-btn
-                class="text-none ml-2 text-teal-lighten-1 mt-8"
+                class="text-none ml-2 text-teal-lighten-1 mt-8 bt1"
                 size="x-large"
                 variant="flat"
                 rounded="0"
@@ -41,7 +41,7 @@
             </v-col>
             <v-col
               cols="12"
-              sm="6"
+              md="6"
               class="pt-0"
             >
               <v-img
@@ -56,7 +56,7 @@
         </v-col>
         <v-col
           cols="12"
-          class="mt-16"
+          style="margin-top: 80px;"
         >
           <v-row>
             <v-col cols="12">
@@ -75,7 +75,7 @@
         <v-col
           cols="12"
           sm="12"
-          class="mt-16"
+          style="margin-top: 80px;"
         >
           <h4 class="text-center text-teal-lighten-1">
             Shop All
@@ -302,23 +302,34 @@ definePage({
 </script>
 
 <style lang="scss" scoped>
+@import '/src/styles/settings.scss';
 *{
   font-family: "Noto Sans TC", sans-serif;
 }
 
 .title1 {
   color:#1F3347;
-  font-size: 48px;
+  font-size: 40px;
   margin-left: 12px;
   margin-top: 70px;
   line-height: 80px;
+  @include sm {
+    font-size: 48px;
+  }
 }
 .p1 {
   color: #1b2d3f90 ;
   margin-left: 12px;
+  @include sm {
+    font-size: 18px;
+  }
 }
 .bt1 {
   margin-left: 12px;
+  font-size: 16px;
+  @include sm {
+    font-size: 18px;
+  }
 }
 
 .v-card.card1 {

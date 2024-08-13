@@ -2,6 +2,7 @@
   <v-container
     class="mt-8 mb-12"
     style="max-width: 1200px;"
+    fluid
   >
     <h2>球場資訊</h2>
     <v-row class="mt-4">
@@ -13,7 +14,10 @@
       </div>
     </v-row>
     <v-row>
-      <v-col cols="3">
+      <v-col
+        cols="5"
+        md="3"
+      >
         <v-select
           v-model="selectedCity"
           :items="cities"
@@ -25,7 +29,10 @@
         />
       </v-col>
       <v-spacer />
-      <v-col cols="3">
+      <v-col
+        cols="5"
+        md="3"
+      >
         <v-text-field
           v-model="searchQuery"
           label="搜尋"
@@ -38,62 +45,61 @@
         />
       </v-col>
     </v-row>
-    <v-container class="pa-0 mt-8">
-      <v-row
-        v-if="isLoading"
-        justify="center"
-        align="center"
-        style="height: 200px;"
+    <v-row
+      v-if="isLoading"
+      justify="center"
+      align="center"
+      style="height: 200px;"
+    >
+      <v-col
+        cols="12"
+        class="text-center"
       >
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          size="64"
+        />
+      </v-col>
+    </v-row>
+    <template v-else>
+      <v-row
+        v-if="venues.length > 0"
+        class="mb-4 "
+      >
+        <v-col
+          v-for="venue in venues"
+          :key="venue._id"
+          cols="12"
+          md="6"
+        >
+          <VenueCard v-bind="venue" />
+        </v-col>
+      </v-row>
+      <v-row v-else>
         <v-col
           cols="12"
           class="text-center"
         >
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            size="64"
+          <p>沒有找到相關球場</p>
+        </v-col>
+      </v-row>
+      <v-row v-if="pages > 1">
+        <v-col cols="12">
+          <v-pagination
+            v-model="page"
+            :length="pages"
+            rounded="circle"
+            density="compact"
+            next-icon="mdi-menu-right"
+            prev-icon="mdi-menu-left"
+            :total-visible="8"
+            color="teal-darken-1"
+            @update:model-value="onPageChange"
           />
         </v-col>
       </v-row>
-      <template v-else>
-        <v-row
-          v-if="venues.length > 0"
-          class="mb-4"
-        >
-          <v-col
-            v-for="venue in venues"
-            :key="venue._id"
-            cols="6"
-          >
-            <VenueCard v-bind="venue" />
-          </v-col>
-        </v-row>
-        <v-row v-else>
-          <v-col
-            cols="12"
-            class="text-center"
-          >
-            <p>沒有找到相關球場</p>
-          </v-col>
-        </v-row>
-        <v-row v-if="pages > 1">
-          <v-col cols="12">
-            <v-pagination
-              v-model="page"
-              :length="pages"
-              rounded="circle"
-              density="compact"
-              next-icon="mdi-menu-right"
-              prev-icon="mdi-menu-left"
-              :total-visible="8"
-              color="teal-darken-1"
-              @update:model-value="onPageChange"
-            />
-          </v-col>
-        </v-row>
-      </template>
-    </v-container>
+    </template>
   </v-container>
 </template>
 
