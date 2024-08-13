@@ -57,15 +57,17 @@ const props = defineProps(['_id', 'category', 'description', 'images', 'name', '
 @import '/src/styles/settings.scss';
 
 .title {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 500;
   color: #333;
+
 }
 
 .price {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: $primary-color;
+
 }
 
 .v-card--reveal {
@@ -76,7 +78,8 @@ const props = defineProps(['_id', 'category', 'description', 'images', 'name', '
   position: absolute;
   width: 100%;
   height: 100%;
-  font-size: 24px;
+  padding: 12px;
+  font-size: 12px;
   font-weight: 600;
   transition: 2s;
 }
@@ -94,5 +97,34 @@ const props = defineProps(['_id', 'category', 'description', 'images', 'name', '
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+@include sm {
+  .title {
+  font-size: 16px;
+}
+
+.price {
+  font-size: 18px;
+}
+
+.v-card--reveal {
+  font-size: 18px;
+}
+}
+
+@include md {
+  .title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.price {
+  font-size: 18px;
+}
+
+.v-card--reveal {
+  font-size: 20px;
+}
 }
 </style>

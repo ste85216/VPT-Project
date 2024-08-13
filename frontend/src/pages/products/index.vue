@@ -8,7 +8,8 @@
         <v-row>
           <v-col><h2>所有商品</h2></v-col>
           <v-col
-            sm="3"
+            sm="4"
+            md="3"
           >
             <v-text-field
               v-model="searchQuery"

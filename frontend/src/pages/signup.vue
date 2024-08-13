@@ -13,12 +13,12 @@
             cols="12"
             class="ps-5 pb-10 text-grey-darken-1"
           >
-            <h2>零打報名系統</h2>
+            <h2>臨打報名系統</h2>
           </v-col>
           <!-- 搜尋篩選區域 -->
           <v-col
             cols="12"
-            sm="3"
+            md="3"
             class="py-0 px-4"
           >
             <v-form @submit.prevent="applyFilters">
@@ -187,228 +187,381 @@
           <!-- 場次列表區域 -->
           <v-col
             cols="12"
-            sm="9"
-            class="elevation-4 rounded-sm pa-8 mt-4 mt-sm-0"
+            md="9"
           >
             <v-row>
-              <v-col cols="12">
-                <v-row>
-                  <!-- 場次列表標題 -->
-                  <v-col cols="12">
-                    <h3 class="title-session">
-                      場次清單
-                    </h3>
-                  </v-col>
-                  <v-col>
-                    <!-- 無搜尋結果時顯示 -->
-                    <v-sheet
-                      v-if="filteredSessions.length === 0"
-                      class="text-center"
-                    >
-                      未搜尋到相關場次
-                    </v-sheet>
-                    <!-- 場次列表 -->
-                    <v-expansion-panels>
-                      <v-expansion-panel
-                        v-for="(session, index) in filteredSessions"
-                        :key="session._id"
-                        elevation="0"
-                        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#ECEFF1' }"
+              <v-col
+                cols="12"
+                class="py-0 px-4 pt-4 pt-md-0 px-md-0"
+              >
+                <v-card
+                  class="pa-md-8"
+                  elevation="4"
+                >
+                  <v-row>
+                    <!-- 場次列表標題 -->
+                    <v-col cols="12">
+                      <h3 class="title-session ps-5 pt-5">
+                        場次清單
+                      </h3>
+                    </v-col>
+                    <v-col>
+                      <!-- 無搜尋結果時顯示 -->
+                      <v-sheet
+                        v-if="filteredSessions.length === 0"
+                        class="text-center"
                       >
-                        <v-expansion-panel-title>
-                          <v-row class="text-center">
-                            <v-col
-                              cols="12"
-                            >
-                              <v-row
-                                align="center"
-                                justify="center"
+                        未搜尋到相關場次
+                      </v-sheet>
+                      <!-- 場次列表 -->
+                      <v-expansion-panels class="d-none d-md-block">
+                        <v-expansion-panel
+                          v-for="(session, index) in filteredSessions"
+                          :key="session._id"
+                          elevation="0"
+                          :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#ECEFF1' }"
+                        >
+                          <v-expansion-panel-title>
+                            <v-row class="text-center">
+                              <v-col
+                                cols="12"
                               >
-                                <!-- 場次信息標題 -->
-                                <v-col
-                                  cols="4"
-                                  sm
+                                <v-row
+                                  align="center"
+                                  justify="center"
                                 >
-                                  會員編號
-                                </v-col>
-                                <v-col
-                                  cols="4"
-                                  sm
-                                >
-                                  地區
-                                </v-col>
-                                <v-col
-                                  cols="4"
-                                  sm
-                                >
-                                  球場
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm="2"
-                                >
-                                  日期
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm
-                                >
-                                  時段
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm
-                                >
-                                  網高
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm
-                                >
-                                  程度
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                            <v-col class="pe-sm-6">
-                              <v-divider />
-                            </v-col>
-                            <v-col cols="12">
-                              <v-row
-                                style="line-height: 32px;font-size: 14px"
-                                class="text-blue-grey-darken-3"
-                              >
-                                <!-- 場次信息內容 -->
-                                <v-col
-                                  cols="4"
-                                  sm
-                                >
-                                  {{ session.userId.userId }}
-                                </v-col>
-                                <v-col
-                                  cols="4"
-                                  sm
-                                >
-                                  {{ getVenueCity(session.v_id) }}
-                                </v-col>
-                                <v-col
-                                  cols="4"
-                                  sm
-                                >
-                                  {{ getVenueName(session.v_id) }}
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm="2"
-                                >
-                                  {{ formatDate(session.date) }}
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm
-                                >
-                                  {{ session.time }}
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm
-                                >
-                                  {{ session.netheight }}
-                                </v-col>
-                                <v-col
-                                  cols="3"
-                                  sm
-                                >
-                                  {{ session.level }}
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                          </v-row>
-                        </v-expansion-panel-title>
-                        <v-expansion-panel-text>
-                          <v-row
-                            class="pa-4 ps-0 text-center"
-                            style="font-size: 15px"
-                          >
-                            <v-col cols="9">
-                              <v-row>
-                                <v-col cols="12">
-                                  <v-row>
-                                    <!-- 場次詳細信息標題 -->
-                                    <v-col
-                                      cols="4"
-                                      sm="2"
-                                    >
-                                      價錢
-                                    </v-col>
-                                    <v-col
-                                      cols="4"
-                                      sm="2"
-                                    >
-                                      備註
-                                    </v-col>
-                                    <v-col cols="3">
-                                      報名狀態
-                                    </v-col>
-                                  </v-row>
-                                </v-col>
-                                <v-col
-                                  cols="12"
-                                  sm="7"
-                                >
-                                  <v-divider />
-                                </v-col>
-                                <v-col cols="12">
-                                  <v-row
-                                    class="text-blue-grey-darken-3"
-                                    style="font-size: 14px;"
+                                  <!-- 場次信息標題 -->
+                                  <v-col
+                                    cols="4"
+                                    sm
                                   >
-                                    <!-- 場次詳細信息內容 -->
-                                    <v-col
-                                      cols="4"
-                                      sm="2"
-                                    >
-                                      ${{ session.fee }}/人
-                                    </v-col>
-                                    <v-col
-                                      cols="4"
-                                      sm="2"
-                                    >
-                                      {{ session.note || '無備註' }}
-                                    </v-col>
-                                    <v-col cols="3">
-                                      尚需: <span style="font-size: 15px;color:#FF1744;">{{ formatRemainingPlayers(session) }}</span>
-                                    </v-col>
-                                  </v-row>
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                            <!-- 報名按鈕 -->
-                            <v-col
-                              cols="12"
-                              sm="3"
-                              class="d-flex align-center"
+                                    會員編號
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                    sm
+                                  >
+                                    地區
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                    sm
+                                  >
+                                    球場
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm="2"
+                                  >
+                                    日期
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm
+                                  >
+                                    時段
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm
+                                  >
+                                    網高
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm
+                                  >
+                                    程度
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                              <v-col class="pe-sm-6">
+                                <v-divider />
+                              </v-col>
+                              <v-col cols="12">
+                                <v-row
+                                  style="line-height: 32px;font-size: 14px"
+                                  class="text-blue-grey-darken-3"
+                                >
+                                  <!-- 場次信息內容 -->
+                                  <v-col
+                                    cols="4"
+                                    sm
+                                  >
+                                    {{ session.userId.userId }}
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                    sm
+                                  >
+                                    {{ getVenueCity(session.v_id) }}
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                    sm
+                                  >
+                                    {{ getVenueName(session.v_id) }}
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm="2"
+                                  >
+                                    {{ formatDate(session.date) }}
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm
+                                  >
+                                    {{ session.time }}
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm
+                                  >
+                                    {{ session.netheight }}
+                                  </v-col>
+                                  <v-col
+                                    cols="3"
+                                    sm
+                                  >
+                                    {{ session.level }}
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-title>
+                          <v-expansion-panel-text>
+                            <v-row
+                              class="pa-4 ps-0 text-center"
+                              style="font-size: 15px"
                             >
-                              <v-btn
-                                size="large"
-                                block
-                                variant="outlined"
-                                color="cyan-darken-3"
-                                :disabled="isSessionFull(session)"
-                                @click="openEnrollDialog(session)"
+                              <v-col cols="9">
+                                <v-row>
+                                  <v-col cols="12">
+                                    <v-row>
+                                      <!-- 場次詳細信息標題 -->
+                                      <v-col
+                                        cols="4"
+                                        sm="2"
+                                      >
+                                        價錢
+                                      </v-col>
+                                      <v-col
+                                        cols="4"
+                                        sm="2"
+                                      >
+                                        備註
+                                      </v-col>
+                                      <v-col cols="3">
+                                        報名狀態
+                                      </v-col>
+                                    </v-row>
+                                  </v-col>
+                                  <v-col
+                                    cols="12"
+                                    sm="7"
+                                  >
+                                    <v-divider />
+                                  </v-col>
+                                  <v-col cols="12">
+                                    <v-row
+                                      class="text-blue-grey-darken-3"
+                                      style="font-size: 14px;"
+                                    >
+                                      <!-- 場次詳細信息內容 -->
+                                      <v-col
+                                        cols="4"
+                                        sm="2"
+                                      >
+                                        ${{ session.fee }}/人
+                                      </v-col>
+                                      <v-col
+                                        cols="4"
+                                        sm="2"
+                                      >
+                                        {{ session.note || '無備註' }}
+                                      </v-col>
+                                      <v-col cols="3">
+                                        尚需: <span style="font-size: 15px;color:#FF1744;">{{ formatRemainingPlayers(session) }}</span>
+                                      </v-col>
+                                    </v-row>
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                              <!-- 報名按鈕 -->
+                              <v-col
+                                cols="12"
+                                sm="3"
+                                class="d-flex align-center"
                               >
-                                {{ isSessionFull(session) ? '名額已滿' : '我要報名' }}
-                                <v-icon
-                                  icon="mdi-playlist-check"
-                                  class="ms-2"
-                                />
-                              </v-btn>
-                            </v-col>
-                          </v-row>
-                        </v-expansion-panel-text>
-                      </v-expansion-panel>
-                    </v-expansion-panels>
-                  </v-col>
-                </v-row>
+                                <v-btn
+                                  size="large"
+                                  block
+                                  elevation="0"
+                                  color="yellow-darken-4"
+                                  :disabled="isSessionFull(session)"
+                                  @click="openEnrollDialog(session)"
+                                >
+                                  {{ isSessionFull(session) ? '名額已滿' : '我要報名' }}
+                                  <v-icon
+                                    icon="mdi-playlist-check"
+                                    class="ms-2"
+                                  />
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-text>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                      <!-- md以下一些資訊丟報名dialog -->
+                      <v-expansion-panels class="d-md-none">
+                        <v-expansion-panel
+                          v-for="(session, index) in filteredSessions"
+                          :key="session._id"
+                          elevation="0"
+                          :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#ECEFF1' }"
+                        >
+                          <v-expansion-panel-title>
+                            <v-row class="text-center">
+                              <v-col
+                                cols="12"
+                              >
+                                <v-row
+                                  align="center"
+                                  justify="center"
+                                >
+                                  <!-- 場次信息標題 -->
+
+                                  <v-col
+                                    cols="4"
+                                  >
+                                    球場
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                  >
+                                    日期
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                  >
+                                    時段
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                              <v-col class="pe-sm-6">
+                                <v-divider />
+                              </v-col>
+                              <v-col cols="12">
+                                <v-row
+                                  style="line-height: 32px;font-size: 14px"
+                                  class="text-blue-grey-darken-3"
+                                >
+                                  <!-- 場次信息內容 -->
+                                  <v-col
+                                    cols="4"
+                                  >
+                                    {{ getVenueName(session.v_id) }}
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                  >
+                                    {{ formatDate(session.date) }}
+                                  </v-col>
+                                  <v-col
+                                    cols="4"
+                                  >
+                                    {{ session.time }}
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-title>
+                          <v-expansion-panel-text>
+                            <v-row
+                              class="pa-4 ps-0 text-center"
+                              style="font-size: 15px"
+                            >
+                              <v-col cols="12">
+                                <v-row>
+                                  <v-col
+                                    cols="12"
+                                    class="pe-4"
+                                  >
+                                    <v-row>
+                                      <!-- 場次詳細信息標題 -->
+
+                                      <v-col
+                                        cols="4"
+                                      >
+                                        網高
+                                      </v-col>
+                                      <v-col
+                                        cols="4"
+                                      >
+                                        價錢
+                                      </v-col>
+
+                                      <v-col cols="4">
+                                        報名狀態
+                                      </v-col>
+                                    </v-row>
+                                  </v-col>
+                                  <v-col
+                                    cols="12"
+                                  >
+                                    <v-divider />
+                                  </v-col>
+                                  <v-col cols="12">
+                                    <v-row
+                                      class="text-blue-grey-darken-3"
+                                      style="font-size: 14px;"
+                                    >
+                                      <!-- 場次詳細信息內容 -->
+                                      <v-col
+                                        cols="4"
+                                      >
+                                        {{ session.netheight }}
+                                      </v-col>
+                                      <v-col
+                                        cols="4"
+                                      >
+                                        ${{ session.fee }}/人
+                                      </v-col>
+                                      <v-col cols="4">
+                                        尚需: <br><span style="font-size: 14px;color:#FF1744;">{{ formatRemainingPlayers(session) }}</span>
+                                      </v-col>
+                                    </v-row>
+                                  </v-col>
+                                </v-row>
+                              </v-col>
+                              <!-- 報名按鈕 -->
+                              <v-col
+                                cols="12"
+                                class="d-flex align-center"
+                              >
+                                <v-btn
+                                  size="large"
+                                  block
+                                  elevation="0"
+                                  color="yellow-darken-4"
+                                  :disabled="isSessionFull(session)"
+                                  @click="openEnrollDialog(session)"
+                                >
+                                  {{ isSessionFull(session) ? '名額已滿' : '我要報名' }}
+                                  <v-icon
+                                    icon="mdi-playlist-check"
+                                    class="ms-2"
+                                  />
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-text>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-col>
+                  </v-row>
+                </v-card>
               </v-col>
             </v-row>
           </v-col>
@@ -435,12 +588,18 @@
         <v-list-item>
           <v-list-item-title>時段：{{ enrollDialog.session?.time }}</v-list-item-title>
         </v-list-item>
+        <v-list-item class="d-md-none">
+          <v-list-item-title>程度：{{ enrollDialog.session?.level }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item class="d-md-none">
+          <v-list-item-title>備註：{{ enrollDialog.session?.note || '無備註' }}</v-list-item-title>
+        </v-list-item>
         <!-- 報名人數輸入 -->
         <v-text-field
           v-if="!enrollDialog.maleDisabled"
           v-model="enrollDialog.male"
           label="男生人數"
-          class="px-3 pt-2"
+          class="px-3 pt-4"
           variant="outlined"
           density="compact"
           type="number"
@@ -452,7 +611,7 @@
           v-if="!enrollDialog.femaleDisabled"
           v-model="enrollDialog.female"
           label="女生人數"
-          class="px-3 pt-2"
+          class="px-3 pt-4"
           variant="outlined"
           density="compact"
           type="number"
@@ -464,7 +623,7 @@
           v-if="!enrollDialog.nopreferenceDisabled"
           v-model="enrollDialog.nopreference"
           label="不限性別人數"
-          class="px-3 pt-2"
+          class="px-3 pt-4"
           variant="outlined"
           density="compact"
           type="number"

@@ -3,7 +3,10 @@
     style="max-width: 1280px;"
     class="pa-0 pt-10 mb-16"
   >
-    <v-row class=" h-100 px-8">
+    <v-row
+      class=" h-100 px-0 pe-0 px-sm-8"
+      no-gutters
+    >
       <v-col
         v-if="mdAndUp"
         style="width: 240px;"
@@ -74,7 +77,7 @@
         class="pa-0"
         style="max-height: 100%;"
       >
-        <v-container class="pa-4 h-100">
+        <v-container class="pa-sm-4 h-100">
           <!-- 麵包屑 -->
           <v-breadcrumbs
             :items="breadcrumbs"

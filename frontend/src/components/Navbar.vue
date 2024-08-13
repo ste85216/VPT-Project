@@ -2,45 +2,168 @@
   <v-navigation-drawer
     v-if="!mdAndUp"
     v-model="drawer"
+    class="custom-drawer overflow-hidden border-0"
   >
-    <v-list class="ps-1">
-      <template
-        v-for="item in navItems"
-        :key="item.to"
+    <!-- 這邊等等要寫v-if -->
+    <v-row>
+      <v-col
+        cols="12"
+        class="pb-1"
       >
-        <v-list-item
-          v-if="item.show"
-          class="mt-5"
-          :prepend-icon="item.icon"
-          :to="item.to"
-          :title="item.text"
+        <v-list
+          v-if="user.isLogin && !user.isAdmin"
+          class="pa-0"
+          density="compact"
         >
-          <template #append>
-            <v-badge
-              v-if="item.to === '/cart' && user.cartQuantity > 0"
-              color="red"
-              :content="user.cartQuantity"
-              floating
-            />
-          </template>
-        </v-list-item>
-      </template>
-      <v-list-item
-        v-if="user.isLogin && user.isAdmin"
-        class="mt-5"
-        prepend-icon="mdi-cog"
-        to="/admin/product"
+          <v-list-item class="bg-blue-grey-darken-1 px-6 pa-4">
+            <v-row no-gutters>
+              <v-col cols="4">
+                <v-img
+                  :src="user.avatar"
+                  class="rounded-circle"
+                  height="50"
+                  width="50"
+                  cover
+                />
+              </v-col>
+              <v-col
+                cols="3"
+                class="d-flex align-center justify-center"
+              >
+                <p class="p1">
+                  HI !
+                </p>
+              </v-col>
+              <v-col
+                cols="3"
+                class="d-flex align-center justify-center"
+              >
+                <h4 class="drawer-name">
+                  {{ user.name }}
+                </h4>
+              </v-col>
+            </v-row>
+          </v-list-item>
+          <v-list-group
+            v-model="isMemberCenterOpen"
+            class="mt-2"
+          >
+            <template #activator="{props}">
+              <v-list-item
+                v-bind="props"
+                class="custom-list-item"
+                prepend-icon="mdi-account"
+                style="font-size: 15px;"
+              >
+                會員中心
+              </v-list-item>
+            </template>
+            <v-list-item
+              v-for="memberNavitem in memberNavItems"
+              :key="memberNavitem.to"
+              :to="memberNavitem.to"
+              :prepend-icon="memberNavitem.icon"
+              :active="false"
+              style="font-size: 14px;"
+            >
+              {{ memberNavitem.text }}
+            </v-list-item>
+          </v-list-group>
+        </v-list>
+      </v-col>
+      <v-divider />
+      <v-col
+        cols="12"
+        class="py-0"
       >
-        進入後台
-      </v-list-item>
-      <v-list-item
-        v-if="user.isLogin && user.isAdmin"
-        class="mt-5"
-        prepend-icon="mdi-account-arrow-right"
-        title="登出"
-        @click="logout"
-      />
-    </v-list>
+        <v-list
+          density="compact"
+        >
+          <v-list-group
+            v-model="isProductOpen"
+          >
+            <template #activator="{props}">
+              <v-list-item
+                v-bind="props"
+                prepend-icon="mdi-volleyball"
+                style="font-size: 15px;"
+                density="compact"
+                to="/products"
+              >
+                所有商品
+              </v-list-item>
+            </template>
+            <v-list-item
+              v-for="productNavitem in productNavItems"
+              :key="productNavitem.to"
+              :to="productNavitem.to"
+              :active="false"
+              style="font-size: 14px;"
+            >
+              {{ productNavitem.title }}
+            </v-list-item>
+          </v-list-group>
+        </v-list>
+      </v-col>
+      <v-divider />
+      <v-col
+        cols="12"
+        class="pa-0"
+      >
+        <v-list class="ps-1">
+          <template
+            v-for="item in drawerItems"
+            :key="item.to"
+          >
+            <v-list-item
+              v-if="item.show"
+              class="mt-2 px-7"
+              :prepend-icon="item.icon"
+              :to="item.to"
+              :active="false"
+              style="font-size: 15px;"
+            >
+              {{ item.text }}
+              <template #append>
+                <v-badge
+                  v-if="item.to === '/cart' && user.cartQuantity > 0"
+                  color="red"
+                  :content="user.cartQuantity"
+                  floating
+                />
+              </template>
+            </v-list-item>
+          </template>
+          <v-divider class="mt-4" />
+          <v-list-item
+            v-if="user.isLogin && user.isAdmin"
+            class="mt-3"
+            prepend-icon="mdi-cog"
+            to="/admin/product"
+          >
+            進入後台
+          </v-list-item>
+          <v-list-item
+            v-if="!user.isLogin"
+            class="mt-3 px-7"
+            to="/loginregister"
+            prepend-icon="mdi-account-plus"
+            style="font-size: 15px;"
+          >
+            註冊/登入
+          </v-list-item>
+          <v-list-item
+            v-if="user.isLogin"
+            class="mt-3 px-7"
+            prepend-icon="mdi-account-arrow-right"
+            style="font-size: 15px;"
+            @click="logout"
+          >
+            登出
+          </v-list-item>
+        </v-list>
+      </v-col>
+    </v-row>
   </v-navigation-drawer>
   <v-app-bar
     height="70"
@@ -204,21 +327,40 @@ const currentPath = route.path
 const isOnProductsPage = computed(() => currentPath.includes('/products'))
 
 const drawer = ref(false)
+const isMemberCenterOpen = ref(false)
+const isProductOpen = ref(true)
 
 const navItems = computed(() => [
   { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/products', text: '所有商品', icon: 'mdi-volleyball', show: user.isLogin || !user.isLogin, class: 'customBtn' },
   { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/venues', text: '球場資訊', icon: 'mdi-information', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/venues', text: '球場資訊', icon: 'mdi-information-outline', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/products', text: '所有商品', icon: 'mdi-shopping', show: user.isLogin || !user.isLogin, class: 'customBtn' },
   { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
   { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' }
 ])
+
+const drawerItems = [
+  { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/venues', text: '球場資訊', icon: 'mdi-information-outline', show: user.isLogin || !user.isLogin, class: 'customBtn' },
+  { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' }
+]
 
 const memberNavItems = [
   { to: '/member/profile', text: '個人資料管理', icon: ' mdi-account-cog' },
   { to: '/member/order', text: '訂單管理', icon: 'mdi-list-box' },
   { to: '/member/enrollment', text: '報名紀錄', icon: 'mdi-volleyball ' },
   { to: '/member/post', text: '刊登場次', icon: 'mdi-post' }
+]
+
+const productNavItems = [
+  { title: '球衣', to: '/products/shirts' },
+  { title: '球褲', to: '/products/pants' },
+  { title: '排球', to: '/products/balls' },
+  { title: '球鞋', to: '/products/shoes' },
+  { title: '球襪', to: '/products/socks' },
+  { title: '護具', to: '/products/protection' },
+  { title: '其他', to: '/products/others' }
 ]
 
 const logout = async () => {
@@ -304,4 +446,20 @@ onMounted(async () => {
       background-color: #455A64;
     }
   }
+
+  .custom-drawer {
+    border-radius: 0 20px 20px 0;
+  }
+  .drawer-name {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    color: #fff;
+  }
+  .p1 {
+    font-size: 16px;
+    letter-spacing: 2px;
+
+  }
+
 </style>

@@ -16,11 +16,13 @@
       <v-col
         cols="12"
         md="6"
-        class="ps-md-10"
+        class="ps-0 ps-md-10"
       >
         <v-col>
           <h2>{{ product.name }}</h2>
-          <v-sheet>{{ product.description }}</v-sheet>
+          <v-sheet class="custom-subtitle mt-2">
+            {{ product.description }}
+          </v-sheet>
         </v-col>
         <v-col>
           <h3>尺寸</h3>
@@ -28,6 +30,7 @@
             v-model="selectedSize"
             class="pa-0"
             column
+            filter
           >
             <v-chip
               v-for="(size, index) in product.sizes"
@@ -46,6 +49,7 @@
             v-model="selectedColor"
             class="pa-0"
             column
+            filter
           >
             <v-chip
               v-for="(color, index) in product.colors"
@@ -58,7 +62,7 @@
             </v-chip>
           </v-chip-group>
         </v-col>
-        <v-col class="mb-12">
+        <v-col class="mb-0 mb-md-16">
           <h3>數量</h3>
           <v-btn
             size="x-small"
@@ -87,11 +91,15 @@
           >
             <v-btn
               class="addCart-btn"
-              prepend-icon="mdi-cart"
               block
               variant="outlined"
               @click="addToCart"
             >
+              <div class="d-flex align-center pe-1">
+                <CartIcon
+                  :size="20"
+                />
+              </div>
               加入購物車
             </v-btn>
           </v-card-actions>
@@ -110,6 +118,7 @@ import { definePage } from 'vue-router/auto'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/stores/user'
 import router from '@/router'
+import CartIcon from '@/components/CartIcon.vue'
 
 definePage({
   meta: {
@@ -162,7 +171,7 @@ const load = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-darken-3'
       }
     })
   }
@@ -195,7 +204,7 @@ const addToCart = async () => {
     createSnackbar({
       text: '請選擇尺寸和顏色',
       snackbarProps: {
-        color: 'red'
+        color: 'red-darken-3'
       }
     })
     return
@@ -213,7 +222,7 @@ const addToCart = async () => {
     createSnackbar({
       text: '商品已加入購物車',
       snackbarProps: {
-        color: 'green'
+        color: 'teal-darken-1'
       }
     })
     if (data.result && Array.isArray(data.result.cart)) {
@@ -252,13 +261,23 @@ h3 {
   font-weight: 400;
   margin-bottom: 12px;
 }
+.custom-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  @include sm {
+    font-size: 15px;
+  }
+  @include md {
+    font-size: 16px;
+  }
+}
 .addCart-btn {
   font-size: 14px;
   font-weight: 500;
   transition: 0.2s;
-  color: teal;
+  color: #00897B;
   &:hover {
-    background-color: $primary-color;
+    background-color: #00897B;
     color: #f6f6f6;
   }
 }

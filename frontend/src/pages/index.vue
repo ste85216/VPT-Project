@@ -1,17 +1,18 @@
 <template>
   <div style="width: 100%; height: 95%;background-color: #fafdf7;">
     <v-container
-      fluid
-      class="pa-0"
-      style="max-width: 1180px;"
+
+      style="max-width: 1200px;"
     >
       <v-row>
-        <v-col cols="12">
+        <v-col
+          cols="12"
+        >
           <v-row>
             <v-col
               cols="12"
               md="6"
-              class="pt-5 ps-0"
+              class="pt-md-5 mb-4 mb-md-0"
             >
               <h1 class="title1">
                 正因為沒有翅膀<br>所以人們才去尋找<br>飛翔的方法
@@ -42,7 +43,7 @@
             <v-col
               cols="12"
               md="6"
-              class="pt-0"
+              class="pt-0 pe-md-0"
             >
               <v-img
                 src="../assets/home01.webp"
@@ -263,7 +264,7 @@
                             rounded="0"
                             elevation="12"
                           >
-                            輕盈涼爽
+                            質若冰羽
                           </v-btn>
                         </div>
                         <div class="text-white top pa-4">
@@ -310,22 +311,25 @@ definePage({
 .title1 {
   color:#1F3347;
   font-size: 40px;
-  margin-left: 12px;
-  margin-top: 70px;
+
+  margin-top: 30px;
   line-height: 80px;
   @include sm {
     font-size: 48px;
   }
+  @include md {
+    margin-top: 70px;
+  }
 }
 .p1 {
   color: #1b2d3f90 ;
-  margin-left: 12px;
+
   @include sm {
     font-size: 18px;
   }
 }
 .bt1 {
-  margin-left: 12px;
+
   font-size: 16px;
   @include sm {
     font-size: 18px;
