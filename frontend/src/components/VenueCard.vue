@@ -8,18 +8,18 @@
     >
       <v-col
         cols="12"
-        md="6"
+        sm="6"
       >
         <v-img
           :src="props.images[0]"
           width="100%"
-          height="300"
+          class="venue-img"
           cover
         />
       </v-col>
       <v-col
         cols="12"
-        md="6"
+        sm="6"
       >
         <v-card-text
           class="d-flex flex-column justify-space-between h-100 py-0"
@@ -70,26 +70,59 @@ const props = defineProps(['name', 'address', 'phone', 'images', 'time', 'mapLin
 </script>
 
 <style lang="scss" scoped>
+@import "/src/styles/settings.scss";
 .custom-card {
   margin: 0;
-  padding: 32px 20px 20px 32px;
+  padding: 28px 28px ;
   border-radius: 20px;
   box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.2);
-  .v-card__title {
-    font-size: 24px;
-    font-weight: 700;
-    padding: 0;
+  .v-card-title {
+    font-size: 18px;
+    font-weight: 600;
   }
   .info-text {
-    font-size: 15px;
+    font-size: 13px;
     margin-bottom: 16px;
   }
   .map-btn {
     border: 1px solid #039199;
     color: #039199;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0;
+  }
+  .venue-img {
+    height: 150px;
+  }
+  @include sm {
+    .venue-img {
+    height: 300px;
+  }
+  }
+  @include md {
+    .custom-card {
+    margin: 0;
+    padding: 32px 20px 20px 32px;
+    border-radius: 20px;
+    box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.2);
+    }
+    .v-card-title {
+    font-size: 20px;
+    }
+    .venue-img {
+      height: 300px;
+    }
+    .info-text {
+    font-size: 15px;
+    margin-bottom: 16px;
+    }
+    .map-btn {
+    border: 1px solid #039199;
+    color: #039199;
     font-size: 14px;
     font-weight: 500;
     padding: 0;
+    }
   }
 }
 </style>

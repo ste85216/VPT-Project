@@ -3,7 +3,7 @@
   <v-container
     fluid
     style="max-width: 1200px;margin-top: 32px;"
-    class="h-75 mb-12"
+    class=" mb-14"
   >
     <v-row>
       <v-col cols="12">
@@ -209,7 +209,7 @@
                       <!-- 無搜尋結果時顯示 -->
                       <v-sheet
                         v-if="filteredSessions.length === 0"
-                        class="text-center"
+                        class="text-center pb-10"
                       >
                         未搜尋到相關場次
                       </v-sheet>
@@ -709,7 +709,7 @@ const openEnrollDialog = (session) => {
   if (isSessionFull(session)) {
     createSnackbar({
       text: '此場次名額已滿',
-      snackbarProps: { color: 'warning' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
     return
   }
@@ -750,7 +750,7 @@ const submitEnrollment = async () => {
   if (!user.token) {
     createSnackbar({
       text: '請先登錄',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
     router.push('/loginregister')
     return
@@ -764,7 +764,7 @@ const submitEnrollment = async () => {
   if (male + female + nopreference === 0) {
     createSnackbar({
       text: '請至少報名一人',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
     return
   }
@@ -772,7 +772,7 @@ const submitEnrollment = async () => {
   if (!validateEnrollment(male, female, nopreference, session)) {
     createSnackbar({
       text: `報名人數超過可報名人數，當前剩餘: ${formatRemainingPlayers(session)}`,
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
     return
   }
@@ -795,7 +795,7 @@ const submitEnrollment = async () => {
     closeEnrollDialog()
     createSnackbar({
       text: '報名成功',
-      snackbarProps: { color: 'success' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
     await loadSessions() // 重新加載場次數據
     router.push('/member/enrollment')
@@ -803,7 +803,7 @@ const submitEnrollment = async () => {
     console.error('Enrollment error:', error)
     createSnackbar({
       text: error?.response?.data?.message || '報名失敗',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -831,13 +831,13 @@ const loadSessions = async () => {
     } else {
       createSnackbar({
         text: '接收到的資料格式不正確',
-        snackbarProps: { color: 'red' }
+        snackbarProps: { color: 'red-lighten-1' }
       })
     }
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '無法加載場次資料',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -886,7 +886,7 @@ const loadVenue = async () => {
     console.error('Error loading venues:', error)
     createSnackbar({
       text: error?.response?.data?.message || '無法加載球場資料',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }

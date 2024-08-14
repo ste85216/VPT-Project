@@ -314,7 +314,7 @@ const submit = handleSubmit(async (values) => {
     createSnackbar({
       text: dialog.value.id === '' ? '新增成功' : '編輯成功',
       snackbarProps: {
-        color: 'green'
+        color: 'teal-darken-1'
       }
     })
     closeDialog()
@@ -324,7 +324,7 @@ const submit = handleSubmit(async (values) => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -366,7 +366,7 @@ const tableLoadItems = async (reset) => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -384,7 +384,7 @@ const deleteProduct = async () => {
     createSnackbar({
       text: '刪除成功',
       snackbarProps: {
-        color: 'green'
+        color: 'teal-darken-1'
       }
     })
     closeDialog()
@@ -395,7 +395,7 @@ const deleteProduct = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   } finally {

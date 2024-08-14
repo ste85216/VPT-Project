@@ -202,7 +202,7 @@ const loadOrders = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '無法加載訂單',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -233,7 +233,7 @@ const confirmCancelOrder = async () => {
     createSnackbar({
       text: '訂單已取消',
       snackbarProps: {
-        color: 'green'
+        color: 'teal-darken-1'
       }
     })
   } catch (error) {
@@ -241,7 +241,7 @@ const confirmCancelOrder = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '無法取消訂單',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   } finally {

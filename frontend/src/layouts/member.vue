@@ -140,7 +140,7 @@ const handleFileChange = (event) => {
     if (file.size > 1024 * 1024) {
       createSnackbar({
         text: '檔案大小不能超過1MB',
-        snackbarProps: { color: 'error' }
+        snackbarProps: { color: 'red-lighten-1' }
       })
       return
     }
@@ -164,7 +164,7 @@ const uploadAvatar = async (file) => {
 
     createSnackbar({
       text: data.message,
-      snackbarProps: { color: 'success' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
 
     await user.profile() // 更新用戶資料，確保新的頭像 URL 被加載
@@ -173,7 +173,7 @@ const uploadAvatar = async (file) => {
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '上傳失敗',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-darken-1' }
     })
   } finally {
     isUploading.value = false // 確保在成功或失敗後都關閉對話框

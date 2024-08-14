@@ -1,22 +1,30 @@
 <template>
-  <div id="background-contact" />
+  <div
+    id="waves-container"
+    class="text-center"
+  >
+    <h2 class="contact-title">
+      聯絡我們
+    </h2>
+    <div class="wave wave1" />
+    <div class="wave wave2" />
+    <div class="wave wave3" />
+    <div class="wave wave4" />
+  </div>
   <v-container
     class="mt-6 text-center"
     style="max-width: 1200px; height: calc(100% - 70px); top: 70px;"
   >
     <v-row>
       <v-col cols="12">
-        <h2>聯絡我們</h2>
-      </v-col>
-      <v-col cols="12">
         <v-container>
           <v-row>
             <v-col
-              cols="6"
-              class="d-flex justify-center"
+              cols="12"
+              class="d-flex justify-space-between"
             >
               <v-card
-                width="350"
+                width="550"
                 class="text-center border custom-card"
                 elevation="4"
                 :ripple="false"
@@ -36,11 +44,11 @@
               </v-card>
             </v-col>
             <v-col
-              cols="6"
-              class="d-flex justify-center"
+              cols="12"
+              class="d-flex justify-space-between"
             >
               <v-card
-                width="350"
+                width="550"
                 class="text-center border custom-card"
                 elevation="4"
               >
@@ -81,17 +89,77 @@ const emailAlert = () => {
 
 <style lang="scss" scoped>
 @import "/src/styles/settings.scss";
-#background-contact {
-  background: $primary-color;
-  height: 600px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+#waves-container {
+  position: relative;
   width: 100%;
+  height: 15vh;
+  // background: #039199e9;
+  background: #26A69A;
+  overflow: hidden;
+  .wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 85px;
+    background: url(/src/assets/wave.png);
+    background-size: 1000px 100px;
+  }
+  .wave1 {
+    animation: animate 30s linear infinite;
+    z-index: 1000;
+    opacity: 1;
+    animation-delay: 0s;
+    bottom: 0;
+  }
+  .wave2 {
+    animation: animate2 15s linear infinite;
+    z-index: 999;
+    opacity: 0.5;
+    animation-delay: -5s;
+    bottom: 5px;
+  }
+  .wave3 {
+    animation: animate 30s linear infinite;
+    z-index: 998;
+    opacity: 0.2;
+    animation-delay: -2s;
+    bottom: 8px;
+  }
+  .wave4 {
+    animation: animate2 5s linear infinite;
+    z-index: 997;
+    opacity: 0.7;
+    animation-delay: -5s;
+    bottom: 12px;
+  }
+  @keyframes animate {
+    0% {
+      background-position-x: 0;
+    }
+    100% {
+      background-position-x: 1000px;
+    }
+  }
+  @keyframes animate2 {
+    0% {
+      background-position-x: 0;
+    }
+    100% {
+      background-position-x: -1000px;
+    }
+  }
 }
 
+.contact-title {
+  font-size: 24px;
+  color: #fff;
+  font-weight: 500;
+  line-height: px;
+}
 .custom-card {
-  border-radius: 24px;
+  border-radius: 10px;
+  padding: 20px 0;
   .custom-title {
   font-size: 24px;
   font-weight: 500;
@@ -115,5 +183,40 @@ const emailAlert = () => {
       color: #fff;
     };
   }
+}
+
+@include sm {
+  #waves-container {
+    height: 30vh;
+  }
+  .wave {
+    height: 100px;
+  }
+  .wave2 {
+    animation: animate2 15s linear infinite;
+    z-index: 999;
+    opacity: 0.5;
+    animation-delay: -5s;
+    bottom: 10px;
+  }
+  .wave3 {
+    animation: animate 30s linear infinite;
+    z-index: 998;
+    opacity: 0.2;
+    animation-delay: -2s;
+    bottom: 15px;
+  }
+  .wave4 {
+    animation: animate2 5s linear infinite;
+    z-index: 997;
+    opacity: 0.7;
+    animation-delay: -5s;
+    bottom: 25px;
+  }
+  .contact-title {
+    font-size: 32px;
+    line-height: 180px;
+  }
+
 }
 </style>

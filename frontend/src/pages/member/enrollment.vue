@@ -271,7 +271,7 @@ const loadEnrollments = async () => {
     console.error('Error loading enrollments:', error)
     createSnackbar({
       text: error?.response?.data?.message || error.message || '無法加載報名資料',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -337,14 +337,14 @@ const submitEdit = async () => {
     await apiAuth.patch(`/enrollment/${editDialog.value.id}`, updateData)
     createSnackbar({
       text: '報名更新成功',
-      snackbarProps: { color: 'success' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
     closeEditDialog()
     loadEnrollments()
   } catch (error) {
     createSnackbar({
       text: error?.message || '更新失敗',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -373,7 +373,7 @@ const loadSessions = async () => {
     console.error('Error loading sessions:', error)
     createSnackbar({
       text: error?.response?.data?.message || '無法加載場次資料',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -384,7 +384,7 @@ const submitDelete = async () => {
     console.log('Delete response:', response.data)
     createSnackbar({
       text: '報名刪除成功',
-      snackbarProps: { color: 'success' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
     closeDeleteDialog()
     await loadEnrollments()
@@ -394,7 +394,7 @@ const submitDelete = async () => {
     console.error('Delete error:', error)
     createSnackbar({
       text: error?.response?.data?.message || error.message || '刪除失敗',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }

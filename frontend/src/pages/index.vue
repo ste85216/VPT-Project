@@ -122,11 +122,11 @@
                           </v-btn>
                         </div>
                         <div class="text-white top pa-4">
-                          <h1 class="mt-4">
+                          <h1 class="mt-4 floating-card-title">
                             VPT排球鞋
                           </h1>
                           <div>
-                            <p class="ma-0 text-body-1 font-weight-bold">
+                            <p class="ma-0 text-body-1 font-weight-bold floating-card-p">
                               $1200起
                             </p>
                           </div>
@@ -174,11 +174,11 @@
                               </v-btn>
                             </div>
                             <div class="text-white">
-                              <h1 class="ms-6 mt-16">
+                              <h1 class="ms-6 mt-16 floating-card-title">
                                 VPT排球
                               </h1>
                               <div>
-                                <p class="ms-6 text-body-1 font-weight-bold">
+                                <p class="ms-6 text-body-1 font-weight-bold floating-card-p">
                                   $380起
                                 </p>
                               </div>
@@ -221,11 +221,11 @@
                               </v-btn>
                             </div>
                             <div class="text-white">
-                              <h1 class=" ms-6 mt-16">
+                              <h1 class=" ms-6 mt-16 floating-card-title">
                                 VPT機能排球襪
                               </h1>
                               <div>
-                                <p class="ms-6 text-body-1 font-weight-bold">
+                                <p class="ms-6 text-body-1 font-weight-bold floating-card-p">
                                   $1500起
                                 </p>
                               </div>
@@ -257,7 +257,7 @@
                       >
                         <div class="d-flex flex-row-reverse">
                           <v-btn
-                            class="text-none me-2 mt-2"
+                            class="text-none me-2 mt-2 "
                             color="teal-lighten-1"
                             size="x-large"
                             variant="flat"
@@ -268,11 +268,11 @@
                           </v-btn>
                         </div>
                         <div class="text-white top pa-4">
-                          <h1 class="mt-4">
+                          <h1 class="mt-4 floating-card-title">
                             VPT透氣排球衣
                           </h1>
                           <div>
-                            <p class="ma-0 text-body-1 font-weight-bold">
+                            <p class="ma-0 text-body-1 font-weight-bold floating-card-p">
                               $500起
                             </p>
                           </div>
@@ -358,5 +358,20 @@ definePage({
   margin-top: 300px;
   margin-left: 20px;
 }
+
+  .floating-card-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+    @include md {
+      font-size: 32px;
+    }
+  }
+
+  .floating-card-p {
+    font-size: 16px;
+    font-weight: 500;
+    text-shadow: 0px 0px 4px rgba(0,0,0,0.5);
+  }
 
 </style>

@@ -438,7 +438,7 @@ const registerSubmit = handleRegisterSubmit(async (values) => {
     createSnackbar({
       text: '註冊成功',
       snackbarProps: {
-        color: 'green'
+        color: 'tea-darken-1'
       }
     })
     onRegisterSuccess()
@@ -448,7 +448,7 @@ const registerSubmit = handleRegisterSubmit(async (values) => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -470,7 +470,7 @@ const loginSubmit = handleLoginSubmit(async (values) => {
     createSnackbar({
       text: result,
       snackbarProps: {
-        color: 'green'
+        color: 'teal-darken-1'
       }
     })
     // 根據用戶角色導向不同頁面
@@ -484,7 +484,7 @@ const loginSubmit = handleLoginSubmit(async (values) => {
     createSnackbar({
       text: result,
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }

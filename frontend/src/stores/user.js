@@ -38,6 +38,7 @@ export const useUserStore = defineStore('user', () => {
       role.value = data.result.role
       avatar.value = data.result.avatar
       cart.value = data.result.cart || []
+      await loadCart() // 登入後立即載入最新的購物車數據
       return '登入成功'
     } catch (error) {
       console.log(error)

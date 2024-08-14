@@ -122,7 +122,7 @@ const loadProducts = async () => {
     createSnackbar({
       text: error.message || '載入商品時發生錯誤',
       snackbarProps: {
-        color: 'error'
+        color: 'red-lighten-1'
       }
     })
     products.value = []

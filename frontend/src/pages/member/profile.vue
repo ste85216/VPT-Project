@@ -245,12 +245,12 @@ const saveProfile = async (values) => {
     })
     createSnackbar({
       text: '資料更新成功',
-      snackbarProps: { color: 'green' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }

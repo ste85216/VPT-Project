@@ -463,7 +463,7 @@
                   class="px-0"
                 >
                   <v-icon
-                    icon="mdi-heart-outline"
+                    icon="mdi-heart-plus-outline"
                     size="small"
                   />
                 </v-col>

@@ -2,7 +2,7 @@
   <v-hover v-slot="{ isHovering, props: hoverProps }">
     <v-card
       :to="'/products/' + _id"
-      class="pa-6 pb-2 rounded-lg border-sm mx-3 d-flex flex-column"
+      class="pa-sm-4 pa-md-6 pb-2 rounded-lg border-sm mx-3 d-flex flex-column"
       elevation="0"
       :ripple="false"
       v-bind="{ ...hoverProps, ...$attrs }"
@@ -33,7 +33,7 @@
       </v-row>
       <v-row no-gutters>
         <v-col>
-          <v-card-title class="ps-0 pt-5 title">
+          <v-card-title class="ps-3 ps-sm-0 pt-5 title">
             {{ props.name }}
           </v-card-title>
         </v-col>

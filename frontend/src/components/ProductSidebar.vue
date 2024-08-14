@@ -102,7 +102,7 @@ const loadProductCategory = async (id) => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }

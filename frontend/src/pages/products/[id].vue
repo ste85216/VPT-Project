@@ -171,7 +171,7 @@ const load = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red-darken-3'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -193,7 +193,7 @@ const addToCart = async () => {
     createSnackbar({
       text: '請先登入',
       snackbarProps: {
-        color: 'red-darken-3'
+        color: 'red-lighten-1'
       }
     })
     router.push('/loginregister')
@@ -204,7 +204,7 @@ const addToCart = async () => {
     createSnackbar({
       text: '請選擇尺寸和顏色',
       snackbarProps: {
-        color: 'red-darken-3'
+        color: 'red-lighten-1'
       }
     })
     return
@@ -235,7 +235,7 @@ const addToCart = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -277,7 +277,7 @@ h3 {
   transition: 0.2s;
   color: #00897B;
   &:hover {
-    background-color: #00897B;
+    background-color: #26A69A;
     color: #f6f6f6;
   }
 }

@@ -153,7 +153,7 @@ const loadVenues = async () => {
     createSnackbar({
       text: error?.response?.data?.message || '載入球場資訊時發生錯誤',
       snackbarProps: {
-        color: 'error'
+        color: 'red-lighten-1'
       }
     })
     venues.value = []

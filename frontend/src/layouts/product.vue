@@ -1,7 +1,7 @@
 <template>
   <v-container
     style="max-width: 1280px;"
-    class="pa-0 pt-10 mb-16"
+    class="pa-0 pt-md-10 mb-16"
   >
     <v-row
       class=" h-100 px-0 pe-0 px-sm-8"
@@ -81,7 +81,7 @@
           <!-- 麵包屑 -->
           <v-breadcrumbs
             :items="breadcrumbs"
-            class="pa-0 pb-5 pt-3"
+            class="pa-0 pb-5 pt-3 custom-breadcrumbs"
           />
           <router-view />
         </v-container>
@@ -116,7 +116,7 @@ const loadProductCategory = async (id) => {
     createSnackbar({
       text: error?.response?.data?.message || '發生錯誤',
       snackbarProps: {
-        color: 'red'
+        color: 'red-lighten-1'
       }
     })
   }
@@ -226,4 +226,15 @@ h2{
     color: #333;
   }
 
+.custom-breadcrumbs {
+    font-size: 12px;
+    color: #333;
+    font-weight: 400;
+    :deep(.v-breadcrumbs-item) {
+      padding: 0;
+    }
+    @include md {
+      font-size: 15px;
+    }
+  }
 </style>

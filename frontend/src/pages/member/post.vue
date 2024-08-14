@@ -333,12 +333,16 @@
         <div v-else>
           <v-alert
             color="blue-grey-lighten-1"
-            icon="mdi-information"
             class="mb-4"
             density="compact"
             variant="flat"
           >
-            報名狀態: {{ formatRemainingPlayers(enrollmentRecordDialog.session) }}
+            <v-icon
+              size="small"
+              icon="mdi-information-outline"
+              class="pb-1 me-2"
+            />
+            報名狀態 - {{ formatRemainingPlayers(enrollmentRecordDialog.session) }}
           </v-alert>
           <v-list>
             <v-list-item
@@ -467,7 +471,7 @@ const submit = handleSubmit(async (values) => {
 
     createSnackbar({
       text: dialog.value.id ? '場次編輯成功' : '場次新增成功',
-      snackbarProps: { color: 'success' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
     closeDialog()
     loadSessions()
@@ -475,7 +479,7 @@ const submit = handleSubmit(async (values) => {
     console.error(error)
     createSnackbar({
       text: error?.response?.data?.message || '操作失敗',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 })
@@ -546,13 +550,13 @@ const confirmCancel = async () => {
     sessions.value = sessions.value.filter(s => s._id !== sessionIdToCancel.value)
     createSnackbar({
       text: '場次已成功取消',
-      snackbarProps: { color: 'green' }
+      snackbarProps: { color: 'teal-darken-1' }
     })
     closeConfirmDialog()
   } catch (error) {
     createSnackbar({
       text: error?.response?.data?.message || '操作失敗',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -566,14 +570,14 @@ const loadSessions = async () => {
       console.error('Received data is not an array:', data)
       createSnackbar({
         text: '接收到的資料格式不正確',
-        snackbarProps: { color: 'red' }
+        snackbarProps: { color: 'red-lighten-1' }
       })
     }
   } catch (error) {
     console.error('Error loading sessions:', error)
     createSnackbar({
       text: error?.response?.data?.message || '無法加載場次資料',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -635,7 +639,7 @@ const loadVenues = async () => {
     console.error('Error loading venues:', error)
     createSnackbar({
       text: error?.response?.data?.message || '無法加載球場資料',
-      snackbarProps: { color: 'red' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -693,7 +697,7 @@ const updateSessionData = async (sessionId) => {
     console.error('Error updating session data:', error)
     createSnackbar({
       text: '無法更新場次資料',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }
@@ -711,7 +715,7 @@ const openEnrollmentRecordDialog = async (session) => {
     console.error('Error fetching enrollment records:', error)
     createSnackbar({
       text: '無法獲取報名紀錄',
-      snackbarProps: { color: 'error' }
+      snackbarProps: { color: 'red-lighten-1' }
     })
   }
 }

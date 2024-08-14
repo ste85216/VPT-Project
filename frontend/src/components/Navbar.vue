@@ -3,167 +3,195 @@
     v-if="!mdAndUp"
     v-model="drawer"
     class="custom-drawer overflow-hidden border-0"
+    width="250"
+
+    style="color:#263238"
   >
     <!-- 這邊等等要寫v-if -->
-    <v-row>
-      <v-col
-        cols="12"
-        class="pb-1"
-      >
-        <v-list
-          v-if="user.isLogin && !user.isAdmin"
+    <div class="drawer-content">
+      <v-row>
+        <v-col
+          cols="12"
+          class="pb-1"
+        >
+          <v-list
+            v-if="user.isLogin && !user.isAdmin"
+            class="pa-0"
+            density="compact"
+          >
+            <div style="background-image: url(/src/assets/drawer_bg.webp); background-size:380px 250px; background-position: bottom left">
+              <v-list-item class="px-6 pa-4">
+                <v-row
+                  no-gutters
+                >
+                  <v-col
+                    cols="12"
+                    style="height: 80px;"
+                  >
+                    <v-img
+                      :src="user.avatar"
+                      class="rounded-circle elevation-4"
+                      height="60"
+                      width="60"
+                      cover
+                    />
+                  </v-col>
+                  <v-col
+                    cols="3"
+                    class="d-flex align-center justify-center"
+                  >
+                    <p class="p1">
+                      HI !
+                    </p>
+                  </v-col>
+                  <v-col
+                    cols="7"
+                  >
+                    <h4 class="drawer-name">
+                      {{ user.name }}
+                    </h4>
+                  </v-col>
+                </v-row>
+              </v-list-item>
+            </div>
+            <v-list-group
+              v-model="isMemberCenterOpen"
+              class="mt-2"
+            >
+              <template #activator="{props}">
+                <v-list-item
+                  v-bind="props"
+                  class="custom-list-item"
+                  prepend-icon="mdi-account"
+                  style="font-size: 15px;"
+                >
+                  會員中心
+                </v-list-item>
+              </template>
+              <v-list-item
+                v-for="memberNavitem in memberNavItems"
+                :key="memberNavitem.to"
+                :to="memberNavitem.to"
+                :prepend-icon="memberNavitem.icon"
+                :active="false"
+                class="mt-2"
+                style="font-size: 14px;"
+              >
+                {{ memberNavitem.text }}
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+          <v-list
+            v-if="!user.isLogin && !user.isAdmin"
+            class="pa-0"
+          >
+            <v-list-item
+              class="text-center bg-blue-grey-darken-2 text-white py-4"
+              style="font-size: 15px; line-height: 32px; font-weight: 500; letter-spacing: 2px;"
+            >
+              今天是個適合加入<br>VPT的好日子呢!
+            </v-list-item>
+          </v-list>
+        </v-col>
+        <v-divider v-if="user.isLogin && !user.isAdmin" />
+        <v-col
+          cols="12"
+          class="py-0"
+        >
+          <v-list
+            density="compact"
+          >
+            <v-list-group
+              v-model="isProductOpen"
+            >
+              <template #activator="{props}">
+                <v-list-item
+                  v-bind="props"
+                  prepend-icon="mdi-volleyball"
+                  style="font-size: 15px; pointer-events: auto;"
+                  density="compact"
+                >
+                  <router-link
+                    to="/products"
+                    class="product-link"
+                  >
+                    所有商品
+                  </router-link>
+                </v-list-item>
+              </template>
+              <v-list-item
+                v-for="productNavitem in productNavItems"
+                :key="productNavitem.to"
+                :to="productNavitem.to"
+                :active="false"
+                style="font-size: 14px;"
+              >
+                <span>&nbsp;&nbsp;&nbsp;</span>{{ productNavitem.title }}
+              </v-list-item>
+            </v-list-group>
+          </v-list>
+        </v-col>
+        <v-divider />
+        <v-col
+          cols="12"
           class="pa-0"
-          density="compact"
         >
-          <v-list-item class="bg-blue-grey-darken-1 px-6 pa-4">
-            <v-row no-gutters>
-              <v-col cols="4">
-                <v-img
-                  :src="user.avatar"
-                  class="rounded-circle"
-                  height="50"
-                  width="50"
-                  cover
-                />
-              </v-col>
-              <v-col
-                cols="3"
-                class="d-flex align-center justify-center"
-              >
-                <p class="p1">
-                  HI !
-                </p>
-              </v-col>
-              <v-col
-                cols="3"
-                class="d-flex align-center justify-center"
-              >
-                <h4 class="drawer-name">
-                  {{ user.name }}
-                </h4>
-              </v-col>
-            </v-row>
-          </v-list-item>
-          <v-list-group
-            v-model="isMemberCenterOpen"
-            class="mt-2"
-          >
-            <template #activator="{props}">
+          <v-list class="ps-1">
+            <template
+              v-for="item in drawerItems"
+              :key="item.to"
+            >
               <v-list-item
-                v-bind="props"
-                class="custom-list-item"
-                prepend-icon="mdi-account"
+                v-if="item.show"
+                class="mt-2 px-7"
+                :prepend-icon="item.icon"
+                :to="item.to"
+                :active="false"
                 style="font-size: 15px;"
               >
-                會員中心
+                {{ item.text }}
+                <template #append>
+                  <v-badge
+                    v-if="item.to === '/cart' && cartQuantity > 0"
+                    color="red"
+                    :content="cartQuantity"
+                    floating
+                  />
+                </template>
               </v-list-item>
             </template>
+            <v-divider class="mt-4" />
             <v-list-item
-              v-for="memberNavitem in memberNavItems"
-              :key="memberNavitem.to"
-              :to="memberNavitem.to"
-              :prepend-icon="memberNavitem.icon"
-              :active="false"
-              style="font-size: 14px;"
+              v-if="user.isLogin && user.isAdmin"
+              class="mt-3 px-7"
+              prepend-icon="mdi-cog"
+              style="font-size: 15px;"
+              to="/admin/product"
             >
-              {{ memberNavitem.text }}
+              進入後台
             </v-list-item>
-          </v-list-group>
-        </v-list>
-      </v-col>
-      <v-divider />
-      <v-col
-        cols="12"
-        class="py-0"
-      >
-        <v-list
-          density="compact"
-        >
-          <v-list-group
-            v-model="isProductOpen"
-          >
-            <template #activator="{props}">
-              <v-list-item
-                v-bind="props"
-                prepend-icon="mdi-volleyball"
-                style="font-size: 15px;"
-                density="compact"
-                to="/products"
-              >
-                所有商品
-              </v-list-item>
-            </template>
             <v-list-item
-              v-for="productNavitem in productNavItems"
-              :key="productNavitem.to"
-              :to="productNavitem.to"
-              :active="false"
-              style="font-size: 14px;"
-            >
-              {{ productNavitem.title }}
-            </v-list-item>
-          </v-list-group>
-        </v-list>
-      </v-col>
-      <v-divider />
-      <v-col
-        cols="12"
-        class="pa-0"
-      >
-        <v-list class="ps-1">
-          <template
-            v-for="item in drawerItems"
-            :key="item.to"
-          >
-            <v-list-item
-              v-if="item.show"
-              class="mt-2 px-7"
-              :prepend-icon="item.icon"
-              :to="item.to"
-              :active="false"
+              v-if="!user.isLogin"
+              class="mt-3 px-7"
+              to="/loginregister"
+              prepend-icon="mdi-account-plus"
               style="font-size: 15px;"
             >
-              {{ item.text }}
-              <template #append>
-                <v-badge
-                  v-if="item.to === '/cart' && user.cartQuantity > 0"
-                  color="red"
-                  :content="user.cartQuantity"
-                  floating
-                />
-              </template>
+              註冊/登入
             </v-list-item>
-          </template>
-          <v-divider class="mt-4" />
-          <v-list-item
-            v-if="user.isLogin && user.isAdmin"
-            class="mt-3"
-            prepend-icon="mdi-cog"
-            to="/admin/product"
-          >
-            進入後台
-          </v-list-item>
-          <v-list-item
-            v-if="!user.isLogin"
-            class="mt-3 px-7"
-            to="/loginregister"
-            prepend-icon="mdi-account-plus"
-            style="font-size: 15px;"
-          >
-            註冊/登入
-          </v-list-item>
-          <v-list-item
-            v-if="user.isLogin"
-            class="mt-3 px-7"
-            prepend-icon="mdi-account-arrow-right"
-            style="font-size: 15px;"
-            @click="logout"
-          >
-            登出
-          </v-list-item>
-        </v-list>
-      </v-col>
-    </v-row>
+            <v-list-item
+              v-if="user.isLogin"
+              class="mt-3 px-7"
+              prepend-icon="mdi-account-arrow-right"
+              style="font-size: 15px;"
+              @click="logout"
+            >
+              登出
+            </v-list-item>
+          </v-list>
+        </v-col>
+      </v-row>
+    </div>
   </v-navigation-drawer>
   <v-app-bar
     height="70"
@@ -189,7 +217,22 @@
         >
       </v-btn>
       <v-spacer />
+
       <template v-if="!mdAndUp">
+        <router-link
+          v-if="user.isLogin && !user.isAdmin"
+          to="/cart"
+          style="color: #fff;"
+        >
+          <CartIcon />
+          <v-badge
+            v-if="user.isLogin && cartQuantity > 0"
+            class="custom-badge-sm"
+            color="warning"
+            :content="cartQuantity"
+            floating
+          />
+        </router-link>
         <v-app-bar-nav-icon @click="drawer = true" />
       </template>
       <template v-else>
@@ -220,10 +263,10 @@
         >
           購物車
           <v-badge
-            v-if="user.isLogin && user.cartQuantity > 0"
+            v-if="user.isLogin && cartQuantity > 0"
             class="custom-badge"
             color="warning"
-            :content="user.cartQuantity"
+            :content="cartQuantity"
             floating
           />
         </v-btn>
@@ -316,11 +359,14 @@ import { useDisplay } from 'vuetify'
 import { useUserStore } from '@/stores/user'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useRoute } from 'vue-router'
+import CartIcon from '@/components/CartIcon.vue'
+import { storeToRefs } from 'pinia'
 
 const { mdAndUp } = useDisplay()
 const user = useUserStore()
 const route = useRoute()
 const createSnackbar = useSnackbar()
+const { cartQuantity } = storeToRefs(user)
 
 const currentPath = route.path
 
@@ -368,20 +414,23 @@ const logout = async () => {
   createSnackbar({
     text: '登出成功',
     snackbarProps: {
-      color: 'success'
+      color: 'teal-darken-1'
     }
   })
 }
 
 // 當用戶登入時載入購物車數據
-watch(() => user.isLogin, async (isLogin) => {
-  if (isLogin) {
+// 監聽登入狀態
+// 監聽登入狀態和路由變化
+watch([user.isLogin, () => route.path], async ([newIsLogin, newPath]) => {
+  if (newIsLogin) {
     await user.loadCart()
     await user.profile()
   }
-})
+}, { immediate: true })
 
 // 當組件掛載時載入購物車數據（例如在頁面刷新後）
+// 組件掛載時載入購物車數據
 onMounted(async () => {
   if (user.isLogin) {
     await user.loadCart()
@@ -440,6 +489,10 @@ onMounted(async () => {
     top: 6px;
     right: 6px;
   }
+  .custom-badge-sm {
+    height: 10px;
+    position: absolute;
+  }
   .logout-btn {
     background-color: #78909C;
     &:hover {
@@ -449,12 +502,26 @@ onMounted(async () => {
 
   .custom-drawer {
     border-radius: 0 20px 20px 0;
+    display: flex;
+    flex-direction: column;
   }
+
+  :deep(.v-navigation-drawer__content) {
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+  }
+
   .drawer-name {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     letter-spacing: 4px;
-    color: #fff;
   }
   .p1 {
     font-size: 16px;
@@ -462,4 +529,8 @@ onMounted(async () => {
 
   }
 
+  .product-link {
+    text-decoration: none;
+    color: #263238;
+  }
 </style>
