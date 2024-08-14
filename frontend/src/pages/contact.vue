@@ -19,50 +19,104 @@
       <v-col cols="12">
         <v-container>
           <v-row>
-            <v-col
-              cols="12"
-              class="d-flex justify-space-between"
-            >
-              <v-card
-                width="550"
-                class="text-center border custom-card"
-                elevation="4"
-                :ripple="false"
-                @click="emailAlert"
-              >
-                <v-card-title class="custom-title">
-                  電子信箱
-                </v-card-title>
-                <v-card-text>
-                  <v-img
-                    src="/src/assets/icon/Email.png"
-                    height="70"
-                    class="mb-6 mt-6"
-                  />
-                  <p>https://tkyhkm.wda.gov.tw</p>
-                </v-card-text>
-              </v-card>
+            <v-col cols="6">
+              <v-row>
+                <LineIcon />
+                <v-col
+                  cols="12"
+                  class="d-flex justify-space-between"
+                >
+                  <v-card
+                    width="550"
+                    class="text-center border custom-card"
+                    elevation="4"
+                    :ripple="false"
+                    @click="emailAlert"
+                  >
+                    <v-card-title class="custom-title">
+                      電子信箱
+                    </v-card-title>
+                    <v-card-text>
+                      <v-img
+                        src="/src/assets/icon/Email.png"
+                        height="70"
+                        class="mb-6 mt-6"
+                      />
+                      <p>https://tkyhkm.wda.gov.tw</p>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+                <v-col
+                  cols="12"
+                  class="d-flex justify-space-between"
+                >
+                  <v-card
+                    width="550"
+                    class="text-center border custom-card"
+                    elevation="4"
+                  >
+                    <v-card-title class="custom-title">
+                      客服專線
+                    </v-card-title>
+                    <v-card-text>
+                      <v-img
+                        src="/src/assets/icon/Phone.png"
+                        height="70"
+                        class="mt-6"
+                      />
+                      <v-divider class="mt-5 mb-5" />
+                      <p>(02)2901-8274</p>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
             </v-col>
-            <v-col
-              cols="12"
-              class="d-flex justify-space-between"
-            >
-              <v-card
-                width="550"
-                class="text-center border custom-card"
-                elevation="4"
-              >
+            <v-col>
+              <v-card>
                 <v-card-title class="custom-title">
-                  客服專線
+                  聯絡表單
                 </v-card-title>
                 <v-card-text>
-                  <v-img
-                    src="/src/assets/icon/Phone.png"
-                    height="70"
-                    class="mt-6"
-                  />
-                  <v-divider class="mt-5 mb-5" />
-                  <p>(02)2901-8274</p>
+                  <v-form>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          label="姓名"
+                          outlined
+                          required
+                        />
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          label="電子信箱"
+                          outlined
+                          required
+                        />
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          label="主旨"
+                          outlined
+                          required
+                        />
+                      </v-col>
+                      <v-col cols="12">
+                        <v-textarea
+                          label="內容"
+                          outlined
+                          required
+                        />
+                      </v-col>
+                      <v-col cols="12">
+                        <v-btn
+                          color="primary"
+                          @click="emailAlert"
+                        >
+                          送出
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-form>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -75,6 +129,7 @@
 
 <script setup>
 import { definePage } from 'vue-router/auto'
+import LineIcon from '../components/LineIcon.vue'
 
 definePage({
   meta: {
@@ -187,7 +242,7 @@ const emailAlert = () => {
 
 @include sm {
   #waves-container {
-    height: 30vh;
+    height: 25vh;
   }
   .wave {
     height: 100px;

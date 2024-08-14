@@ -1,0 +1,53 @@
+<!-- CartIcon.vue -->
+<template>
+  <svg
+    :width="props.size"
+    :height="props.size"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g transform="translate(2, 3)">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2ZM0 10C0 4.47715 4.47715 0 10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10Z"
+        :fill="props.color"
+      />
+      <path
+        d="M16 9C16 10.5 15.1238 11.6974 14 13C13.0749 14.0723 11.9823 15.0128 11.0739 15.6463C10.444 16.0856 10 16.2976 10 15.5296C10 15.0086 10 14.4004 10 14C6.68629 14 4 11.7614 4 9C4 6.23858 6.68629 4 10 4C13.3137 4 16 6.23858 16 9Z"
+        :fill="props.color"
+      />
+      <path
+        d="M5.5 10.6845V8H6.22881V10.0973H7.31417V10.6845H5.5Z"
+        fill="white"
+      />
+      <path
+        d="M8.72881 8V10.6845H8V8H8.72881Z"
+        fill="white"
+      />
+      <path
+        d="M11.8228 8V10.6845H11.2145L10.2445 9.27411H10.2288V10.6845H9.5V8H10.1187L11.073 9.40519H11.0939V8H11.8228Z"
+        fill="white"
+      />
+      <path
+        d="M12.4824 10.6845V8H14.4172V8.58725H13.2112V9.04865H14.3175V9.6359H13.2112V10.0973H14.4119V10.6845H12.4824Z"
+        fill="white"
+      />
+    </g>
+  </svg>
+</template>
+
+<script setup>
+import { defineProps } from 'vue'
+
+const props = defineProps({
+  size: {
+    type: [Number, String],
+    default: 24
+  },
+  color: {
+    type: String,
+    default: 'currentColor'
+  }
+})
+</script>

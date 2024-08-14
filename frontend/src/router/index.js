@@ -12,7 +12,13 @@ import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes)
+  routes: setupLayouts(routes),
+  scrollBehavior (to, from) {
+    // 只有當路徑發生變化時，才滾動到頂部
+    if (to.path !== from.path) {
+      return { top: 0 }
+    }
+  }
 })
 
 // Workaround for https://github.com/vitejs/vite/issues/11804

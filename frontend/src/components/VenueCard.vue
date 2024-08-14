@@ -92,7 +92,7 @@ const props = defineProps(['name', 'address', 'phone', 'images', 'time', 'mapLin
     padding: 0;
   }
   .venue-img {
-    height: 150px;
+    height: 200px;
   }
   @include sm {
     .venue-img {

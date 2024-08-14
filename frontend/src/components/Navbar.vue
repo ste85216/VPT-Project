@@ -219,20 +219,23 @@
       <v-spacer />
 
       <template v-if="!mdAndUp">
-        <router-link
+        <v-btn
           v-if="user.isLogin && !user.isAdmin"
+          size="x-small"
           to="/cart"
-          style="color: #fff;"
+          variant="plain"
+          class="opacity-100"
+          :ripple="false"
+          style="height: 24px;"
         >
           <CartIcon />
           <v-badge
             v-if="user.isLogin && cartQuantity > 0"
-            class="custom-badge-sm"
             color="warning"
+            offset-y="-12"
             :content="cartQuantity"
-            floating
           />
-        </router-link>
+        </v-btn>
         <v-app-bar-nav-icon @click="drawer = true" />
       </template>
       <template v-else>
@@ -489,10 +492,7 @@ onMounted(async () => {
     top: 6px;
     right: 6px;
   }
-  .custom-badge-sm {
-    height: 10px;
-    position: absolute;
-  }
+
   .logout-btn {
     background-color: #78909C;
     &:hover {

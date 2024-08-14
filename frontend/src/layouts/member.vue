@@ -5,6 +5,7 @@
   >
     <div class="d-flex justify-space-between ">
       <v-col
+        v-if="mdAndUp"
         id="profile"
         class="me-4 pa-0"
         cols="3"
@@ -85,7 +86,8 @@
       </v-col>
       <v-col
         id="content"
-        cols="9"
+        cols="12"
+        md="9"
         class="pa-8"
       >
         <router-view />
@@ -115,7 +117,9 @@ import { ref, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useUserStore } from '@/stores/user'
 import { useSnackbar } from 'vuetify-use-dialog'
+import { useDisplay } from 'vuetify'
 
+const { mdAndUp } = useDisplay()
 const { apiAuth } = useApi()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
