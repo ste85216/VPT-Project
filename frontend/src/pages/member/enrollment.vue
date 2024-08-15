@@ -18,7 +18,11 @@
     <v-col class="pt-0 pb-2">
       <v-divider />
     </v-col>
-    <v-col cols="12">
+    <!-- md以上報名紀錄表 -->
+    <v-col
+      v-if="mdAndUp"
+      cols="12"
+    >
       <v-row class="mb-4">
         <v-col cols="12">
           <v-row
@@ -123,6 +127,81 @@
         </v-row>
       </v-card>
     </v-col>
+    <!-- md以下報名紀錄表 -->
+    <v-col
+      v-if="!mdAndUp"
+      cols="12"
+    >
+      <v-row class="mb-4">
+        <v-col cols="12">
+          <v-row
+            class="px-4 text-center"
+            style="font-size: 15px;"
+          >
+            <v-col>
+              球場
+            </v-col>
+            <v-col>
+              日期/時段
+            </v-col>
+            <v-col cols="3">
+              操作
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-sheet
+        v-if="enrollments.length === 0"
+        height="100%"
+        align="center"
+        class="opacity-80"
+      >
+        目前您沒有報名任何場次
+      </v-sheet>
+
+      <!-- 場次卡片列表 -->
+      <v-card
+        v-for="(enrollment, index) in enrollments"
+        :key="enrollment._id"
+        elevation="0"
+        class="pa-4 py-8 post-card"
+        :style="{ backgroundColor: index % 2 === 0 ? '#ECEFF1' : '#f0f0f080' }"
+      >
+        <v-row>
+          <v-col cols="12">
+            <v-row class="align-center text-center text-subtitle-2 text-blue-grey-darken-2">
+              <v-col>
+                {{ getVenueName(enrollment.s_id) }}
+              </v-col>
+              <v-col>
+                {{ formatDate(enrollment.s_id?.date) }} <br>
+                {{ enrollment.s_id?.time || '未知時段' }}
+              </v-col>
+              <v-col cols="3">
+                <v-btn
+                  size="x-small"
+                  color="teal-darken-1"
+                  variant="outlined"
+                  @click="openEditDialog(enrollment)"
+                >
+                  <v-icon icon="mdi-pen" />
+                </v-btn>
+                <br>
+                <v-btn
+                  size="x-small"
+                  color="red-darken-3"
+                  variant="outlined"
+                  class="mt-2"
+                  @click="openDeleteDialog(enrollment._id)"
+                >
+                  <v-icon icon="mdi-delete" />
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-col>
   </v-row>
 
   <!-- 編輯對話框 -->
@@ -138,6 +217,27 @@
         編輯報名
       </v-card-title>
       <v-card-text>
+        <v-row
+          v-if="!mdAndUp"
+          class="mb-4 md-down-dialog-text"
+        >
+          <v-col cols="12">
+            網高: {{ editDialog.session?.netheight || '未知' }}
+          </v-col>
+          <v-col cols="12">
+            程度: {{ editDialog.session?.level || '未知' }}
+          </v-col>
+          <v-col cols="12">
+            價錢: ${{ editDialog.session?.fee || '未知' }}
+          </v-col>
+          <v-col cols="12">
+            備註: {{ editDialog.session?.note || '無' }}
+          </v-col>
+          <v-col cols="12">
+            你已報名: {{ formatEnrollmentCount(editDialog.enrollment) }}
+          </v-col>
+        </v-row>
+        <v-divider class="mt-2 mb-5" />
         <v-text-field
           v-if="editDialog.showMale"
           v-model="editDialog.male"
@@ -228,7 +328,9 @@ import { ref, onMounted } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { definePage } from 'vue-router/auto'
+import { useDisplay } from 'vuetify'
 
+const { mdAndUp } = useDisplay()
 const { api, apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 
@@ -238,7 +340,8 @@ const editDialog = ref({
   open: false,
   id: null,
   male: 0,
-  female: 0
+  female: 0,
+  nopreference: 0
 })
 
 const deleteDialog = ref({
@@ -297,7 +400,8 @@ const openEditDialog = (enrollment) => {
     session: enrollment.s_id,
     showMale: enrollment.s_id.male > 0,
     showFemale: enrollment.s_id.female > 0,
-    showNopreference: enrollment.s_id.nopreference > 0
+    showNopreference: enrollment.s_id.nopreference > 0,
+    enrollment
   }
 }
 
@@ -416,6 +520,9 @@ definePage({
   background-color: #f5f5f5;
   border-top: 2px solid #d5d5d5;
   border-radius: 0;
+}
+.md-down-dialog-text {
+  font-size: 14px;
 }
 </style>
 

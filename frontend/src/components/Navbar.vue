@@ -15,11 +15,11 @@
           class="pb-1"
         >
           <v-list
-            v-if="user.isLogin && !user.isAdmin"
+            v-if="isLogin && !user.isAdmin"
             class="pa-0"
             density="compact"
           >
-            <div style="background-image: url(/src/assets/drawer_bg.webp); background-size:380px 250px; background-position: bottom left">
+            <div style="background-image: url(/src/assets/drawer_bg2.webp); background-size:380px 250px; background-position: bottom left">
               <v-list-item class="px-6 pa-4">
                 <v-row
                   no-gutters
@@ -40,14 +40,14 @@
                     cols="3"
                     class="d-flex align-center justify-center"
                   >
-                    <p class="p1">
-                      HI !
+                    <p class="p1 enhanced-text">
+                      嗨 !
                     </p>
                   </v-col>
                   <v-col
                     cols="7"
                   >
-                    <h4 class="drawer-name">
+                    <h4 class="drawer-name enhanced-text">
                       {{ user.name }}
                     </h4>
                   </v-col>
@@ -82,7 +82,7 @@
             </v-list-group>
           </v-list>
           <v-list
-            v-if="!user.isLogin && !user.isAdmin"
+            v-if="!isLogin && !user.isAdmin"
             class="pa-0"
           >
             <div
@@ -94,7 +94,7 @@
             </div>
           </v-list>
         </v-col>
-        <v-divider v-if="user.isLogin && !user.isAdmin" />
+        <v-divider v-if="isLogin && !user.isAdmin" />
         <v-col
           cols="12"
           class="py-0"
@@ -163,7 +163,7 @@
             </template>
             <v-divider class="mt-4" />
             <v-list-item
-              v-if="user.isLogin && user.isAdmin"
+              v-if="isLogin && user.isAdmin"
               class="mt-3 px-7"
               prepend-icon="mdi-cog"
               style="font-size: 15px;"
@@ -172,7 +172,7 @@
               進入後台
             </v-list-item>
             <v-list-item
-              v-if="!user.isLogin"
+              v-if="!isLogin"
               class="mt-3 px-7"
               to="/loginregister"
               prepend-icon="mdi-account-plus"
@@ -181,7 +181,7 @@
               註冊/登入
             </v-list-item>
             <v-list-item
-              v-if="user.isLogin"
+              v-if="isLogin"
               class="mt-3 px-7"
               prepend-icon="mdi-account-arrow-right"
               style="font-size: 15px;"
@@ -221,7 +221,7 @@
 
       <template v-if="!mdAndUp">
         <v-btn
-          v-if="user.isLogin && !user.isAdmin"
+          v-if="isLogin && !user.isAdmin"
           size="x-small"
           to="/cart"
           variant="plain"
@@ -231,7 +231,7 @@
         >
           <CartIcon />
           <v-badge
-            v-if="user.isLogin && cartQuantity > 0"
+            v-if="isLogin && cartQuantity > 0"
             color="warning"
             offset-y="-12"
             :content="cartQuantity"
@@ -259,7 +259,7 @@
         </template>
 
         <v-btn
-          v-if="user.isLogin && !user.isAdmin"
+          v-if="isLogin && !user.isAdmin"
           class="highlight"
           prepend-icon="mdi-cart"
           to="/cart"
@@ -267,7 +267,7 @@
         >
           購物車
           <v-badge
-            v-if="user.isLogin && cartQuantity > 0"
+            v-if="isLogin && cartQuantity > 0"
             class="custom-badge"
             color="warning"
             :content="cartQuantity"
@@ -275,7 +275,7 @@
           />
         </v-btn>
         <v-btn
-          v-if="user.isLogin && user.isAdmin"
+          v-if="isLogin && user.isAdmin"
           class="highlight"
           prepend-icon="mdi-cog"
           to="/admin/product"
@@ -283,17 +283,17 @@
           進入後台
         </v-btn>
         <v-btn
-          v-if="user.isLogin && user.isAdmin"
+          v-if="isLogin && user.isAdmin"
           class="highlight"
           prepend-icon="mdi-account-arrow-right"
           @click="logout"
         >
           登出
         </v-btn>
-        <v-menu v-if="user.isLogin && !user.isAdmin">
+        <v-menu v-if="isLogin && !user.isAdmin">
           <template #activator="{props}">
             <v-btn
-              v-if="user.isLogin"
+              v-if="isLogin"
               class="highlight"
               prepend-icon="mdi-account"
               v-bind="props"
@@ -370,30 +370,29 @@ const { mdAndUp } = useDisplay()
 const user = useUserStore()
 const route = useRoute()
 const createSnackbar = useSnackbar()
-const { cartQuantity } = storeToRefs(user)
+const { cartQuantity, isLogin } = storeToRefs(user)
 
-const currentPath = route.path
-
-const isOnProductsPage = computed(() => currentPath.includes('/products'))
+const currentPath = computed(() => route.path)
+const isOnProductsPage = computed(() => currentPath.value.includes('/products'))
 
 const drawer = ref(false)
 const isMemberCenterOpen = ref(false)
 const isProductOpen = ref(true)
 
 const navItems = computed(() => [
-  { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/venues', text: '球場資訊', icon: 'mdi-information-outline', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/products', text: '所有商品', icon: 'mdi-shopping', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !user.isLogin, class: 'highlight' }
+  { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: true, class: 'customBtn' },
+  { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: true, class: 'customBtn' },
+  { to: '/venues', text: '球場資訊', icon: 'mdi-information-outline', show: true, class: 'customBtn' },
+  { to: '/products', text: '所有商品', icon: 'mdi-shopping', show: true, class: 'customBtn' },
+  { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: true, class: 'customBtn' },
+  { to: '/loginregister', text: '登入/註冊', icon: 'mdi-account-plus', show: !isLogin.value, class: 'highlight' }
 ])
 
 const drawerItems = [
-  { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/venues', text: '球場資訊', icon: 'mdi-information-outline', show: user.isLogin || !user.isLogin, class: 'customBtn' },
-  { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: user.isLogin || !user.isLogin, class: 'customBtn' }
+  { to: '/story', text: '品牌故事', icon: 'mdi-book-open', show: true, class: 'customBtn' },
+  { to: '/signup', text: '場次報名', icon: 'mdi-pen', show: true, class: 'customBtn' },
+  { to: '/venues', text: '球場資訊', icon: 'mdi-information-outline', show: true, class: 'customBtn' },
+  { to: '/contact', text: '聯絡我們', icon: 'mdi-phone', show: true, class: 'customBtn' }
 ]
 
 const memberNavItems = [
@@ -423,23 +422,31 @@ const logout = async () => {
   })
 }
 
-// 當用戶登入時載入購物車數據
-// 監聽登入狀態
+const loadUserData = async () => {
+  if (isLogin.value) {
+    try {
+      await Promise.all([user.profile(), user.loadCart()])
+    } catch (error) {
+      console.error('加載用戶數據失敗', error)
+      createSnackbar({
+        text: '加載用戶數據失敗，請稍後再試',
+        snackbarProps: {
+          color: 'error'
+        }
+      })
+    }
+  }
+}
+
 // 監聽登入狀態和路由變化
-watch([user.isLogin, () => route.path], async ([newIsLogin, newPath]) => {
+watch([isLogin, currentPath], async ([newIsLogin]) => {
   if (newIsLogin) {
-    await user.loadCart()
-    await user.profile()
+    await loadUserData()
   }
 }, { immediate: true })
 
-// 當組件掛載時載入購物車數據（例如在頁面刷新後）
-// 組件掛載時載入購物車數據
-onMounted(async () => {
-  if (user.isLogin) {
-    await user.loadCart()
-  }
-})
+// 組件掛載時載入用戶數據
+onMounted(loadUserData)
 </script>
 
 <style lang="scss" scoped>
@@ -521,13 +528,25 @@ onMounted(async () => {
 
   .drawer-name {
     font-size: 18px;
-    font-weight: 600;
     letter-spacing: 4px;
+    text-shadow: 0 0 4px rgba(255,255,255,1);
   }
   .p1 {
-    font-size: 16px;
+    font-size: 18px;
     letter-spacing: 2px;
+  }
 
+  .enhanced-text {
+    text-shadow:
+      -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px  1px 0 #fff,
+      1px  1px 0 #fff,
+       0    0   5px #fff; /* adds a soft glow */
+    font-weight: 700; /* makes the font bolder */
+    padding: 2px 4px; /* adds some padding around the text */
+    background: rgba(255,255,255,0.5);
+    border-radius: 20px; /* rounds the corners of the background */
   }
 
   .product-link {

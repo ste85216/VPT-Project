@@ -33,8 +33,14 @@
     <v-col class="pt-0 pb-2">
       <v-divider />
     </v-col>
-    <v-col cols="12">
-      <v-row class="mb-4">
+    <!-- md以上 -->
+    <v-col
+      v-if="mdAndUp"
+      cols="12"
+    >
+      <v-row
+        class="mb-4"
+      >
         <v-col cols="12">
           <v-row
             class="px-4 text-center"
@@ -133,6 +139,214 @@
                 >
                   <v-icon icon="mdi-pen" />
                 </v-btn>
+                <v-btn
+                  size="x-small"
+                  color="red-darken-3"
+                  variant="outlined"
+                  class="mt-1"
+                  @click="openConfirmDialog(session._id.$oid || session._id)"
+                >
+                  <v-icon icon="mdi-delete" />
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-col>
+    <!-- sm~md -->
+    <v-col
+      v-if="!mdAndUp && smAndUp"
+      cols="12"
+    >
+      <v-row
+        class="mb-4"
+      >
+        <v-col cols="12">
+          <v-row
+            class="px-4 text-center"
+            style="font-size: 14px;"
+          >
+            <v-col class="align-self-center">
+              球場
+            </v-col>
+            <v-col class="align-self-center">
+              日期<br>時段
+            </v-col>
+            <v-col class="align-self-center">
+              網高<br>程度<br>費用
+            </v-col>
+            <v-col class="align-self-center">
+              人數
+            </v-col>
+            <v-col class="align-self-center">
+              備註
+            </v-col>
+            <v-col class="align-self-center">
+              操作
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-sheet
+        v-if="sessions.length === 0"
+        height="100%"
+        align="center"
+        class="opacity-80"
+      >
+        目前您沒有刊登任何場次
+      </v-sheet>
+
+      <!-- 場次卡片列表 -->
+      <v-card
+        v-for="(session, index) in sessions"
+        :key="session._id.$oid || session._id"
+        elevation="0"
+        class="pa-4 py-8 post-card"
+        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#EFEBE990' }"
+      >
+        <v-row>
+          <v-col cols="12">
+            <v-row
+              class="align-center text-center text-blue-grey-darken-2"
+              style="font-size: 13px; font-weight: 500;"
+            >
+              <v-col>
+                {{ getVenueName(session.v_id) }}
+              </v-col>
+              <v-col>
+                {{ formatDate(session.date) }} <br>
+                {{ session.time }}
+              </v-col>
+              <v-col>
+                {{ session.netheight }}<br>
+                {{ session.level }}<br>
+                {{ session.fee }}/人
+              </v-col>
+              <v-col>
+                男:{{ session.male }}<br>
+                女:{{ session.female }} <br>
+                不限:{{ session.nopreference }}
+              </v-col>
+              <v-col>
+                {{ session.note || '無備註' }}
+              </v-col>
+              <v-col>
+                <v-btn
+                  size="x-small"
+                  color="blue-darken-3"
+                  variant="outlined"
+                  class="mt-2"
+                  @click="openEnrollmentRecordDialog(session)"
+                >
+                  <v-icon icon="mdi-progress-check" />
+                </v-btn><br>
+                <v-btn
+                  size="x-small"
+                  color="teal-darken-1"
+                  variant="outlined"
+                  class="mt-1"
+                  @click="openDialog(session)"
+                >
+                  <v-icon icon="mdi-pen" />
+                </v-btn><br>
+                <v-btn
+                  size="x-small"
+                  color="red-darken-3"
+                  variant="outlined"
+                  class="mt-1"
+                  @click="openConfirmDialog(session._id.$oid || session._id)"
+                >
+                  <v-icon icon="mdi-delete" />
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-col>
+    <!-- sm以下 -->
+    <v-col
+      v-if="!mdAndUp && !smAndUp"
+      cols="12"
+    >
+      <v-row
+        class="mb-4"
+      >
+        <v-col cols="12">
+          <v-row
+            class="px-4 text-center"
+            style="font-size: 14px;"
+          >
+            <v-col class="align-self-center">
+              球場
+            </v-col>
+            <v-col class="align-self-center">
+              日期<br>時段
+            </v-col>
+            <v-col class="align-self-center">
+              網高<br>程度<br>費用
+            </v-col>
+            <v-col class="align-self-center">
+              操作
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-sheet
+        v-if="sessions.length === 0"
+        height="100%"
+        align="center"
+        class="opacity-80"
+      >
+        目前您沒有刊登任何場次
+      </v-sheet>
+
+      <!-- 場次卡片列表 -->
+      <v-card
+        v-for="(session, index) in sessions"
+        :key="session._id.$oid || session._id"
+        elevation="0"
+        class="pa-4 py-8 post-card"
+        :style="{ backgroundColor: index % 2 === 0 ? '#f0f0f080' : '#EFEBE990' }"
+      >
+        <v-row>
+          <v-col cols="12">
+            <v-row
+              class="align-center text-center text-blue-grey-darken-2"
+              style="font-size: 13px; font-weight: 500;"
+            >
+              <v-col>
+                {{ getVenueName(session.v_id) }}
+              </v-col>
+              <v-col>
+                {{ formatDate(session.date) }} <br>
+                {{ session.time }}
+              </v-col>
+              <v-col>
+                {{ session.netheight }}<br>
+                {{ session.level }}<br>
+                {{ session.fee }}/人
+              </v-col>
+              <v-col>
+                <v-btn
+                  size="x-small"
+                  color="blue-darken-3"
+                  variant="outlined"
+                  class="mt-2"
+                  @click="openEnrollmentRecordDialog(session)"
+                >
+                  <v-icon icon="mdi-progress-check" />
+                </v-btn><br>
+                <v-btn
+                  size="x-small"
+                  color="teal-darken-1"
+                  variant="outlined"
+                  class="mt-1"
+                  @click="openDialog(session)"
+                >
+                  <v-icon icon="mdi-pen" />
+                </v-btn><br>
                 <v-btn
                   size="x-small"
                   color="red-darken-3"
@@ -384,6 +598,7 @@ import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue'
 import * as yup from 'yup'
 import { useForm, useField } from 'vee-validate'
 import { definePage } from 'vue-router/auto'
+import { useDisplay } from 'vuetify'
 
 definePage({
   meta: {
@@ -393,6 +608,7 @@ definePage({
   }
 })
 
+const { mdAndUp, smAndUp } = useDisplay()
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
 

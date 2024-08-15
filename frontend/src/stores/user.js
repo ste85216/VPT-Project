@@ -54,7 +54,6 @@ export const useUserStore = defineStore('user', () => {
       account.value = data.result.account
       role.value = data.result.role
       avatar.value = data.result.avatar
-      cart.value = data.result.cart || []
       name.value = data.result.name
       userId.value = data.result.userId
       address.value = data.result.address
@@ -68,7 +67,6 @@ export const useUserStore = defineStore('user', () => {
       account.value = ''
       role.value = UserRole.USER
       avatar.value = ''
-      cart.value = []
       name.value = ''
       userId.value = ''
       address.value = ''
@@ -77,6 +75,11 @@ export const useUserStore = defineStore('user', () => {
       birthday.value = ''
       nickname.value = ''
     }
+  }
+
+  // 在需要同時更新個人資料和購物車時使用這個方法
+  const loadFullUserData = async () => {
+    await Promise.all([profile(), loadCart()])
   }
 
   const logout = async () => {
@@ -177,6 +180,7 @@ export const useUserStore = defineStore('user', () => {
     isLogin,
     isAdmin,
     note,
+    loadFullUserData,
     updateProfile,
     login,
     profile,

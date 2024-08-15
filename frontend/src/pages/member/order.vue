@@ -219,45 +219,98 @@
                 v-for="item in order.cart"
                 :key="item.p_id._id"
               >
-                <v-row
-                  style="font-size: 14px;"
-                  class="text-center"
-                >
-                  <v-col cols="2">
+                <v-row>
+                  <v-col
+                    cols="3"
+                    class="ps-sm-4"
+                  >
                     <v-img
                       :src="item.p_id.images[0]"
                       height="50"
+                      width="50"
                     />
                   </v-col>
-                  <v-col
-                    cols="2"
-                    class="align-self-center"
-                  >
-                    {{ item.p_id.name }}
+                  <v-col class="d-flex">
+                    <v-row no-gutters>
+                      <v-col
+                        cols="12"
+                        class="align-self-center product-text"
+                      >
+                        {{ item.p_id.name }}
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        class="align-self-center product-text"
+                      >
+                        {{ item.colors }} / {{ item.sizes }}
+                      </v-col>
+                    </v-row>
                   </v-col>
                   <v-col
-                    cols="2"
-                    class="align-self-center"
+
+                    class="d-flex"
                   >
-                    {{ item.colors }} / {{ item.sizes }}
+                    <v-row
+                      no-gutters
+                    >
+                      <v-col
+                        cols="12"
+                        class="align-self-center product-text"
+                      >
+                        ${{ item.p_id.price }}
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        class="align-self-center product-text"
+                      >
+                        數量: {{ item.quantity }}
+                      </v-col>
+                    </v-row>
                   </v-col>
                   <v-col
-                    cols="2"
-                    class="align-self-center"
+                    cols="3"
+                    class="d-flex per-total"
                   >
-                    ${{ item.p_id.price }}
+                    <v-row no-gutters>
+                      <v-col
+                        cols="12"
+                        class="align-self-center"
+                      >
+                        商品小計:
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        class="align-self-center"
+                      >
+                        ${{ item.p_id.price * item.quantity }}
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-list-item>
+              <v-divider class="my-4" />
+
+              <v-list-item>
+                <v-row class="justify-end">
+                  <v-col
+                    cols="12"
+                    class="total-price d-flex align-self-center justify-end pe-sm-16"
+                  >
+                    訂單總額: <span class="total-price-tag ps-1">${{ calculateTotal(order.cart) }}</span>
                   </v-col>
                   <v-col
-                    cols="2"
-                    class="align-self-center"
+                    cols="12"
+                    class="d-flex align-self-center justify-end pe-sm-16"
                   >
-                    {{ item.quantity }}
-                  </v-col>
-                  <v-col
-                    cols="2"
-                    class="align-self-center"
-                  >
-                    ${{ item.p_id.price * item.quantity }}
+                    <v-btn
+                      class="cancel-btn"
+                      color="red-darken-3"
+                      variant="outlined"
+                      size="x-small"
+                      @click.stop="cancelOrder(order._id)"
+                    >
+                      取消訂單
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-list-item>
@@ -388,6 +441,30 @@ definePage({
 .data-img {
   min-width: 72px;
   width: 80px;
+}
+
+.product-text {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.per-total {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+:deep(.v-expansion-panel-text__wrapper) {
+  padding: 8px;
+}
+
+.total-price {
+  font-size: 12px;
+  font-weight: 500;
+  .total-price-tag {
+    font-size: 12px;
+    font-weight: 500;
+    color: #EF6C00;
+  }
 }
 
 @include sm {

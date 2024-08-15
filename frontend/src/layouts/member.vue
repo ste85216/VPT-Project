@@ -184,8 +184,18 @@ const uploadAvatar = async (file) => {
   }
 }
 
+const loadUserData = async () => {
+  if (user.isLogin) { // 只在用戶登錄時加載數據
+    try {
+      await Promise.all([user.profile(), user.loadCart()])
+    } catch (error) {
+      console.error('加載用戶數據失敗', error)
+    }
+  }
+}
+
 onMounted(async () => {
-  await user.profile()
+  await loadUserData()
 })
 
 </script>
