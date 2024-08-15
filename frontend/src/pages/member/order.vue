@@ -1,5 +1,7 @@
 <template>
-  <v-row class="mt-4">
+  <v-row
+    class="mt-4"
+  >
     <v-col
       cols="12"
       class="pt-0"
@@ -29,7 +31,7 @@
       </v-sheet>
 
       <!-- 訂單列表 -->
-      <v-expansion-panels>
+      <v-expansion-panels v-if="mdAndUp">
         <v-expansion-panel
           v-for="(order, index) in orders"
           :key="order._id"
@@ -60,7 +62,7 @@
                 </div>
                 <div>${{ calculateTotal(order.cart) }}</div>
               </v-col>
-              <v-col c>
+              <v-col>
                 <div class="text-subtitle-2 font-weight-bold mb-4">
                   訂單備註
                 </div>
@@ -158,6 +160,111 @@
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
+
+      <!-- 小尺寸螢幕顯示 -->
+      <v-expansion-panels v-if="!mdAndUp">
+        <v-expansion-panel
+          v-for="(order, index) in orders"
+          :key="order._id"
+          class="mb-4"
+        >
+          <v-expansion-panel-title
+            :style="{ backgroundColor: index % 2 === 0 ? '#ECEFF190' : '#f0f0f080' }"
+          >
+            <v-row>
+              <v-col
+                cols="4"
+                sm="3"
+              >
+                <v-img
+                  :src="order?.cart[0]?.p_id?.images?.[0]"
+                  cover
+                  class="data-img"
+                />
+              </v-col>
+              <v-col
+                cols="8"
+                sm="9"
+              >
+                <v-row>
+                  <v-col
+                    cols="12"
+                    sm="7"
+                  >
+                    <div class="order-data-title mb-1">
+                      訂單編號 :
+                    </div>
+                    <div class="order-data-text">
+                      {{ order._id }}
+                    </div>
+                  </v-col>
+                  <v-col
+                    class="pt-0 pt-sm-3"
+                    sm="5"
+                  >
+                    <div class="order-data-title mb-1">
+                      訂單日期 :
+                    </div>
+                    <div class="order-data-text">
+                      {{ formatDate(order.createdAt) }}
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-title>
+          <v-expansion-panel-text>
+            <v-list>
+              <v-list-item
+                v-for="item in order.cart"
+                :key="item.p_id._id"
+              >
+                <v-row
+                  style="font-size: 14px;"
+                  class="text-center"
+                >
+                  <v-col cols="2">
+                    <v-img
+                      :src="item.p_id.images[0]"
+                      height="50"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    {{ item.p_id.name }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    {{ item.colors }} / {{ item.sizes }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    ${{ item.p_id.price }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    {{ item.quantity }}
+                  </v-col>
+                  <v-col
+                    cols="2"
+                    class="align-self-center"
+                  >
+                    ${{ item.p_id.price * item.quantity }}
+                  </v-col>
+                </v-row>
+              </v-list-item>
+            </v-list>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-col>
   </v-row>
 
@@ -184,9 +291,11 @@ import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { definePage } from 'vue-router/auto'
 import ConfirmDeleteDialog from '../../components/ConfirmDeleteDialog.vue'
+import { useDisplay } from 'vuetify'
 
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()
+const { mdAndUp } = useDisplay()
 
 const orders = ref([])
 const confirmDialog = ref({ open: false })
@@ -262,9 +371,33 @@ definePage({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '/src/styles/settings.scss';
 .opacity-90 {
   opacity: 0.9;
+}
+
+.order-data-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+.order-data-text {
+  font-size: 12px;
+}
+
+.data-img {
+  min-width: 72px;
+  width: 80px;
+}
+
+@include sm {
+  .order-data-title {
+    font-size: 15px;
+    height: 50px;
+  }
+  .order-data-text {
+    font-size: 13px;
+  }
 }
 </style>
 

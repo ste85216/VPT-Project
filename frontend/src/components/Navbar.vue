@@ -85,12 +85,13 @@
             v-if="!user.isLogin && !user.isAdmin"
             class="pa-0"
           >
-            <v-list-item
-              class="text-center bg-blue-grey-darken-2 text-white py-4"
-              style="font-size: 15px; line-height: 32px; font-weight: 500; letter-spacing: 2px;"
+            <div
+              class="text-white d-flex align-center justify-center"
+              style="font-size: 16px; line-height: 32px; font-weight: 600; letter-spacing: 2px; height: 120px;
+              background-image: url(/src/assets/men.jpg);background-size: cover; text-shadow: 0 0 10px rgba(0,0,0,1);"
             >
               今天是個適合加入<br>VPT的好日子呢!
-            </v-list-item>
+            </div>
           </v-list>
         </v-col>
         <v-divider v-if="user.isLogin && !user.isAdmin" />
