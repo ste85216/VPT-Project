@@ -13,7 +13,6 @@ import '@fortawesome/fontawesome-free/css/all.css'
 // Composables
 import { createVuetify } from 'vuetify'
 
-import { aliases, fa } from 'vuetify/iconsets/fa'
 import { zhHant } from 'vuetify/locale'
 import colors from 'vuetify/util/colors'
 
@@ -27,7 +26,8 @@ export default createVuetify({
         dark: false,
         colors: {
           primary: '#039199', // #E53935
-          secondary: colors.red.lighten4 // #FFCDD2
+          secondary: colors.red.lighten4, // #FFCDD2
+          loginBg: '#F0FDFA'
         }
       }
     }

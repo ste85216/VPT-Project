@@ -150,6 +150,7 @@
             <v-img
               :src="user.avatar"
               class="avatar"
+              :aspect-ratio="1"
               cover
             >
               <template #placeholder>
@@ -552,6 +553,7 @@ const submitProfile = handleSubmit(saveProfile)
     border-radius: 50%;
     position: relative;
     max-width: 200px;
+    max-height: 200px;
     }
 
     .camera-icon {

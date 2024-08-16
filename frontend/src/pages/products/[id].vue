@@ -2,21 +2,20 @@
   <v-container>
     <v-row>
       <v-col
-        class="pa-0 pt-5"
+        class="pa-0 pt-5 pb-4"
         cols="12"
-        md="6"
+        sm="6"
       >
         <v-img
           :src="product.images[0]"
-          height="500"
-          class="rounded-xl elevation-6"
+          class="rounded-xl elevation-6 product-img"
           cover
         />
       </v-col>
       <v-col
         cols="12"
-        md="6"
-        class="ps-0 ps-md-10"
+        sm="6"
+        class="ps-0 ps-sm-10"
       >
         <v-col>
           <h2>{{ product.name }}</h2>
@@ -62,7 +61,7 @@
             </v-chip>
           </v-chip-group>
         </v-col>
-        <v-col class="mb-0 mb-md-16">
+        <v-col class="mb-0 mb-sm-16">
           <h3>數量</h3>
           <v-btn
             size="x-small"
@@ -256,6 +255,12 @@ watch(() => user.cart, (newCart) => {
 
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
+
+.product-img {
+  width: 100%;
+  height: 100%;
+}
+
 h3 {
   font-size: 16px;
   font-weight: 400;

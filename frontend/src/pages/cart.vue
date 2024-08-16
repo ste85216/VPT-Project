@@ -226,6 +226,17 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <!-- ConfirmDeleteDialog 組件 -->
+  <ConfirmDeleteDialog
+    v-model="confirmDialog.open"
+    :title="confirmDialog.title"
+    :message="confirmDialog.message"
+    cancel-size="small"
+    confirm-size="small"
+    @confirm="confirmAction"
+    @cancel="closeConfirmDialog"
+  />
 </template>
 
 <script setup>
@@ -235,7 +246,7 @@ import { useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import { useSnackbar } from 'vuetify-use-dialog'
 import { useUserStore } from '@/stores/user'
-import Swal from 'sweetalert2'
+import ConfirmDeleteDialog from '@/components/ConfirmDeleteDialog.vue'
 
 definePage({
   meta: {
@@ -253,6 +264,7 @@ const createSnackbar = useSnackbar()
 const items = ref([]) // 購物車中的商品
 const loading = ref(false) // 標示是否正在載入或處理請求
 const note = ref('') // 訂單備註
+const confirmDialog = ref({ open: false })
 
 const loadItems = async () => {
   try {
@@ -289,6 +301,7 @@ const validateQuantity = (item) => {
     item.quantity = 1
   }
 }
+
 const changeQuantity = async (item, newQuantity) => {
   if (!user.isLogin) {
     router.push('/login')
@@ -296,32 +309,13 @@ const changeQuantity = async (item, newQuantity) => {
   }
 
   if (newQuantity < 1) {
-    const result = await Swal.fire({
-      title: '確認要移除此商品嗎？',
-      icon: 'warning',
-      iconColor: 'success',
-      showCancelButton: true,
-      confirmButtonText: '確認',
-      confirmButtonColor: '#d9534f',
-      cancelButtonText: '取消',
-      cancelButtonColor: '#a1a1a1',
-      focusConfirm: false,
-      returnFocus: false,
-      width: '25%',
-      customClass: {
-        confirmButton: 'me-5 fw-light',
-        cancelButton: 'ms-5'
-      },
-      didOpen: () => {
-        document.body.style.paddingRight = '0px'
-      }
-    })
-    if (result.isConfirmed) {
-      await updateQuantity(item, 0)
-      return
-    } else {
-      newQuantity = 1
+    confirmDialog.value = {
+      open: true,
+      title: '您確認要移除嗎？',
+      message: '',
+      action: () => updateQuantity(item, 0)
     }
+    return
   }
 
   item.quantity = newQuantity // 先更新本地數量
@@ -335,33 +329,27 @@ const deleteItem = async (item, showConfirmation = true) => {
   }
 
   if (showConfirmation) {
-    const result = await Swal.fire({
-      title: '確認要移除此商品嗎？',
-      icon: 'warning',
-      iconColor: 'success',
-      showCancelButton: true,
-      confirmButtonText: '確認',
-      confirmButtonColor: '#d9534f',
-      cancelButtonText: '取消',
-      cancelButtonColor: '#a1a1a1',
-      focusConfirm: false,
-      returnFocus: false,
-      width: '25%',
-      customClass: {
-        confirmButton: 'me-5 fw-light',
-        cancelButton: 'ms-5'
-      },
-      didOpen: () => {
-        document.body.style.paddingRight = '0px'
-      }
-    })
-
-    if (!result.isConfirmed) {
-      return
+    confirmDialog.value = {
+      open: true,
+      title: '您確認要移除嗎？',
+      message: '',
+      action: () => updateQuantity(item, 0)
     }
+  } else {
+    await updateQuantity(item, 0)
   }
+}
 
-  await updateQuantity(item, 0)
+const confirmAction = async () => {
+  if (confirmDialog.value.action) {
+    await confirmDialog.value.action()
+  }
+  closeConfirmDialog()
+}
+
+const closeConfirmDialog = () => {
+  confirmDialog.value.open = false
+  confirmDialog.value.action = null
 }
 
 const updateQuantity = async (item, newQuantity = null) => {

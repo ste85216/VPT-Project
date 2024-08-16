@@ -5,6 +5,7 @@
     class="d-flex justify-center align-center"
   >
     <v-container
+      v-if="smAndUp"
       id="login-register"
       class="d-flex justify-center align-center"
     >
@@ -259,6 +260,259 @@
         </v-row>
       </v-container>
     </v-container>
+    <!-- sm以下 -->
+    <v-container
+      v-if="!smAndUp"
+      fluid
+      class="bg-loginBg h-100 sm-container"
+      :class="{ 'show-register': !isLoginFormVisible }"
+    >
+      <div class="sm-wrapper">
+        <v-container class="login wrapper d-flex align-center justify-center ps-8 pe-8">
+          <v-row>
+            <v-col cols="12">
+              <div class="title text-center">
+                登入
+              </div>
+            </v-col>
+            <v-col cols="12">
+              <!-- 登入表單 -->
+              <v-form
+                :disabled="isLoginSubmitting"
+                @submit.prevent="loginSubmit"
+              >
+                <!-- 登入帳號輸入欄位 -->
+                <v-text-field
+                  v-model="Laccount.value.value"
+                  :error-messages="Laccount.errorMessage.value"
+                  label="帳號"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                />
+                <!-- 登入密碼輸入欄位 -->
+                <v-text-field
+                  v-model="Lpassword.value.value"
+                  :error-messages="Lpassword.errorMessage.value"
+                  class="mt-4"
+                  label="密碼"
+                  :type="showPasswordLogin ? 'text' : 'password'"
+                  :append-inner-icon="showPasswordLogin ? 'mdi-eye-off' : 'mdi-eye'"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                  @click:append-inner="showPasswordLogin = !showPasswordLogin"
+                />
+                <!-- 記住我選項 -->
+                <v-row>
+                  <v-col class="remember-me ps-2">
+                    <v-checkbox
+                      v-model="rememberMe"
+                      label="記住我"
+                      hide-details
+                      color="#546e7a"
+                      density="compact"
+                    />
+                  </v-col>
+                </v-row>
+                <!-- 登入按鈕 -->
+                <v-btn
+                  class="mt-4"
+                  type="submit"
+                  block
+                  :loading="isLoginSubmitting"
+                >
+                  登入
+                </v-btn>
+                <!-- 註冊連結 -->
+                <v-container class="signup mt-4">
+                  <v-row class="d-flex justify-end ">
+                    <v-col
+                      cols="auto"
+                      class="pa-0"
+                    >
+                      還沒有VPT帳號?
+                    </v-col>
+                    <v-col
+                      cols="auto"
+                      class="pa-0"
+                    >
+                      <div
+                        id="showRegister"
+                        class="ms-3 link"
+                        @click="showRegister"
+                      >
+                        立即加入會員
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-col>
+          </v-row>
+        </v-container>
+        <!-- 註冊表單容器 -->
+        <v-container class="register wrapper ps-8 pe-8 pt-8">
+          <v-row>
+            <v-col cols="12">
+              <div class="title text-center">
+                立即註冊
+              </div>
+            </v-col>
+            <v-col cols="12">
+              <!-- 註冊表單 -->
+              <v-form
+                :disabled="isRegisterSubmitting"
+                @submit.prevent="registerSubmit"
+              >
+                <!-- 註冊帳號輸入欄位 -->
+                <v-text-field
+                  v-model="Raccount.value.value"
+                  :error-messages="Raccount.errorMessage.value"
+                  label="帳號"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                />
+                <!-- 姓名輸入欄位 -->
+                <v-text-field
+                  v-model="name.value.value"
+                  :error-messages="name.errorMessage.value"
+                  class="mt-2"
+                  label="姓名"
+                  type="text"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                />
+                <!-- 暱稱輸入欄位 -->
+                <v-text-field
+                  v-model="nickname.value.value"
+                  :error-messages="nickname.errorMessage.value"
+                  class="mt-2"
+                  label="暱稱"
+                  type="text"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                />
+                <!-- Email輸入欄位 -->
+                <v-text-field
+                  v-model="email.value.value"
+                  :error-messages="email.errorMessage.value"
+                  class="mt-2"
+                  label="email"
+                  type="email"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                />
+                <!-- 手機號碼輸入欄位 -->
+                <v-text-field
+                  v-model="phone.value.value"
+                  :error-messages="phone.errorMessage.value"
+                  class="mt-2"
+                  label="手機號碼"
+                  type="text"
+                  variant="outlined"
+                  density="compact"
+                  min-length="10"
+                  maxlength="10"
+                  clearable
+                />
+                <!-- 生日輸入欄位 -->
+                <v-text-field
+                  v-model="birthday.value.value"
+                  :error-messages="birthday.errorMessage.value"
+                  class="mt-2"
+                  label="生日"
+                  type="date"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                />
+                <!-- 註冊密碼輸入欄位 -->
+                <v-text-field
+                  v-model="Rpassword.value.value"
+                  :error-messages="Rpassword.errorMessage.value"
+                  class="mt-2"
+                  label="密碼"
+                  :type="showPasswordRegister ? 'text' : 'password'"
+                  :append-inner-icon="showPasswordRegister ? 'mdi-eye-off' : 'mdi-eye'"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                  @click:append-inner="showPasswordRegister = !showPasswordRegister"
+                />
+                <!-- 確認密碼輸入欄位 -->
+                <v-text-field
+                  v-model="passwordConfirm.value.value"
+                  :error-messages="passwordConfirm.errorMessage.value"
+                  class="mt-2"
+                  label="確認密碼"
+                  :type="showPasswordRegisterConfirm ? 'text' : 'password'"
+                  :append-inner-icon="showPasswordRegisterConfirm ? 'mdi-eye-off' : 'mdi-eye'"
+                  variant="outlined"
+                  density="compact"
+                  min-length="4"
+                  maxlength="20"
+                  clearable
+                  @click:append-inner="showPasswordRegisterConfirm = !showPasswordRegisterConfirm"
+                />
+                <!-- 註冊按鈕 -->
+                <v-btn
+                  class="mt-4"
+                  type="submit"
+                  block
+                  :loading="isRegisterSubmitting"
+                >
+                  註冊
+                </v-btn>
+                <!-- 登入連結 -->
+                <v-container class="signup mt-4 mb-4">
+                  <v-row class="d-flex justify-end ">
+                    <v-col
+                      cols="auto"
+                      class="pa-0"
+                    >
+                      已經有VPT帳號?
+                    </v-col>
+                    <v-col
+                      cols="auto"
+                      class="pa-0"
+                    >
+                      <div
+                        id="showLogin"
+                        class="ms-3 link"
+                        @click="showLogin"
+                      >
+                        登入
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-form>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-container>
   </div>
 </template>
 
@@ -273,7 +527,7 @@ import { definePage } from 'vue-router/auto'
 import { useUserStore } from '@/stores/user'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
-
+import { useDisplay } from 'vuetify'
 // 定義頁面元數據
 definePage({
   meta: {
@@ -281,11 +535,13 @@ definePage({
   }
 })
 
+const { smAndUp } = useDisplay()
 // 初始化必要的工具和狀態
 const { api } = useApi()
 const router = useRouter()
 const user = useUserStore()
 const createSnackbar = useSnackbar()
+const isLoginFormVisible = ref(true)
 
 // 密碼顯示狀態
 const showPasswordLogin = ref(false)
@@ -297,23 +553,34 @@ const rememberMe = ref(false)
 
 // 切換顯示註冊表單
 const showRegister = () => {
-  const login = document.querySelector('.login')
-  const register = document.querySelector('.register')
-  const loginRegister = document.querySelector('#login-register')
-  loginRegister.style.height = '800px'
-  login.style.transform = 'translateX(-420px)'
-  register.style.transform = 'translateX(-420px)'
+  if (smAndUp.value) {
+    // 大螢幕邏輯保持不變
+    const login = document.querySelector('.login')
+    const register = document.querySelector('.register')
+    const loginRegister = document.querySelector('#login-register')
+    loginRegister.style.height = '800px'
+    login.style.transform = 'translateX(-420px)'
+    register.style.transform = 'translateX(-420px)'
+  } else {
+    // 小螢幕邏輯
+    isLoginFormVisible.value = false
+  }
   resetLoginForm()
 }
 
-// 切換顯示登入表單
 const showLogin = () => {
-  const login = document.querySelector('.login')
-  const register = document.querySelector('.register')
-  const loginRegister = document.querySelector('#login-register')
-  loginRegister.style.height = '440px'
-  login.style.transform = 'translateX(0)'
-  register.style.transform = 'translateX(0)'
+  if (smAndUp.value) {
+    // 大螢幕邏輯保持不變
+    const login = document.querySelector('.login')
+    const register = document.querySelector('.register')
+    const loginRegister = document.querySelector('#login-register')
+    loginRegister.style.height = '440px'
+    login.style.transform = 'translateX(0)'
+    register.style.transform = 'translateX(0)'
+  } else {
+    // 小螢幕邏輯
+    isLoginFormVisible.value = true
+  }
   resetRegisterForm()
 }
 
@@ -501,10 +768,127 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @import '/src/styles/settings.scss';
+
 .remember-me {
   :deep(.v-label) {
     font-family: "sans-serif";
     font-weight: 400;
+  }
+}
+
+#background {
+  width: 100%;
+  height: calc(100vh - 70px);
+  top: 70px;
+  background: url('/src/assets/sea2-court.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.link {
+  cursor: pointer;
+  color: $third-color;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+#login-register {
+  width: 400px;
+  height: 440px;
+  background: rgba(255,255,255,0.5);
+  border: 2px solid rgba(163, 163, 163, 0.5);
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  padding: 0;
+  overflow: hidden;
+  transition: ease 0.2s;
+}
+
+.login {
+  a {
+    text-decoration: none;
+    color: $third-color;
+  }
+}
+
+.wrapper {
+  position: relative;
+  left: 0px;
+  transition: 0.18s ease;
+
+  .v-btn {
+    background-color: $primary-color;
+    color: white;
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .forget {
+    color: #333;
+    font-size: 12px;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .signup {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    a {
+      font-size: 14px;
+      margin-left: 8px;
+      line-height: 12px;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  @include sm {
+    left: 210px;
+    .v-text-field {
+      width: 335px;
+    }
+  }
+}
+
+.sm-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sm-container {
+  position: relative;
+  overflow: hidden;
+  height: 100vh; // 確保容器高度足夠
+
+  .sm-wrapper {
+    position: relative;
+    width: 200%; // 使wrapper寬度為容器的兩倍
+    height: 100%;
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .login, .register {
+    width: 50%; // 每個表單占 wrapper 的一半
+    height: 100%;
+    overflow-y: auto; // 允許內容滾動
+  }
+
+  &.show-register {
+    .sm-wrapper {
+      transform: translateX(-50%);
+    }
   }
 }
 </style>

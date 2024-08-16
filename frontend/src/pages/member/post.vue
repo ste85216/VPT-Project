@@ -371,8 +371,8 @@
     width="440"
   >
     <v-form @submit.prevent="submit">
-      <v-card class="rounded-xl px-6 py-5">
-        <v-card-title>
+      <v-card class="rounded-lg px-6 py-5">
+        <v-card-title class="dialog-title">
           {{ dialog.id ? '編輯場次' : '新增場次' }}
         </v-card-title>
         <v-card-text class="mt-3 pa-3">
@@ -447,7 +447,7 @@
             density="compact"
             required
           />
-          <v-row>
+          <v-row class="mb-1">
             <v-col>
               <v-text-field
                 v-model="male.value.value"
@@ -481,6 +481,13 @@
                 required
               />
             </v-col>
+            <v-alert
+              v-if="errors['at-least-one-gender']"
+              type="error"
+              class="mt-3"
+            >
+              {{ errors['at-least-one-gender'] }}
+            </v-alert>
           </v-row>
 
           <v-text-field
@@ -491,6 +498,7 @@
             density="compact"
             type="number"
             required
+            placeholder="e.g. 250"
           />
           <v-textarea
             v-model="note.value.value"
@@ -502,6 +510,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn
+            v-if="mdAndUp"
             color="red-lighten-1"
             variant="outlined"
             @click="closeDialog"
@@ -509,9 +518,29 @@
             取消
           </v-btn>
           <v-btn
+            v-if="mdAndUp"
             color="teal-darken-1"
             type="submit"
             variant="outlined"
+            :loading="isSubmitting"
+          >
+            送出
+          </v-btn>
+          <v-btn
+            v-if="!mdAndUp"
+            color="red-lighten-1"
+            variant="outlined"
+            size="small"
+            @click="closeDialog"
+          >
+            取消
+          </v-btn>
+          <v-btn
+            v-if="!mdAndUp"
+            color="teal-darken-1"
+            type="submit"
+            variant="outlined"
+            size="small"
             :loading="isSubmitting"
           >
             送出
@@ -526,6 +555,8 @@
     v-model="confirmDialog.open"
     title="確認要取消此場次嗎？"
     message="此操作不可撤銷。"
+    cancel-size="small"
+    confirm-size="small"
     @confirm="confirmCancel"
     @cancel="closeConfirmDialog"
   />
@@ -533,10 +564,12 @@
   <!-- 報名紀錄對話框 -->
   <v-dialog
     v-model="enrollmentRecordDialog.open"
-    max-width="600px"
+    max-width="480px"
   >
     <v-card class="pa-4">
-      <v-card-title>報名清單</v-card-title>
+      <v-card-title class="enrollment-record-title">
+        報名清單
+      </v-card-title>
       <v-card-text>
         <v-sheet
           v-if="enrollmentRecordDialog.enrollments.length === 0"
@@ -547,14 +580,14 @@
         <div v-else>
           <v-alert
             color="blue-grey-lighten-1"
-            class="mb-4"
+            class="mb-4 alert-title"
             density="compact"
             variant="flat"
           >
             <v-icon
               size="small"
               icon="mdi-information-outline"
-              class="pb-1 me-2"
+              class="pb-0 me-2 "
             />
             報名狀態 - {{ formatRemainingPlayers(enrollmentRecordDialog.session) }}
           </v-alert>
@@ -563,11 +596,10 @@
               v-for="enrollment in enrollmentRecordDialog.enrollments"
               :key="enrollment._id"
             >
-              <v-list-item-title class="text-subtitle-2">
-                會員編號: {{ enrollment.userId.userId }}
+              <v-list-item-title>
+                <span class="enrollment-list-name">{{ enrollment.userId.name }}</span> <span class="enrollment-list-userId">{{ enrollment.userId.userId }}</span>
               </v-list-item-title>
               <v-list-item-subtitle class="mt-2 mb-4">
-                姓名: {{ enrollment.userId.name }} |
                 電話: {{ enrollment.userId.phone }} |
                 {{ formatEnrollmentCount(enrollment) }}
               </v-list-item-subtitle>
@@ -622,14 +654,22 @@ const schema = yup.object({
   endTime: yup.string().required('請輸入結束時間'),
   netheight: yup.string().required('請選擇網高'),
   level: yup.string().required('請選擇程度'),
-  male: yup.string().required('請輸入男生人數').min(0, '人數不能小於0'),
-  female: yup.string().required('請輸入女生人數').min(0, '人數不能小於0'),
-  nopreference: yup.string().required('請輸入不限性別人數').min(0, '人數不能小於0'),
-  fee: yup.string().required('請輸入費用').min(0, '費用不能小於0'),
+  male: yup.string().min(0, '人數不能小於0'),
+  female: yup.string().min(0, '人數不能小於0'),
+  nopreference: yup.string().min(0, '人數不能小於0'),
+  fee: yup.string().required('請輸入費用').min(1, '請填寫費用'),
   note: yup.string()
+}).test('at-least-one-gender', '至少需要填寫其中一性別的人數', function (values) {
+  if (!(Number(values.male) > 0 || Number(values.female) > 0 || Number(values.nopreference) > 0)) {
+    return this.createError({
+      path: 'male', // 你可以選擇將錯誤附加到哪個字段
+      message: '三欄必填一欄人數'
+    })
+  }
+  return true
 })
 
-const { handleSubmit, isSubmitting, resetForm } = useForm({
+const { handleSubmit, isSubmitting, resetForm, errors } = useForm({
   validationSchema: schema,
   initialValues: {
     venueId: '',
@@ -947,6 +987,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@import '/src/styles/settings.scss';
 .post-btn {
   background-color: #5e7b88;
   color: white;
@@ -958,6 +999,34 @@ onMounted(() => {
   background-color: #f5f5f5;
   border-top: 2px solid #d5d5d5;
   border-radius: 0;
+}
+
+.dialog-title {
+  font-size: 16px;
+}
+
+.alert-title {
+  font-size: 14px;
+}
+
+.enrollment-record-title {
+  font-size: 15px;
+}
+
+.enrollment-list-name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.enrollment-list-userId {
+  font-size: 14px;
+  color: #666;
+}
+
+@include md {
+  .dialog-title {
+    font-size: 18px;
+  }
 }
 </style>
 

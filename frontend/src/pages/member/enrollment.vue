@@ -98,7 +98,7 @@
                 {{ formatEnrollmentCount(enrollment) }}
               </v-col>
               <v-col cols="1">
-                ${{ enrollment.s_id?.fee || '未知' }}/人
+                {{ enrollment.s_id?.fee === 0 ? '免費' : `$${enrollment.s_id.fee}/人` }}
               </v-col>
               <v-col cols="1">
                 {{ enrollment.s_id?.note || '無' }}
@@ -228,7 +228,7 @@
             程度: {{ editDialog.session?.level || '未知' }}
           </v-col>
           <v-col cols="12">
-            價錢: ${{ editDialog.session?.fee || '未知' }}
+            價錢: {{ editDialog.session?.fee === 0 ? '免費' : `$${editDialog.session.fee}/人` }}
           </v-col>
           <v-col cols="12">
             備註: {{ editDialog.session?.note || '無' }}
@@ -236,8 +236,8 @@
           <v-col cols="12">
             你已報名: {{ formatEnrollmentCount(editDialog.enrollment) }}
           </v-col>
+          <v-divider class="mt-2 mb-5" />
         </v-row>
-        <v-divider class="mt-2 mb-5" />
         <v-text-field
           v-if="editDialog.showMale"
           v-model="editDialog.male"
@@ -271,6 +271,7 @@
         <v-btn
           color="red-darken-1"
           variant="outlined"
+          size="small"
           @click="closeEditDialog"
         >
           取消
@@ -278,6 +279,7 @@
         <v-btn
           color="teal-lighten-1"
           variant="outlined"
+          size="small"
           @click="submitEdit"
         >
           確認

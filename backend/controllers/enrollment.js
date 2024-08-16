@@ -326,3 +326,26 @@ export const remove = async (req, res) => {
     }
   }
 }
+
+// 新增：檢查用戶是否已報名特定場次
+export const checkEnrollment = async (req, res) => {
+  try {
+    if (!validator.isMongoId(req.params.sessionId)) {
+      return handleError(res, StatusCodes.BAD_REQUEST, '無效的場次 ID')
+    }
+
+    const enrollment = await Enrollment.findOne({
+      s_id: req.params.sessionId,
+      userId: req.user._id
+    })
+
+    res.status(StatusCodes.OK).json({
+      success: true,
+      enrolled: !!enrollment,
+      message: enrollment ? '已報名該場次' : '未報名該場次'
+    })
+  } catch (error) {
+    console.error('Error in check enrollment:', error)
+    return handleError(res, StatusCodes.INTERNAL_SERVER_ERROR, '檢查報名狀態時發生錯誤')
+  }
+}

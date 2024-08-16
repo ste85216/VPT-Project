@@ -373,7 +373,7 @@
                                         cols="4"
                                         sm="2"
                                       >
-                                        ${{ session.fee }}/人
+                                        {{ session.fee === 0 ? '免費' : `$${session.fee}/人` }}
                                       </v-col>
                                       <v-col
                                         cols="4"
@@ -526,7 +526,7 @@
                                       <v-col
                                         cols="4"
                                       >
-                                        ${{ session.fee }}/人
+                                        {{ session.fee === 0 ? '免費' : `$${session.fee}/人` }}
                                       </v-col>
                                       <v-col cols="4">
                                         尚需: <br><span style="font-size: 14px;color:#FF1744;">{{ formatRemainingPlayers(session) }}</span>
@@ -745,6 +745,17 @@ const validateEnrollment = (male, female, nopreference, session) => {
   }
 }
 
+// 檢查用戶是否已報名特定場次
+const checkEnrollment = async (sessionId) => {
+  try {
+    const { data } = await apiAuth.get(`/enrollment/check/${sessionId}`)
+    return data.enrolled
+  } catch (error) {
+    console.error('Error checking enrollment:', error)
+    throw error // 將錯誤拋出，以便在調用處處理
+  }
+}
+
 // 提交報名
 const submitEnrollment = async () => {
   if (!user.token) {
@@ -772,12 +783,32 @@ const submitEnrollment = async () => {
   if (!validateEnrollment(male, female, nopreference, session)) {
     createSnackbar({
       text: `報名人數超過可報名人數，當前剩餘: ${formatRemainingPlayers(session)}`,
-      snackbarProps: { color: 'red-lighten-1' }
+      snackbarProps: {
+        color: 'red-lighten-1'
+      }
     })
     return
   }
 
   try {
+    // 檢查用戶是否已經報名過該場次
+    const isEnrolled = await checkEnrollment(session._id)
+    if (isEnrolled) {
+      createSnackbar({
+        text: '您已報名過該場次，點擊此處查看"報名紀錄"',
+        snackbarProps: {
+          color: 'orange-darken-3',
+          timeout: 3000,
+          closeOnClick: false,
+          onClick: () => {
+            router.push('/member/enrollment')
+          }
+        }
+      })
+      closeEnrollDialog()
+      return
+    }
+    // 執行報名
     const response = await apiAuth.post('/enrollment', {
       s_id: session._id,
       male,
@@ -801,8 +832,14 @@ const submitEnrollment = async () => {
     router.push('/member/enrollment')
   } catch (error) {
     console.error('Enrollment error:', error)
+    let errorMessage = '報名失敗'
+    if (error.response && error.response.data && error.response.data.message) {
+      errorMessage = error.response.data.message
+    } else if (error.message) {
+      errorMessage = error.message
+    }
     createSnackbar({
-      text: error?.response?.data?.message || '報名失敗',
+      text: errorMessage,
       snackbarProps: { color: 'red-lighten-1' }
     })
   }
