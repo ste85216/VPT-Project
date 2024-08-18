@@ -30,17 +30,17 @@ const isOnProductsPage = computed(() => {
 <style lang="scss" scoped>
 @import '/src/styles/settings.scss';
 
-#robot {
-  width: 20%;
-  height: 30%;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background: transparent;
-  display: none;
-}
-@media (min-width: 1590px) {
-  #robot {display:block}
-}
+// #robot {
+//   width: 20%;
+//   height: 30%;
+//   position: fixed;
+//   bottom: 0;
+//   left: 0;
+//   background: transparent;
+//   display: none;
+// }
+// @media (min-width: 1590px) {
+//   #robot {display:block}
+// }
 
 </style>

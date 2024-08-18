@@ -286,9 +286,14 @@
                       </v-col>
                     </v-row>
                   </v-col>
+                  <v-col
+                    cols="12"
+                    class="pt-0 mb-2"
+                  >
+                    <v-divider />
+                  </v-col>
                 </v-row>
               </v-list-item>
-              <v-divider class="my-4" />
 
               <v-list-item>
                 <v-row class="justify-end">

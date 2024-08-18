@@ -1,5 +1,5 @@
 <template>
-  <v-container class="h-75">
+  <v-container class="h-100">
     <h3>品牌故事待開發</h3>
     <v-row>
       <v-col class="d-flex justify-center">

@@ -12,8 +12,8 @@
     <div class="wave wave4" />
   </div>
   <v-container
-    class="text-center"
-    style="max-width: 1200px; height: calc(100% - 70px); top: 70px;"
+    class="text-center mb-16"
+    style="max-width: 600px; "
   >
     <v-row>
       <v-col cols="12">
@@ -22,7 +22,11 @@
         </v-sheet>
       </v-col>
       <v-col cols="12">
-        <v-form class="d-flex justify-center">
+        <v-form
+          :disabled="isSubmitting"
+          class="d-flex justify-center"
+          @submit.prevent="submit"
+        >
           <v-card
             class="custom-card py-0"
             elevation="0"
@@ -33,11 +37,11 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      class="text-left pb-0"
+                      class="text-left pb-0 pt-0"
                     >
                       姓名:
                     </v-col>
-                    <v-col>
+                    <v-col class="py-0 pt-2">
                       <v-text-field
                         v-model="name.value.value"
                         :error-messages="name.errorMessage.value"
@@ -52,11 +56,11 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      class="text-left pb-0"
+                      class="text-left pb-0 pt-0"
                     >
                       email:
                     </v-col>
-                    <v-col>
+                    <v-col class="py-0 pt-2">
                       <v-text-field
                         v-model="email.value.value"
                         :error-messages="email.errorMessage.value"
@@ -71,11 +75,11 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      class="text-left pb-0"
+                      class="text-left pb-0 pt-0"
                     >
                       信件主旨:
                     </v-col>
-                    <v-col>
+                    <v-col class="py-0 pt-2">
                       <v-text-field
                         v-model="subject.value.value"
                         :error-messages="subject.errorMessage.value"
@@ -90,16 +94,17 @@
                   <v-row>
                     <v-col
                       cols="12"
-                      class="text-left pb-0"
+                      class="text-left pb-0 pt-0"
                     >
                       內容:
                     </v-col>
-                    <v-col>
+                    <v-col class="py-0 pt-2">
                       <v-textarea
                         v-model="content.value.value"
                         :error-messages="content.errorMessage.value"
                         density="compact"
                         variant="outlined"
+                        no-resize
                       />
                     </v-col>
                   </v-row>
@@ -119,9 +124,11 @@
                   </v-btn>
                   <v-btn
                     v-if="!smAndUp"
+                    type="submit"
                     variant="outlined"
                     color="teal-lighten-1"
                     size="small"
+                    :loading="isSubmitting"
                   >
                     送出
                   </v-btn>
@@ -152,7 +159,7 @@ definePage({
 
 const { api } = useApi()
 const { smAndUp } = useDisplay()
-const { createSnackbar } = useSnackbar()
+const createSnackbar = useSnackbar()
 
 const schema = yup.object({
   name: yup
@@ -175,7 +182,7 @@ const schema = yup.object({
     .required('請輸入內容')
 })
 
-const { handleSubmit, isSubmitting } = useForm({
+const { handleSubmit, isSubmitting, resetForm } = useForm({
   validationSchema: schema
 })
 
@@ -198,6 +205,7 @@ const submit = handleSubmit(async (values) => {
         color: 'teal-darken-1'
       }
     })
+    resetForm()
   } catch (error) {
     // 錯誤處理
     console.log(error)
@@ -348,6 +356,7 @@ const submit = handleSubmit(async (values) => {
     animation-delay: -5s;
     bottom: 25px;
   }
+
   .contact-title {
     font-size: 32px;
     line-height: 180px;
@@ -358,12 +367,6 @@ const submit = handleSubmit(async (values) => {
   color: #333;
   }
 
-  .contact-title {
-    font-size: 24px;
-    color: #fff;
-    font-weight: 500;
-    line-height: px;
-  }
   .custom-card {
   max-width: 800px;
   border-radius: 10px;

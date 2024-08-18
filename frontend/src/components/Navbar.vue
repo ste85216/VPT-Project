@@ -3,8 +3,7 @@
     v-if="!mdAndUp"
     v-model="drawer"
     class="custom-drawer overflow-hidden border-0"
-    width="250"
-
+    temporary
     style="color:#263238"
   >
     <!-- 這邊等等要寫v-if -->
@@ -80,6 +79,27 @@
                 {{ memberNavitem.text }}
               </v-list-item>
             </v-list-group>
+          </v-list>
+          <v-list
+            v-if="isLogin && user.isAdmin"
+            class="pa-0"
+            density="compact"
+          >
+            <div style="background-image: url(/src/assets/drawer_bg_admin.webp); background-size:380px 250px; background-position: bottom left">
+              <v-list-item class="px-6 pa-4">
+                <v-row
+                  no-gutters
+                >
+                  <v-col
+                    cols="7"
+                  >
+                    <h4 class="drawer-name-admin">
+                      管理者{{ user.account }}
+                    </h4>
+                  </v-col>
+                </v-row>
+              </v-list-item>
+            </div>
           </v-list>
           <v-list
             v-if="!isLogin && !user.isAdmin"
@@ -237,7 +257,10 @@
             :content="cartQuantity"
           />
         </v-btn>
-        <v-app-bar-nav-icon @click="drawer = true" />
+        <v-app-bar-nav-icon
+          class="me-1 pe-0"
+          @click="drawer = true"
+        />
       </template>
       <template v-else>
         <template
@@ -530,6 +553,13 @@ onMounted(loadUserData)
     font-size: 18px;
     letter-spacing: 4px;
     text-shadow: 0 0 4px rgba(255,255,255,1);
+  }
+  .drawer-name-admin {
+    font-size: 18px;
+    letter-spacing: 3px;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: 0 0 4px rgba(0,0,0,1);
   }
   .p1 {
     font-size: 18px;

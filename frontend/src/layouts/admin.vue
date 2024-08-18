@@ -74,6 +74,19 @@
                   />
                   球場資訊
                 </v-list-item>
+                <v-list-item
+                  to="/admin/contact"
+                  :active="false"
+                  base-color="#333"
+                >
+                  <v-icon
+                    icon="mdi-email-outline"
+                    size="small"
+                    class="me-2"
+                    color="#333"
+                  />
+                  收件匣
+                </v-list-item>
               </v-list-group>
             </v-col>
             <v-divider class="mt-5" />
