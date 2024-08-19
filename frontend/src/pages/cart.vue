@@ -404,7 +404,7 @@ const checkout = async () => {
     }
   })
 
-  if (result.color === 'green') {
+  if (result.color === 'teal-darken-1') {
     router.push('/member/order')
     loading.value = false
   }

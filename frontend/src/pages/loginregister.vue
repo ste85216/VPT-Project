@@ -705,7 +705,7 @@ const registerSubmit = handleRegisterSubmit(async (values) => {
     createSnackbar({
       text: '註冊成功',
       snackbarProps: {
-        color: 'tea-darken-1'
+        color: 'teal-darken-1'
       }
     })
     onRegisterSuccess()

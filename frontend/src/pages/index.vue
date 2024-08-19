@@ -37,7 +37,7 @@
                 rounded="0"
                 to="/signup"
               >
-                一起飛翔
+                一同翱翔
               </v-btn>
             </v-col>
             <v-col

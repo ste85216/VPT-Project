@@ -114,12 +114,12 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await apiAuth.patch('/user/cart', { p_id: product, quantity, colors, sizes })
       cart.value = data.result || []
       return {
-        color: 'green',
+        color: 'teal-darken-1',
         text: '成功'
       }
     } catch (error) {
       return {
-        color: 'red',
+        color: 'red-lighten-1',
         text: error?.response?.data?.message || '發生錯誤，請稍後再試'
       }
     }
@@ -130,12 +130,12 @@ export const useUserStore = defineStore('user', () => {
       await apiAuth.post('/order', { note })
       cart.value = []
       return {
-        color: 'green',
-        text: '成功'
+        color: 'teal-darken-1',
+        text: '結帳成功'
       }
     } catch (error) {
       return {
-        color: 'red',
+        color: 'red-lighten-1',
         text: error?.response?.data?.message || '發生錯誤，請稍後再試'
       }
     }
