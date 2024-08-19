@@ -220,6 +220,15 @@
 import { ref } from 'vue'
 import { useApi } from '@/composables/axios'
 import { useSnackbar } from 'vuetify-use-dialog'
+import { definePage } from 'vue-router/auto'
+
+definePage({
+  meta: {
+    title: '收件匣 | VPT',
+    login: true,
+    admin: true
+  }
+})
 
 const { apiAuth } = useApi()
 const createSnackbar = useSnackbar()

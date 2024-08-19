@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0">
+  <v-container class="pa-0 h-100">
     <v-row class="d-flex justify-start align-start">
       <v-col
         cols="12"

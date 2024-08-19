@@ -1,7 +1,7 @@
 <template>
   <v-container
     style="max-width: 1280px;"
-    class="pa-0 pt-md-10 mb-16"
+    class="pa-0 pt-md-10 product-container"
   >
     <v-row
       class=" h-100 px-0 pe-0 px-sm-8"
@@ -235,6 +235,14 @@ h2{
     }
     @include md {
       font-size: 15px;
+    }
+  }
+
+.product-container {
+    margin-bottom: 25%;
+    padding-bottom: 0;
+    @include sm {
+      margin-bottom: 10%;
     }
   }
 </style>

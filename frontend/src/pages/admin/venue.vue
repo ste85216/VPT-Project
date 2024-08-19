@@ -257,7 +257,7 @@ import { useSnackbar } from 'vuetify-use-dialog'
 
 definePage({
   meta: {
-    title: '球場資訊管理 | VPT',
+    title: '球場資訊 | VPT',
     login: true,
     admin: true
   }

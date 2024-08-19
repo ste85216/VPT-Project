@@ -20,7 +20,7 @@
         ref="topTitleRight"
         class="top-title-2"
       >
-        <p>Volley Player of Taiwan</p>
+        <p>Volleyball Player of Taiwan</p>
       </div>
     </section>
     <section class="gradient" />
@@ -31,15 +31,16 @@
         class="end-lottie"
       />
 
-      <v-row>
+      <v-row class="section-row">
         <v-col
           cols="12"
-          sm="6"
+          md="6"
+          class="d-flex justify-center align-center"
         >
-          <v-row>
+          <v-row no-gutters>
             <v-col>
               <v-row>
-                <v-col cols="12">
+                <v-col>
                   <h1
                     data-aos="fade-right"
                     data-aos-delay="200"
@@ -48,16 +49,12 @@
                   >
                     排球不僅是一項運動
                   </h1>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="6"
-                >
+
                   <p
                     data-aos="fade-up"
                     data-aos-delay="250"
                     data-aos-duration="1500"
-                    class="mb-12"
+                    class="mb-12 mt-sm-8"
                   >
                     它象徵著團結、協作與無限的可能性。一開始創辦這個品牌的初衷，<br>是希望能打造一個不僅僅是販賣排球用具的品牌，<br>而是一個能讓所有喜愛打排球的人更容易、更自由的聚在一起的平台。
                   </p>
@@ -68,41 +65,102 @@
         </v-col>
         <v-col
           cols="12"
-          sm="6"
+          md="6"
+          class="d-flex justify-center align-center"
         >
-          <v-img src="/src/assets/排球企聯.jpg" />
+          <v-img
+            data-aos="fade-left"
+            data-aos-delay="500"
+            data-aos-duration="2000"
+            data-aos-easing="ease-in"
+            src="/src/assets/排球企聯01.jpg"
+            cover
+          />
         </v-col>
       </v-row>
-      <v-row class="d-flex flex-sm-row-reverse ">
+      <v-row
+        class="d-flex flex-sm-row-reverse section-row"
+        no-gutters
+      >
         <v-col
           cols="12"
-          sm="6"
-          class="ps-sm-12"
+          md="6"
+          class="ps-sm-12 d-flex flex-column justify-center"
         >
-          <h1>飛得更高</h1>
-          <p>在首頁最上方的兩行標語之一，代表著穿著裝備的重要性。我們在經過無數次拜訪各家工廠後，細選出品質優良的廠商。VPT的每一件產品也都經歷了嚴苛的測試與無數次的改進，為的就是讓你能夠在球場上發揮出最佳水平</p>
+          <h1
+            data-aos="fade-left"
+            data-aos-delay="500"
+            data-aos-duration="1500"
+            data-aos-easing="ease-in"
+            data-aos-offset="500"
+          >
+            飛得更高
+          </h1>
+          <p
+            data-aos="fade-up"
+            data-aos-delay="550"
+            data-aos-duration="1500"
+            data-aos-offset="500"
+            class="mb-12 mt-sm-8"
+          >
+            在首頁最上方的兩行標語之一，代表著穿著裝備的重要性。我們在經過無數次拜訪各家工廠後，細選出品質優良的廠商。VPT的每一件產品也都經歷了嚴苛的測試與無數次的改進，為的就是讓你能夠在球場上發揮出最佳水平，甚至更好!
+          </p>
         </v-col>
         <v-col
           cols="12"
-          sm="6"
+          md="6"
         >
-          <v-img src="/src/assets/工廠.webp" />
+          <v-img
+            data-aos="fade-right"
+            data-aos-delay="700"
+            data-aos-duration="1500"
+            data-aos-easing="ease-in"
+            data-aos-offset="500"
+            src="/src/assets/工廠.jpg"
+            cover
+          />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row
+        class="section-row"
+      >
         <v-col
           cols="12"
-          sm="6"
-          class="ps-sm-12"
+          md="6"
+          class="ps-sm-12 d-flex flex-column justify-center"
         >
-          <h1>一同翱翔</h1>
-          <p>在首頁最上方的兩行標語之一，代表著穿著裝備的重要性。我們在經過無數次拜訪各家工廠後，細選出品質優良的廠商。VPT的每一件產品也都經歷了嚴苛的測試與無數次的改進，為的就是讓你能夠在球場上發揮出最佳水平。</p>
+          <h1
+            data-aos="fade-right"
+            data-aos-delay="750"
+            data-aos-duration="1500"
+            data-aos-easing="ease-in"
+            data-aos-offset="500"
+          >
+            一同翱翔
+          </h1>
+          <p
+            data-aos="fade-up"
+            data-aos-delay="550"
+            data-aos-duration="1500"
+            data-aos-offset="500"
+            class="mb-12 mt-sm-8 pe-sm-8"
+          >
+            無論是臨時想要找場地，還是想找志同道合的隊友一起打場酣暢淋漓的比賽，使用VPT的刊登報名系統是你最佳的選擇! 我們不僅能幫想打球的人快速連結到合適場地，也能讓臨時缺人的場主刊登場次、及時補齊人數。來吧，一同翱翔在球場上吧!
+          </p>
         </v-col>
         <v-col
           cols="12"
-          sm="6"
+          md="6"
         >
-          <v-img src="/src/assets/男排.jpg" />
+          <v-img
+            data-aos="fade-left"
+            data-aos-delay="500"
+            data-aos-duration="2000"
+            data-aos-easing="ease-in"
+            data-aos-offset="500"
+            src="/src/assets/男排嘶吼.jpg"
+            cover
+          />
         </v-col>
       </v-row>
     </section>
@@ -190,8 +248,8 @@ onMounted(() => {
         trigger: '.top-title-2', // 使用 top-container 作為觸發元素
         start: 'center 20%', // 當 top-container 的中心到達視窗中心時開始
         end: 'bottom center', // 當 top-container 的底部到達視窗中心時結束
-        scrub: 4, // 平滑滾動效果
-        markers: true // 顯示標記，方便調試
+        scrub: 4 // 平滑滾動效果
+        // markers: true // 顯示標記，方便調試
       }
     })
   }
@@ -294,13 +352,13 @@ function LottieScrollTrigger (vars) {
         0 0 30px #fff,
         0 0 40px #fff;
       font-family: 'Bebas Neue';
-      letter-spacing: 4px;
+      letter-spacing: 2px;
     }
   }
 
   h1 {
     margin: 0.25em 0;
-    font-size: 50px;
+    font-size: 40px;
     font-weight: 500;
     letter-spacing: -0.02em;
     margin-bottom: 32px;
@@ -311,6 +369,10 @@ function LottieScrollTrigger (vars) {
     font-weight: 400;
     line-height: 175%;
   }
+
+  .section-row {
+      margin-bottom: 120px;
+    }
 
   .lottie-container {
     position: fixed;
@@ -353,8 +415,8 @@ function LottieScrollTrigger (vars) {
   .website-content {
     position: relative;
     width: 100%;
-    height: 300vh;
-    padding: 2rem;
+    height: 250vh;
+    padding: 10%;
     background: #fff;
     color: #333;
     z-index: 0;
@@ -425,26 +487,86 @@ function LottieScrollTrigger (vars) {
 
     }
     p {
-        font-size: 80px;
+        font-size: 68px;
         font-weight: 550;
         text-shadow:
           0 0 20px #fff,
           0 0 30px #fff,
-          0 0 40px #fff;
+          0 0 40px #fff,
+          0 0 50px #fff;
         font-family: 'Bebas Neue';
         letter-spacing: 4px;
       }
     }
+    .section-row {
+      margin-bottom: 120px;
+    }
     h1 {
       margin: 0.25em 0;
-      font-size: 80px;
+      font-size: 48px;
       font-weight: 500;
       letter-spacing: -0.02em;
     }
     p {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 400;
       line-height: 175%;
     }
+    // .v-img {
+    //   min-width: 500px;
+    // }
+  }
+  @include lg {
+    #story-bg {
+      height: 515vh;
+    }
+    .logo-animate {
+      width: 500px;
+    }
+    .top-container {
+    width: 100%;
+    height: 120vh;
+    .top-title {
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    }
+    .top-title-2 {
+    position: fixed;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    }
+    p {
+        font-size: 70px;
+        font-weight: 550;
+        text-shadow:
+          0 0 20px #fff,
+          0 0 30px #fff,
+          0 0 40px #fff,
+          0 0 50px #fff;
+        font-family: 'Bebas Neue';
+        letter-spacing: 4px;
+      }
+    }
+    .section-row {
+      margin-bottom: 120px;
+    }
+    h1 {
+      margin: 0.25em 0;
+      font-size: 60px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+    p {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 175%;
+    }
+    // .v-img {
+    //   min-width: 500px;
+    // }
   }
 </style>
