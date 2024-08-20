@@ -1,5 +1,5 @@
 <template>
-  <div id="story-bg">
+  <v-container id="story-bg">
     <section class="lottie-container">
       <div
         ref="animationRef"
@@ -103,7 +103,7 @@
             data-aos-offset="500"
             class="mb-12 mt-sm-8"
           >
-            在首頁最上方的兩行標語之一，代表著穿著裝備的重要性。我們在經過無數次拜訪各家工廠後，細選出品質優良的廠商。VPT的每一件產品也都經歷了嚴苛的測試與無數次的改進，為的就是讓你能夠在球場上發揮出最佳水平，甚至更好!
+            在首頁最上方的兩行標語之一，代表著穿著裝備的重要性。我們在經過無數次拜訪各家工廠後，與優良廠商合作。VPT的每一件產品也都經歷了嚴苛的測試與無數次的改進，為的就是讓你能夠在球場上發揮出最佳水平，甚至更好!
           </p>
         </v-col>
         <v-col
@@ -164,7 +164,7 @@
         </v-col>
       </v-row>
     </section>
-  </div>
+  </v-container>
 </template>
 
 <script setup>
@@ -318,8 +318,7 @@ function LottieScrollTrigger (vars) {
 
   #story-bg {
     background-color: #000;
-    height: 600vh;
-    width: 100%;
+    min-width: 100%;
     font-family: "PP Neue Montreal";
     overflow: hidden;
   }
@@ -396,7 +395,7 @@ function LottieScrollTrigger (vars) {
     content: "";
     background: url(/src/assets/noise.jpg) ;
     width: 200%;
-    height: 200%;
+    height: 100%;
     position: fixed;
     top: 0;
     left: 0;
@@ -415,7 +414,6 @@ function LottieScrollTrigger (vars) {
   .website-content {
     position: relative;
     width: 100%;
-    height: 250vh;
     padding: 10%;
     background: #fff;
     color: #333;
@@ -487,7 +485,7 @@ function LottieScrollTrigger (vars) {
 
     }
     p {
-        font-size: 68px;
+        font-size: 60px;
         font-weight: 550;
         text-shadow:
           0 0 20px #fff,
@@ -517,9 +515,6 @@ function LottieScrollTrigger (vars) {
     // }
   }
   @include lg {
-    #story-bg {
-      height: 515vh;
-    }
     .logo-animate {
       width: 500px;
     }

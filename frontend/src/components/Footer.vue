@@ -95,6 +95,7 @@
               >
                 <router-link
                   class="text-link"
+                  to="#"
                 >
                   熱銷商品
                 </router-link>
@@ -103,7 +104,10 @@
                 cols="12"
                 class="ps-1 ps-sm-0"
               >
-                <router-link class="text-link">
+                <router-link
+                  class="text-link"
+                  to="#"
+                >
                   新品上市
                 </router-link>
               </v-col>
@@ -231,7 +235,7 @@
               </v-btn>
               <v-btn
                 variant="plain"
-                to="/products/shirts"
+                to="#"
                 :active="false"
                 :ripple="false"
                 class="opacity-100"
@@ -240,7 +244,7 @@
               </v-btn>
               <v-btn
                 variant="plain"
-                to="/products/pants"
+                to="#"
                 :active="false"
                 :ripple="false"
                 class="opacity-100"
