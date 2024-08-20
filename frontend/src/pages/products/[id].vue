@@ -107,6 +107,21 @@
     </v-row>
     <v-col cols="12" />
   </v-container>
+  <v-overlay
+    class="align-center justify-center"
+    :model-value="!product.sell"
+    persistent
+  >
+    <h1 class="no-sell-title">
+      此商品已下架
+    </h1>
+    <router-link
+      class="no-sell-subtitle"
+      to="/products"
+    >
+      逛逛其他商品 →
+    </router-link>
+  </v-overlay>
 </template>
 
 <script setup>
@@ -284,6 +299,21 @@ h3 {
   &:hover {
     background-color: #26A69A;
     color: #f6f6f6;
+  }
+}
+.no-sell-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: white;
+}
+.no-sell-subtitle {
+  font-size: 24px;
+  color: #fff;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    color: $secondary-color;
+    font-weight: 600;
   }
 }
 </style>
